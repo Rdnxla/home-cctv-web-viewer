@@ -1,0 +1,14 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+certs
+*.local
+coverage
+mockServiceWorker.js
+.nyc_output
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.yarn/

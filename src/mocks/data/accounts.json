@@ -1,0 +1,93 @@
+[
+  {
+    "id": "acc_instructor_1",
+    "roles": ["instructor"],
+    "email": "ok@example.com",
+    "password": "Password123!",
+    "phone": "+79261112233",
+    "firstName": "Иван",
+    "lastName": "Соколов",
+    "avatarUrl": "https://i.pravatar.cc/150?img=12",
+    "createdAt": "2025-03-01T09:00:00.000Z",
+    "status": "active",
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "acc_instructor_2",
+    "roles": ["instructor"],
+    "email": "olga@example.com",
+    "password": "Password123!",
+    "phone": "+79261112244",
+    "firstName": "Ольга",
+    "lastName": "Реброва",
+    "avatarUrl": "https://i.pravatar.cc/150?img=32",
+    "createdAt": "2025-04-15T09:00:00.000Z",
+    "status": "active",
+    "twoFactorEnabled": true
+  },
+  {
+    "id": "acc_client_1",
+    "roles": ["client"],
+    "email": "petr.client@example.com",
+    "password": "Password123!",
+    "phone": "+79031234567",
+    "firstName": "Пётр",
+    "lastName": "Волков",
+    "avatarUrl": "https://i.pravatar.cc/150?img=5",
+    "createdAt": "2025-09-01T10:00:00.000Z",
+    "status": "active",
+    "twoFactorEnabled": true
+  },
+  {
+    "id": "acc_client_2",
+    "roles": ["client"],
+    "email": "maria.client@example.com",
+    "password": "Password123!",
+    "phone": "+79031234568",
+    "firstName": "Мария",
+    "lastName": "Кузнецова",
+    "avatarUrl": "https://i.pravatar.cc/150?img=9",
+    "createdAt": "2025-09-02T10:00:00.000Z",
+    "status": "active",
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "acc_client_3",
+    "roles": ["client"],
+    "email": "sergey.client@example.com",
+    "password": "Password123!",
+    "phone": "+79031234569",
+    "firstName": "Сергей",
+    "lastName": "Новиков",
+    "avatarUrl": "https://i.pravatar.cc/150?img=15",
+    "createdAt": "2025-09-03T10:00:00.000Z",
+    "status": "active",
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "acc_client_4",
+    "roles": ["client"],
+    "email": "anna.client@example.com",
+    "password": "Password123!",
+    "phone": "+79031234570",
+    "firstName": "Анна",
+    "lastName": "Егорова",
+    "avatarUrl": "https://i.pravatar.cc/150?img=21",
+    "createdAt": "2025-09-05T10:00:00.000Z",
+    "status": "active",
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "acc_client_5",
+    "roles": ["client"],
+    "email": "dmitry.client@example.com",
+    "password": "Password123!",
+    "phone": "+79031234571",
+    "firstName": "Дмитрий",
+    "lastName": "Орлов",
+    "avatarUrl": "https://i.pravatar.cc/150?img=25",
+    "createdAt": "2025-09-06T10:00:00.000Z",
+    "status": "active",
+    "twoFactorEnabled": false
+  }
+]

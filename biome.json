@@ -1,0 +1,234 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              [":URL:", ":PACKAGE_WITH_PROTOCOL:", ":NODE:", ":BUN:", ":PACKAGE:"],
+              ["@/app", "@/app/**"],
+              ["@/pages", "@/pages/**"],
+              ["@/widgets", "@/widgets/**"],
+              ["@/features", "@/features/**"],
+              ["@/entities", "@/entities/**"],
+              ["@/shared", "@/shared/**"],
+              ":ALIAS:",
+              ":PATH:"
+            ]
+          }
+        },
+        "useSortedAttributes": "on",
+        "useSortedKeys": "on",
+        "useSortedProperties": "on"
+      }
+    },
+    "enabled": true
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    },
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "asNeeded",
+      "bracketSpacing": false,
+      "jsxQuoteStyle": "single",
+      "quoteProperties": "asNeeded",
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "es5",
+      "expand": "auto"
+    }
+  },
+  "linter": {
+    "domains": {
+      "project": "all",
+      "react": "all",
+      "test": "all"
+    },
+    "enabled": true,
+    "rules": {
+      "a11y": "error",
+      "complexity": {
+        "recommended": true,
+        "useSimplifiedLogicExpression": "off"
+      },
+      "correctness": "error",
+      "nursery": "error",
+      "performance": "error",
+      "recommended": true,
+      "security": "error",
+      "style": "error",
+      "suspicious": "error"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useImportExtensions": "off",
+            "noUnresolvedImports": "off",
+            "useJsonImportAttributes": "off",
+            "useQwikValidLexicalScope": "off"
+          },
+          "nursery": {
+            "useExplicitType": "off",
+            "noTernary": "off"
+          },
+          "suspicious": {
+            "noReactSpecificProps": "off",
+            "noUnknownAtRules": "off"
+          },
+          "performance": {
+            "noImgElement": "off",
+            "noNamespaceImport": "off",
+            "useSolidForComponent": "off"
+          },
+          "style": {
+            "noMagicNumbers": "off",
+            "noImplicitBoolean": "off",
+            "useBlockStatements": "off",
+            "useNamingConvention": "off",
+            "useComponentExportOnlyModules": "off",
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false,
+                "requireAscii": true,
+                "filenameCases": ["camelCase"]
+              }
+            },
+            "useImportType": {
+              "level": "error",
+              "options": {
+                "style": "separatedType"
+              }
+            },
+            "noJsxLiterals": "off"
+          },
+          "security": {
+            "noSecrets": {
+              "level": "error",
+              "options": {
+                "entropyThreshold": 100
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false,
+                "requireAscii": true,
+                "filenameCases": ["PascalCase"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/index.tsx", "src/main.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false,
+                "requireAscii": true,
+                "filenameCases": ["camelCase"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false,
+                "requireAscii": true,
+                "filenameCases": ["camelCase", "kebab-case"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["vite.config.ts", "playwright.config.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "off"
+          },
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/**/*.test.tsx"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.json", "**/*.jsonc"],
+      "assist": {
+        "actions": {
+          "source": {
+            "useSortedKeys": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["public/**"],
+      "formatter": {
+        "enabled": false
+      },
+      "linter": {
+        "enabled": false
+      }
+    }
+  ]
+}
