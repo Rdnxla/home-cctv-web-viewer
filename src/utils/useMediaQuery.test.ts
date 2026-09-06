@@ -5,21 +5,21 @@ const BELOW_MIN_WIDTH = 599
 const MIN_WITDH = 600
 
 describe('useMediaQuery', () => {
-	it('renders', () => {
-		globalThis.happyDOM?.setViewport({
-			height: BELOW_MIN_WIDTH,
-			width: BELOW_MIN_WIDTH
-		})
+  it('renders', () => {
+    globalThis.happyDOM?.setViewport({
+      height: BELOW_MIN_WIDTH,
+      width: BELOW_MIN_WIDTH
+    })
 
-		const {result} = renderHook(() =>
-			useMediaQuery(`(min-width: ${MIN_WITDH}px)`)
-		)
-		expect(result.current).toBeFalsy()
+    const {result} = renderHook(() =>
+      useMediaQuery(`(min-width: ${MIN_WITDH}px)`)
+    )
+    expect(result.current).toBeFalsy()
 
-		act(() =>
-			globalThis.happyDOM?.setViewport({height: MIN_WITDH, width: MIN_WITDH})
-		)
+    act(() =>
+      globalThis.happyDOM?.setViewport({height: MIN_WITDH, width: MIN_WITDH})
+    )
 
-		expect(result.current).toBeTruthy()
-	})
+    expect(result.current).toBeTruthy()
+  })
 })

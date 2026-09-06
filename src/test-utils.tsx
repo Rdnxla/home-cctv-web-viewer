@@ -5,30 +5,30 @@ import type {PropsWithChildren, ReactElement} from 'react'
 import {BrowserRouter} from 'react-router'
 
 export const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {gcTime: Number.POSITIVE_INFINITY, retry: false}
-	}
+  defaultOptions: {
+    queries: {gcTime: Number.POSITIVE_INFINITY, retry: false}
+  }
 })
 
 export function render(
-	ui: ReactElement,
-	{route, ...options}: Omit<RenderOptions, 'wrapper'> & {route?: string} = {
-		reactStrictMode: true
-	}
+  ui: ReactElement,
+  {route, ...options}: Omit<RenderOptions, 'wrapper'> & {route?: string} = {
+    reactStrictMode: true
+  }
 ) {
-	globalThis.history.pushState({}, '', route)
+  globalThis.history.pushState({}, '', route)
 
-	return {
-		user: userEvent.setup(),
-		...rtlRender(ui, {
-			wrapper: ({children}: PropsWithChildren) => (
-				<QueryClientProvider client={queryClient}>
-					<BrowserRouter>{children}</BrowserRouter>
-				</QueryClientProvider>
-			),
-			...options
-		})
-	}
+  return {
+    user: userEvent.setup(),
+    ...rtlRender(ui, {
+      wrapper: ({children}: PropsWithChildren) => (
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </QueryClientProvider>
+      ),
+      ...options
+    })
+  }
 }
 
 // biome-ignore lint: test file

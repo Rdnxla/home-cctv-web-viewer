@@ -17,15 +17,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      - name: Enable Corepack
+        run: corepack enable
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm'
+          cache: 'yarn'
 
       - name: Install dependencies
-        run: pnpm i && pnpm playwright install --with-deps
+        run: yarn install --immutable && yarn playwright install --with-deps
 
       - name: Validate
-        run: pnpm biome ci && pnpm test:ci && pnpm test:e2e:ci
+        run: yarn biome ci && yarn test:ci && yarn test:e2e:ci
