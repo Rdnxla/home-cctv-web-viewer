@@ -39,7 +39,10 @@
     "enabled": true,
     "rules": {
       "a11y": "error",
-      "complexity": "error",
+      "complexity": {
+        "recommended": true,
+        "useSimplifiedLogicExpression": "off"
+      },
       "correctness": "error",
       "nursery": "error",
       "performance": "error",
