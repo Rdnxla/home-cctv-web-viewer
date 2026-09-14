@@ -1,12 +1,22 @@
 /// <reference types="vitest/config" />
 
-import path from 'node:path'
-import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
 import {defineConfig} from 'vite'
+import fs from 'node:fs'
+import path from 'node:path'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(() => ({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+  ],
+  server: {
+    https: {
+      key: fs.readFileSync('./certs/localhost-key.pem'),
+      cert: fs.readFileSync('./certs/localhost.pem'),
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src')

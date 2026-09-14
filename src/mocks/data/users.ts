@@ -3,13 +3,13 @@
 // Each one is wired to trigger a specific login corner case.
 
 export interface MockUser {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  role: 'user' | 'admin';
-  status: 'active' | 'locked' | 'unverified' | 'password_reset_required';
-  twoFactorEnabled: boolean;
+  id: string
+  email: string
+  password: string
+  name: string
+  role: 'user' | 'admin'
+  status: 'active' | 'locked' | 'unverified' | 'password_reset_required'
+  twoFactorEnabled: boolean
 }
 
 export const users: MockUser[] = [
@@ -20,7 +20,7 @@ export const users: MockUser[] = [
     name: 'Alex Ok',
     role: 'user',
     status: 'active',
-    twoFactorEnabled: false,
+    twoFactorEnabled: false
   },
   {
     id: 'usr_002',
@@ -29,7 +29,7 @@ export const users: MockUser[] = [
     name: 'Ada Admin',
     role: 'admin',
     status: 'active',
-    twoFactorEnabled: false,
+    twoFactorEnabled: false
   },
   {
     id: 'usr_003',
@@ -38,7 +38,7 @@ export const users: MockUser[] = [
     name: 'Tia TwoFactor',
     role: 'user',
     status: 'active',
-    twoFactorEnabled: true,
+    twoFactorEnabled: true
   },
   {
     id: 'usr_004',
@@ -47,7 +47,7 @@ export const users: MockUser[] = [
     name: 'Lex Locked',
     role: 'user',
     status: 'locked',
-    twoFactorEnabled: false,
+    twoFactorEnabled: false
   },
   {
     id: 'usr_005',
@@ -56,7 +56,7 @@ export const users: MockUser[] = [
     name: 'Uma Unverified',
     role: 'user',
     status: 'unverified',
-    twoFactorEnabled: false,
+    twoFactorEnabled: false
   },
   {
     id: 'usr_006',
@@ -65,10 +65,8 @@ export const users: MockUser[] = [
     name: 'Rio Reset',
     role: 'user',
     status: 'password_reset_required',
-    twoFactorEnabled: false,
+    twoFactorEnabled: false
   },
-  // Special trigger accounts (magic emails) — not "real" users,
-  // just convenient hooks to force a specific server response.
   {
     id: 'usr_trigger_500',
     email: 'error500@example.com',
@@ -76,7 +74,7 @@ export const users: MockUser[] = [
     name: 'trigger',
     role: 'user',
     status: 'active',
-    twoFactorEnabled: false,
+    twoFactorEnabled: false
   },
   {
     id: 'usr_trigger_timeout',
@@ -85,7 +83,7 @@ export const users: MockUser[] = [
     name: 'trigger',
     role: 'user',
     status: 'active',
-    twoFactorEnabled: false,
+    twoFactorEnabled: false
   },
   {
     id: 'usr_trigger_ratelimit',
@@ -94,8 +92,8 @@ export const users: MockUser[] = [
     name: 'trigger',
     role: 'user',
     status: 'active',
-    twoFactorEnabled: false,
-  },
-];
+    twoFactorEnabled: false
+  }
+]
 
-export const OTP_CODE = '123456'; // "correct" 2FA code for the mock
+export const OTP_CODE = '123456'

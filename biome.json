@@ -4,7 +4,7 @@
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "on",
+        "organizeImports": "off",
         "useSortedAttributes": "on",
         "useSortedProperties": "on"
       }
@@ -76,15 +76,10 @@
           },
           "style": {
             "noMagicNumbers": "off",
+            "noImplicitBoolean": "off",
             "useExportsLast": "off",
             "useBlockStatements": "off",
-            "useNamingConvention": {
-              "level": "error",
-              "options": {
-                "strictCase": false,
-                "requireAscii": true
-              }
-            },
+            "useNamingConvention": "off",
             "useFilenamingConvention": {
               "level": "error",
               "options": {

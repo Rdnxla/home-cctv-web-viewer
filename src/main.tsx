@@ -1,23 +1,24 @@
 import './app/global.css'
+import '@radix-ui/themes/styles.css'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
-import {BrowserRouter} from 'react-router'
-import {App} from './app/App'
+import {RouterProvider} from 'react-router/dom'
+import {router} from '@/routes'
 
 const queryClient = new QueryClient()
 
 async function enableMocking() {
-  // TODO: uncomment this line
-  // if (process.env.NODE_ENV !== 'development') {
-  //   return
-  // }
+  if (!import.meta.env.DEV) {
+    return
+  }
   const {worker} = await import('./mocks/browser')
   return worker.start()
 }
 
-const container = document.querySelector('#root')
+const container = document.querySelector('#root');
+
 enableMocking()
   .then(() => {
     if (container) {
@@ -26,9 +27,7 @@ enableMocking()
         <StrictMode>
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={false} />
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <RouterProvider router={router} />
           </QueryClientProvider>
         </StrictMode>
       )

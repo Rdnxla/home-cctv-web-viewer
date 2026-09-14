@@ -13,11 +13,13 @@
     "lint:biome": "biome check --write --unsafe",
     "lint": "yarn lint:tsc && yarn lint:biome",
     "format": "biome format --write",
+    "check": "biome check --write",
     "validate": "yarn lint && yarn test:ci && yarn test:e2e:ci",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.3.0",
     "@tanstack/react-query": "5.95.2",
     "@tanstack/react-query-devtools": "5.95.2",
     "radix-ui": "^1.6.7",
@@ -42,6 +44,7 @@
     "@vitest/coverage-v8": "4.1.2",
     "happy-dom": "20.8.9",
     "msw": "2.12.14",
+    "sass": "^1.104.1",
     "tailwindcss": "4.2.2",
     "typescript": "6.0.2",
     "vite": "8.0.3",
