@@ -1,0 +1,45 @@
+.root {
+  width: 224px;
+  background: var(--color-panel-solid);
+  border-right: 1px solid var(--gray-4);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+
+.logo {
+  padding: 0 16px;
+  margin-bottom: 4px;
+}
+
+.logoMark {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-3);
+  background: var(--indigo-9);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.summary {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.instructors {
+  padding: 16px 16px 0;
+  border-top: 1px solid var(--gray-4);
+  flex: 1;
+}
+
+.sectionTitle {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "inst_1",
+    "productId": "prod_1",
+    "title": "Кемп 15–29 декабря, Шерегеш",
+    "location": "Шерегеш",
+    "startDate": "2026-12-15T05:00:00.000Z",
+    "endDate": "2026-12-29T05:00:00.000Z",
+    "capacityMax": 8,
+    "bookedCount": 6,
+    "status": "open",
+    "createdAt": "2025-09-01T10:00:00.000Z"
+  },
+  {
+    "id": "inst_2",
+    "productId": "prod_1",
+    "title": "Кемп 10–24 января, Шерегеш",
+    "location": "Шерегеш",
+    "startDate": "2027-01-10T05:00:00.000Z",
+    "endDate": "2027-01-24T05:00:00.000Z",
+    "capacityMax": 8,
+    "bookedCount": 8,
+    "status": "full",
+    "createdAt": "2025-09-01T10:05:00.000Z"
+  },
+  {
+    "id": "inst_3",
+    "productId": "prod_2",
+    "title": "Слот: 24 сентября, 14:00",
+    "location": "Сочи, Роза Хутор",
+    "startDate": "2026-09-24T11:00:00.000Z",
+    "endDate": "2026-09-24T12:30:00.000Z",
+    "capacityMax": 1,
+    "bookedCount": 0,
+    "status": "open",
+    "createdAt": "2025-09-10T10:00:00.000Z"
+  },
+  {
+    "id": "inst_4",
+    "productId": "prod_3",
+    "title": "Курс для начинающих, старт 5 октября",
+    "location": "Сочи, Роза Хутор",
+    "startDate": "2026-10-05T08:00:00.000Z",
+    "endDate": "2026-11-02T08:00:00.000Z",
+    "capacityMax": 6,
+    "bookedCount": 4,
+    "status": "open",
+    "createdAt": "2025-09-05T10:00:00.000Z"
+  },
+  {
+    "id": "inst_5",
+    "productId": "prod_4",
+    "title": "Октябрьский абонемент",
+    "location": "Студия «Свет», Москва",
+    "startDate": "2026-10-01T05:00:00.000Z",
+    "endDate": "2026-10-31T05:00:00.000Z",
+    "capacityMax": 10,
+    "bookedCount": 10,
+    "status": "full",
+    "createdAt": "2025-09-01T10:00:00.000Z"
+  },
+  {
+    "id": "inst_6",
+    "productId": "prod_5",
+    "title": "Слот: 22 сентября, 09:00",
+    "location": "Студия «Свет», Москва",
+    "startDate": "2026-09-22T06:00:00.000Z",
+    "endDate": "2026-09-22T07:00:00.000Z",
+    "capacityMax": 1,
+    "bookedCount": 0,
+    "status": "open",
+    "createdAt": "2025-09-12T10:00:00.000Z"
+  }
+]

@@ -1,10 +1,10 @@
 import './auth.scss';
-import type { AuthSuccess } from '@/api/auth.ts';
+import type { AuthSuccess } from '@/api/auth/auth.types';
 import {
   useLoginMutation,
   useVerifyTwoFactorMutation,
-} from '@/features/auth/mutations';
-import { ApiErrorCode } from '@/shared/api/errorCodes';
+} from './model/useAuth';
+import { ApiErrorCode } from '@/shared/api/authErrorCodes';
 import { isApiError } from '@/shared/api/http';
 import { Form } from 'radix-ui';
 import { Button, TextField } from '@radix-ui/themes';
@@ -38,7 +38,7 @@ export function Component() {
     (data: AuthSuccess) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      navigate('/');
+      navigate('/me');
     },
     [navigate],
   );
@@ -122,7 +122,7 @@ export function Component() {
   );
 
   const handleTwoFactorSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
+    (event: React.SubmitEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       if (step.name !== '2fa') {

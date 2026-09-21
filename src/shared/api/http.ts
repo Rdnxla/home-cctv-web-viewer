@@ -1,4 +1,4 @@
-import {ApiErrorCode, type ApiErrorCodeType} from './errorCodes'
+import {ApiErrorCode, type ApiErrorCodeType} from './authErrorCodes'
 
 export interface ApiError extends Error {
   status: number

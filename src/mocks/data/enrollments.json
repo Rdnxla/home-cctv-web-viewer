@@ -1,0 +1,83 @@
+[
+  {
+    "id": "enr_1",
+    "accountId": "acc_client_1",
+    "productInstanceId": "inst_1",
+    "status": "confirmed",
+    "paymentId": "pay_1",
+    "createdAt": "2025-09-02T12:00:00.000Z",
+    "updatedAt": "2025-09-02T12:20:00.000Z"
+  },
+  {
+    "id": "enr_2",
+    "accountId": "acc_client_2",
+    "productInstanceId": "inst_1",
+    "status": "confirmed",
+    "paymentId": "pay_2",
+    "createdAt": "2025-09-03T09:00:00.000Z",
+    "updatedAt": "2025-09-03T09:15:00.000Z"
+  },
+  {
+    "id": "enr_3",
+    "accountId": "acc_client_3",
+    "productInstanceId": "inst_1",
+    "status": "pending_payment",
+    "paymentId": "pay_3",
+    "createdAt": "2025-09-15T14:00:00.000Z",
+    "updatedAt": "2025-09-15T14:00:00.000Z"
+  },
+  {
+    "id": "enr_4",
+    "accountId": "acc_client_4",
+    "productInstanceId": "inst_2",
+    "status": "confirmed",
+    "paymentId": "pay_4",
+    "createdAt": "2025-08-20T10:00:00.000Z",
+    "updatedAt": "2025-08-20T10:10:00.000Z"
+  },
+  {
+    "id": "enr_5",
+    "accountId": "acc_client_5",
+    "productInstanceId": "inst_2",
+    "status": "waitlisted",
+    "paymentId": null,
+    "createdAt": "2025-09-18T11:00:00.000Z",
+    "updatedAt": "2025-09-18T11:00:00.000Z"
+  },
+  {
+    "id": "enr_6",
+    "accountId": "acc_client_1",
+    "productInstanceId": "inst_4",
+    "status": "confirmed",
+    "paymentId": "pay_5",
+    "createdAt": "2025-09-06T08:00:00.000Z",
+    "updatedAt": "2025-09-06T08:05:00.000Z"
+  },
+  {
+    "id": "enr_7",
+    "accountId": "acc_client_2",
+    "productInstanceId": "inst_5",
+    "status": "completed",
+    "paymentId": "pay_6",
+    "createdAt": "2025-08-25T09:00:00.000Z",
+    "updatedAt": "2025-09-19T09:00:00.000Z"
+  },
+  {
+    "id": "enr_8",
+    "accountId": "acc_client_3",
+    "productInstanceId": "inst_5",
+    "status": "waitlisted",
+    "paymentId": null,
+    "createdAt": "2025-09-17T13:00:00.000Z",
+    "updatedAt": "2025-09-17T13:00:00.000Z"
+  },
+  {
+    "id": "enr_9",
+    "accountId": "acc_client_4",
+    "productInstanceId": "inst_3",
+    "status": "cancelled",
+    "paymentId": null,
+    "createdAt": "2025-09-10T10:00:00.000Z",
+    "updatedAt": "2025-09-11T10:00:00.000Z"
+  }
+]

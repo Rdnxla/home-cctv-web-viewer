@@ -1,0 +1,32 @@
+[
+  {
+    "id": "legal_1",
+    "accountId": "acc_instructor_1",
+    "entityType": "ip",
+    "legalName": "ИП Соколов Иван Андреевич",
+    "inn": "770812345678",
+    "ogrnip": "321770000012345",
+    "taxationSystem": "usn_6",
+    "bankAccount": {
+      "bik": "044525225",
+      "accountNumber": "40802810900000012345",
+      "bankName": "АО «Тинькофф Банк»"
+    },
+    "createdAt": "2025-03-01T09:00:00.000Z"
+  },
+  {
+    "id": "legal_2",
+    "accountId": "acc_instructor_2",
+    "entityType": "self_employed",
+    "legalName": "Реброва Ольга Сергеевна",
+    "inn": "770887654321",
+    "ogrnip": null,
+    "taxationSystem": "npd",
+    "bankAccount": {
+      "bik": "044525593",
+      "accountNumber": "40817810900000054321",
+      "bankName": "ПАО «Сбербанк»"
+    },
+    "createdAt": "2025-04-15T09:00:00.000Z"
+  }
+]

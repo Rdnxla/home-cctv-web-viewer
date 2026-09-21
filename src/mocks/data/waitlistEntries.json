@@ -1,0 +1,24 @@
+[
+  {
+    "id": "wl_1",
+    "enrollmentId": "enr_5",
+    "accountId": "acc_client_5",
+    "productInstanceId": "inst_2",
+    "position": 1,
+    "autoNotify": true,
+    "notifiedAt": null,
+    "expiresAt": null,
+    "createdAt": "2025-09-18T11:00:00.000Z"
+  },
+  {
+    "id": "wl_2",
+    "enrollmentId": "enr_8",
+    "accountId": "acc_client_3",
+    "productInstanceId": "inst_5",
+    "position": 1,
+    "autoNotify": true,
+    "notifiedAt": "2025-09-19T08:00:00.000Z",
+    "expiresAt": "2025-09-21T08:00:00.000Z",
+    "createdAt": "2025-09-17T13:00:00.000Z"
+  }
+]

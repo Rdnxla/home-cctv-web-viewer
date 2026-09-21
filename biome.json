@@ -59,7 +59,9 @@
         "rules": {
           "correctness": {
             "useImportExtensions": "off",
-            "noUnresolvedImports": "off"
+            "noUnresolvedImports": "off",
+            "useJsonImportAttributes": "off",
+            "useQwikValidLexicalScope": "off"
           },
           "nursery": {
             "useExplicitType": "off",
@@ -80,6 +82,7 @@
             "useExportsLast": "off",
             "useBlockStatements": "off",
             "useNamingConvention": "off",
+            "useComponentExportOnlyModules": "off",
             "useFilenamingConvention": {
               "level": "error",
               "options": {

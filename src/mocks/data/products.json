@@ -1,0 +1,67 @@
+[
+  {
+    "id": "prod_1",
+    "instructorProfileId": "prof_1",
+    "title": "Сноуборд-кемп 2 недели",
+    "description": "Интенсивная программа для уверенного катания: техника, фрирайд, видеоразбор.",
+    "type": "camp",
+    "capacity": { "min": 4, "max": 8 },
+    "pricing": { "amount": 45000, "currency": "RUB", "unit": "per_program" },
+    "durationMinutes": 20160,
+    "schedulePattern": "fixed_dates",
+    "isActive": true,
+    "createdAt": "2025-05-01T10:00:00.000Z"
+  },
+  {
+    "id": "prod_2",
+    "instructorProfileId": "prof_1",
+    "title": "Персональная тренировка",
+    "description": "Разовое занятие один на один, разбор техники под видео.",
+    "type": "single_session",
+    "capacity": { "min": 1, "max": 1 },
+    "pricing": { "amount": 3500, "currency": "RUB", "unit": "per_session" },
+    "durationMinutes": 90,
+    "schedulePattern": "on_demand_slots",
+    "isActive": true,
+    "createdAt": "2025-05-01T10:05:00.000Z"
+  },
+  {
+    "id": "prod_3",
+    "instructorProfileId": "prof_1",
+    "title": "Групповой курс для начинающих",
+    "description": "5 занятий по основам катания в малой группе.",
+    "type": "course",
+    "capacity": { "min": 3, "max": 6 },
+    "pricing": { "amount": 12000, "currency": "RUB", "unit": "per_program" },
+    "durationMinutes": 450,
+    "schedulePattern": "recurring_weekly",
+    "isActive": true,
+    "createdAt": "2025-05-10T10:00:00.000Z"
+  },
+  {
+    "id": "prod_4",
+    "instructorProfileId": "prof_2",
+    "title": "Абонемент на месяц: групповая йога",
+    "description": "8 занятий в месяц в малой группе, гибкое расписание.",
+    "type": "subscription",
+    "capacity": { "min": 1, "max": 10 },
+    "pricing": { "amount": 8000, "currency": "RUB", "unit": "per_month" },
+    "durationMinutes": null,
+    "schedulePattern": "recurring_weekly",
+    "isActive": true,
+    "createdAt": "2025-06-01T10:00:00.000Z"
+  },
+  {
+    "id": "prod_5",
+    "instructorProfileId": "prof_2",
+    "title": "Индивидуальное занятие",
+    "description": "Разовая персональная тренировка по йоге или растяжке.",
+    "type": "single_session",
+    "capacity": { "min": 1, "max": 1 },
+    "pricing": { "amount": 2500, "currency": "RUB", "unit": "per_session" },
+    "durationMinutes": 60,
+    "schedulePattern": "on_demand_slots",
+    "isActive": true,
+    "createdAt": "2025-06-01T10:05:00.000Z"
+  }
+]
