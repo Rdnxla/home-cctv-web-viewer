@@ -1,4 +1,4 @@
-import './auth.scss';
+import './Auth.scss';
 import type { AuthSuccess } from '@/api/auth/auth.types';
 import {
   useLoginMutation,

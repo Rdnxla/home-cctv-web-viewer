@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
-import { Component as Root } from '@/app/app'
+import { Component as Root } from '@/app/layouts/empty/EmptyLayout'
+import { Component as MainLayout } from '@/app/layouts/main/MainLayout'
 
 export const router = createBrowserRouter([
   {
@@ -9,6 +10,11 @@ export const router = createBrowserRouter([
         path: '/',
         lazy: () => import('@/pages/auth/Auth'),
       },
+    ],
+  },
+  {
+    Component: MainLayout,
+    children: [
       {
         path: '/me',
         lazy: () => import('@/pages/client-dashboard/ClientDashboard'),

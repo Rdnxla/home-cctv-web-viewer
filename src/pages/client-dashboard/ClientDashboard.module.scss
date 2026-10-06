@@ -1,0 +1,7 @@
+.clientDashboard {
+  min-height: calc(100% - $header-h);
+  border-radius: $base-radius;
+  box-shadow: $base-shadow;
+  background: var(--gray-1);
+  overflow: hidden;
+}

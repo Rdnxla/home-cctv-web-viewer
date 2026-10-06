@@ -40,5 +40,15 @@ export default defineConfig(() => ({
     globals: true,
     include: ['src/**/*.test.ts?(x)'],
     setupFiles: 'src/test-setup.ts'
-  }
+  },
+  css: {
+    api: 'modern-compiler',
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @use "@/assets/scss/variables.scss" as *;
+        `,
+      },
+    },
+  },
 }))

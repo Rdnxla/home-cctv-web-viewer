@@ -1,0 +1,10 @@
+.header {
+  border-radius: $base-radius;
+  background-color: var(--gray-2);
+  box-shadow: $base-shadow;
+  overflow: hidden;
+}
+
+.headerItem {
+  width: calc(100% / 3);
+}
