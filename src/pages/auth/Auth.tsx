@@ -38,7 +38,7 @@ export function Component() {
     (data: AuthSuccess) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      navigate('/me');
+      navigate('/dashboard');
     },
     [navigate],
   );

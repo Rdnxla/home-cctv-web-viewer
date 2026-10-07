@@ -16,8 +16,12 @@ export const router = createBrowserRouter([
     Component: MainLayout,
     children: [
       {
-        path: '/me',
+        path: '/dashboard',
         lazy: () => import('@/pages/client-dashboard/ClientDashboard'),
+      },
+      {
+        path: '/events',
+        lazy: () => import('@/pages/event-list/EventList'),
       },
     ],
   },

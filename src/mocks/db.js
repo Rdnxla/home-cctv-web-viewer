@@ -1,12 +1,4 @@
 import accounts from './data/accounts.json';
-import instructorProfiles from './data/instructorProfiles.json';
-import legalEntities from './data/legalEntities.json';
-import products from './data/products.json';
-import productInstances from './data/productInstances.json';
-import enrollments from './data/enrollments.json';
-import waitlistEntries from './data/waitlistEntries.json';
-import payments from './data/payments.json';
-import notifications from './data/notifications.json';
 
 // Глубокое клонирование, чтобы каждый запуск (например, каждый тест)
 // начинался с чистого состояния и не мутировал исходные json-модули.
@@ -16,14 +8,6 @@ const idCounters = {};
 function createStore() {
   return {
     accounts: clone(accounts),
-    instructorProfiles: clone(instructorProfiles),
-    legalEntities: clone(legalEntities),
-    products: clone(products),
-    productInstances: clone(productInstances),
-    enrollments: clone(enrollments),
-    waitlistEntries: clone(waitlistEntries),
-    payments: clone(payments),
-    notifications: clone(notifications),
   };
 }
 

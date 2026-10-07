@@ -1,7 +1,7 @@
 import {setupServer} from 'msw/node'
 import {
   authHandlers,
-  viewsHandlers,
+  nvrHandlers,
 } from './handlers'
 
-export const server = setupServer(...authHandlers, ...viewsHandlers)
+export const server = setupServer(...authHandlers, ...nvrHandlers)

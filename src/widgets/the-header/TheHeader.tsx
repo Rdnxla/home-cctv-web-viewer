@@ -1,4 +1,6 @@
 import styles from './TheHeader.module.scss'
+import { useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router';
 import {
   Box,
   Flex,
@@ -10,30 +12,37 @@ import {
 import { CheckIcon, GearIcon } from "@radix-ui/react-icons"
 import { useMediaQuery } from '@/shared/utils/useMediaQuery'
 
+const SEGMENTS_CONFIG = [
+  { value: 'dashboard', label: 'Камеры', icon: 'К' },
+  { value: 'events', label: 'Уведомления', icon: 'У' },
+  { value: 'archive', label: 'Архив', icon: 'А' },
+];
+
 export function TheHeader() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const currentPath = location.pathname.split('/')[1] || 'dashboard';
+
+  const redirectToPage = useCallback((value: string) => navigate(`/${value}`), [navigate]);
 
   function getSegmentComponent() {
     return (
       <SegmentedControl.Root
         className={styles.headerItem}
-        defaultValue="inbox"
+        onValueChange={redirectToPage}
         radius="medium"
         size="2"
+        value={currentPath}
       >
-        {isMobile ? (
-          <>
-            <SegmentedControl.Item value="inbox">К</SegmentedControl.Item>
-            <SegmentedControl.Item value="drafts">У</SegmentedControl.Item>
-            <SegmentedControl.Item value="sent">А</SegmentedControl.Item>
-          </>
-        ) : (
-          <>
-            <SegmentedControl.Item value="inbox">Камеры</SegmentedControl.Item>
-            <SegmentedControl.Item value="drafts">Уведомления</SegmentedControl.Item>
-            <SegmentedControl.Item value="sent">Архив</SegmentedControl.Item>
-          </>
-        )}
+        {
+          SEGMENTS_CONFIG.map((tab) => (
+            <SegmentedControl.Item key={tab.value} value={tab.value}>
+              { isMobile ? tab.icon : tab.label }
+            </SegmentedControl.Item>
+          ))
+        }
       </SegmentedControl.Root>
     );
   }
