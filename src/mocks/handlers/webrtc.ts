@@ -3,14 +3,13 @@ import type { StreamInfo } from '../data/nvrtypes';
 
 export type PlayerState = 'idle' | 'connecting' | 'playing' | 'failed';
 
-const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === 'true';
-
 /** Тестовая картинка вместо реального видео (MSW не умеет отдавать медиа) */
-function createMockMediaStream(label: string): MediaStream {
+function createMockMediaStream(label: string) {
   const canvas = document.createElement('canvas');
   canvas.width = 640;
   canvas.height = 360;
   const ctx = canvas.getContext('2d')!;
+
   const draw = () => {
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -21,11 +20,18 @@ function createMockMediaStream(label: string): MediaStream {
     ctx.font = '20px monospace';
     ctx.fillText(new Date().toLocaleTimeString(), 24, canvas.height - 24);
   };
+
   draw();
   const timer = setInterval(draw, 200);
-  const media = canvas.captureStream(25);
-  media.getVideoTracks()[0].addEventListener('ended', () => clearInterval(timer));
-  return media;
+  const stream = canvas.captureStream(25);
+
+  return {
+    stream,
+    stop: () => {
+      clearInterval(timer);
+      stream.getTracks().forEach((t) => t.stop());
+    },
+  };
 }
 
 function waitForIceGathering(pc: RTCPeerConnection) {
@@ -38,38 +44,51 @@ function waitForIceGathering(pc: RTCPeerConnection) {
       }
     };
     pc.addEventListener('icegatheringstatechange', onChange);
-    setTimeout(resolve, 2000); // не ждём дольше 2 с
+    setTimeout(resolve, 2000);
   });
 }
 
 /**
  * Подключает WebRTC-поток (WHEP) к <video>.
- * Использование:
  *   const { videoRef, state } = useWebRtcPlayer(stream, 'Входная дверь');
  *   <video ref={videoRef} autoPlay muted playsInline />
  */
 export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const labelRef = useRef(label);
+  labelRef.current = label;
   const [state, setState] = useState<PlayerState>('idle');
 
+  // Только примитивы: expiresAt и прочие поля при рефетче меняются,
+  // но пересоздавать соединение из-за этого не нужно.
+  const whepUrl = stream?.whepUrl;
+  const iceKey = stream ? JSON.stringify(stream.iceServers) : '';
+
   useEffect(() => {
-    if (!stream) return;
     const video = videoRef.current;
-    if (!video) return;
+    if (!whepUrl || !video) {
+      setState('idle');
+      return;
+    }
 
     setState('connecting');
 
-    if (USE_MOCKS) {
-      video.srcObject = createMockMediaStream(label);
+    // --- Мок-режим: включается, когда запущен MSW ---
+    if (window.__MSW_ACTIVE__) {
+      const mock = createMockMediaStream(labelRef.current);
+      video.srcObject = mock.stream;
+      video.play().catch(() => {});
       setState('playing');
       return () => {
+        mock.stop();
         video.srcObject = null;
       };
     }
 
-    const pc = new RTCPeerConnection({ iceServers: stream.iceServers });
+    // --- Реальный WHEP ---
+    const pc = new RTCPeerConnection({ iceServers: JSON.parse(iceKey || '[]') });
+    const abort = new AbortController();
     let sessionUrl: string | null = null;
-    let cancelled = false;
 
     pc.addTransceiver('video', { direction: 'recvonly' });
     pc.ontrack = (e) => {
@@ -84,27 +103,27 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
       try {
         await pc.setLocalDescription(await pc.createOffer());
         await waitForIceGathering(pc);
-        const res = await fetch(stream.whepUrl, {
+        const res = await fetch(whepUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/sdp' },
           body: pc.localDescription!.sdp,
+          signal: abort.signal,
         });
         if (!res.ok) throw new Error(`WHEP ${res.status}`);
         sessionUrl = res.headers.get('Location');
-        const answer = await res.text();
-        if (!cancelled) await pc.setRemoteDescription({ type: 'answer', sdp: answer });
+        await pc.setRemoteDescription({ type: 'answer', sdp: await res.text() });
       } catch {
-        if (!cancelled) setState('failed');
+        if (!abort.signal.aborted) setState('failed');
       }
     })();
 
     return () => {
-      cancelled = true;
+      abort.abort();
       pc.close();
       video.srcObject = null;
       if (sessionUrl) fetch(sessionUrl, { method: 'DELETE' }).catch(() => {});
     };
-  }, [stream, label]);
+  }, [whepUrl, iceKey]);
 
   return { videoRef, state };
 }

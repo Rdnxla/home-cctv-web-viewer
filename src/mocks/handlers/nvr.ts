@@ -1,12 +1,6 @@
 import { delay, http, HttpResponse } from 'msw';
-import {
-  cameras,
-  getNvrInfo,
-  MOCK_SDP_ANSWER,
-  poePorts,
-  sortCameras,
-  whepUrl,
-} from '../data/nvr';
+import { cameras, getNvrInfo, poePorts, sortCameras, whepUrl } from '../data/nvr';
+import { closeMockWhepSession, createMockWhepSession } from './mockWhep';
 import type { ApiErrorBody, Camera, StreamInfo } from '../data/nvrtypes';
 
 const API = '/api';
@@ -77,7 +71,7 @@ export const nvrHandlers = [
       cameraId: camera!.id,
       protocol: 'webrtc',
       whepUrl: whepUrl(camera!),
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+      iceServers: [],
       codec: camera!.codec!,
       resolution: camera!.resolution!,
       fps: camera!.fps!,
@@ -100,16 +94,21 @@ export const nvrHandlers = [
       });
     }
 
-    await delay(400);
-    return new HttpResponse(MOCK_SDP_ANSWER, {
+    const offer = await request.text();
+    const { sessionId, answerSdp } = await createMockWhepSession(offer, camera!.name);
+
+    return new HttpResponse(answerSdp, {
       status: 201,
       headers: {
         'Content-Type': 'application/sdp',
-        Location: `${API}/webrtc/${camera!.id}/whep/session-${Date.now()}`,
+        Location: `${API}/webrtc/${camera!.id}/whep/${sessionId}`,
       },
     });
   }),
 
   // Завершение WHEP-сессии
-  http.delete(`${API}/webrtc/:id/whep/:session`, () => new HttpResponse(null, { status: 200 })),
+  http.delete(`${API}/webrtc/:id/whep/:session`, ({ params }) => {
+    closeMockWhepSession(String(params.session));
+    return new HttpResponse(null, { status: 200 });
+  }),
 ];

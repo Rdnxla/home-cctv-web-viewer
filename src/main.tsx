@@ -14,7 +14,9 @@ async function enableMocking() {
     return
   }
   const {worker} = await import('./mocks/browser')
-  return worker.start()
+  return worker.start({
+    quiet: true,
+  })
 }
 
 const container = document.querySelector('#root');

@@ -1,0 +1,17 @@
+.cameraCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-width: calc(50% - 4px);
+  margin: 2px;
+  background-color: var(--gray-8);
+  border-radius: $base-radius;
+  overflow: hidden;
+
+}
+
+.cameraCard__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
