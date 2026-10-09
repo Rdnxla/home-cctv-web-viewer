@@ -5,4 +5,10 @@
   box-shadow: $base-shadow;
   background: var(--gray-1);
   overflow: hidden;
+  
+  .clientDashboard__cameraCard {
+    width: calc(50% - 4px);
+    margin: 0 2px 2px;
+  }
 }
+

@@ -1,0 +1,18 @@
+.camPage {
+  min-height: calc(100% - $header-h);
+  padding: 16px;
+  border-radius: $base-radius;
+  box-shadow: $base-shadow;
+  background: var(--gray-1);
+  overflow: hidden;
+}
+
+.camPage__camLink {
+  display: block;
+  width: 180px;
+  height: 120px;
+  margin-right: 4px;
+  padding: 8px;
+  border-radius: $base-radius;
+  background: var(--gray-5);
+}

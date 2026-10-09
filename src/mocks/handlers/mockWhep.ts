@@ -19,12 +19,12 @@ function createCanvasStream(label: string) {
   const ctx = canvas.getContext('2d')!;
 
   const draw = () => {
-    ctx.fillStyle = '#111';
+    ctx.fillStyle = '#123';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#2a9d5c';
+    ctx.fillStyle = '#2bad5d';
     ctx.font = '28px sans-serif';
     ctx.fillText(label, 24, 48);
-    ctx.fillStyle = '#ddd';
+    ctx.fillStyle = '#aaa';
     ctx.font = '20px monospace';
     ctx.fillText(new Date().toLocaleTimeString(), 24, canvas.height - 24);
   };

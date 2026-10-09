@@ -30,7 +30,7 @@ export function Component() {
   return (
     <section className={styles.clientDashboard}>
       <Heading as="h2" mb="2" size="4">Камеры</Heading>
-      <Flex gap="2" wrap="nowrap">
+      <Flex align='start' gap="2" wrap="nowrap">
         <Flex
           flexGrow="1"
           flexShrink="1"
@@ -38,7 +38,7 @@ export function Component() {
         >
           {
             [1,2,3,4].map((item) => (
-              <CameraCard key={item} />
+              <CameraCard className={styles.clientDashboard__cameraCard} key={item} />
             ))
           }
         </Flex>

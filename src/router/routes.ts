@@ -20,6 +20,10 @@ export const router = createBrowserRouter([
         lazy: () => import('@/pages/client-dashboard/ClientDashboard'),
       },
       {
+        path: '/:id/detail',
+        lazy: () => import('@/pages/cam-page/CamPage'),
+      },
+      {
         path: '/events',
         lazy: () => import('@/pages/event-list/EventList'),
       },
