@@ -18,12 +18,12 @@ Statuses: `todo` | `next` | `in-progress` | `done` | `blocked`.
 |---|-------|--------|--------|--------|----------------------------|
 | 1 | Inventory | prompts/01-inventory.md | reports/01-inventory.md, stack block in AGENTS.md | done | a22ced1 |
 | 2 | FSD Audit | prompts/02-fsd-audit.md | reports/02-fsd-audit.md | done | a22ced1 |
-| 3 | Biome & Style Audit | prompts/03-biome-audit.md | reports/03-biome-audit.md, references/conventions.md | next (2nd) | - |
-| 4 | Data & Mocks | prompts/04-data-and-mocks.md | reports/04-data-and-mocks.md, references/data-layer.md | next (1st) | - |
+| 3 | Biome & Style Audit | prompts/03-biome-audit.md | reports/03-biome-audit.md, references/conventions.md | next | - |
+| 4 | Data & Mocks | prompts/04-data-and-mocks.md | reports/04-data-and-mocks.md, references/data-layer.md | done | e599d53 |
 | 5 | Interaction Map | prompts/05-interaction-map.md | references/interaction-map.md | todo | - |
 | 6 | Synthesis, Skill, Roadmap | prompts/06-synthesis.md | SKILL.md, reports/06-roadmap.md | todo | - |
 
-Порядок оставшихся фаз: **04 → 03 → 05 → 06**. 04 первой, потому что 05 ждёт 02 и 04; 03 ни от чего, кроме 01, не зависит.
+Порядок оставшихся фаз: **03 → 05 → 06**. 05 уже разблокирована (02 и 04 выполнены), но 03 тоже готова к запуску; 06 требует всех фаз. Коммит `e599d53` («ai audit») не меняет `src/` относительно `a22ced1`, поэтому отчёты 01–02 актуальны.
 
 ## Dependencies
 
@@ -58,6 +58,7 @@ The agent records things here that cannot be determined from the code (intention
 - `tree` не установлен; дерево построено через `find`.
 - Ассеты из `index.html` (`/Inter.woff2`, `/favicon.png`, `/manifest.webmanifest`) в `public/` не найдены; источник — `UNVERIFIED`.
 - Biome и `tsc` ещё не запускались (предмет фазы 3).
+- Фаза 4: поведение по умолчанию TanStack Query v5 и MSW v2 (`retry: 3`, `onUnhandledRequest: 'warn'`, порядок хендлеров, devtools в prod) взято из документации версий, локально не проверено (`node_modules` не читаются). Приложение не запускалось (`dev` без разрешения запрещён), поэтому ответ Vite на немокнутый `/api/me/context` — `UNVERIFIED`.
 
 ## Session Log
 
@@ -66,7 +67,8 @@ The agent records things here that cannot be determined from the code (intention
 | 2026-10-17 | 1 | Инвентаризация: `reports/01-inventory.md`, блок stack в `AGENTS.md`, сканер → `reports/generated/` (38 файлов, 14 слайсов, 19 рёбер, 18 нарушений, 0 циклов, без FALLBACK). | Фазы 2–6 |
 | 2026-10-17 | 2 | Комплект перенесён владельцем в корень; ссылки на `ai-arch/` исправлены в `AGENTS.md` (блок stack) и `01-inventory.md`. FSD-аудит: `reports/02-fsd-audit.md` — 14 находок (high 1, medium 7, low 6), 16 перемещений, целевое дерево. Ключевое: FSD-001 (production `entities/camera-card` импортирует плеер и типы из `src/mocks`), 0 Public API, все 9 `layer-upward` — ложные. | Фазы 4, 3, 5, 6 |
 | 2026-10-17 | 2 | Ответы владельца на Q1, Q2, Q3, Q7, Q8 записаны в Decisions; `02-fsd-audit.md` обновлён (FSD-010 и FSD-013 закрыты решениями владельца, таблица перемещений скорректирована). | Фазы 4, 3, 5, 6 |
+| 2026-10-17 | 4 | `reports/04-data-and-mocks.md`: 15 находок (medium 6, low 9) — 1 query, 2 mutations, 13 хендлеров (8 без потребителя, 1 недостижим), 1 эндпоинт без мока. Главное: два формата ошибок при клиенте, понимающем один (DATA-001); недостижимый дубль `POST /api/auth/login` (DATA-002); токены не отправляются (DATA-005). Заполнен `references/data-layer.md` (таблицы, тестовые аккаунты/сценарии, 4 рецепта). | Фазы 3, 5, 6 |
 
 ## Next Step
 
-Phase 4: Data & Mocks. Run using `docs/ai/prompts/04-data-and-mocks.md`. Cross-reference FSD-001, FSD-003, FSD-008 from `reports/02-fsd-audit.md` instead of re-describing them. Then Phase 3 (no `node_modules` reading — see Decisions; ask before any internet lookup).
+Phase 3: Biome & Style Audit. Run using `docs/ai/prompts/03-biome-audit.md`. Step 6 (Biome docs): do not read `node_modules`; use the Biome 2.4.9 documentation and ask the owner before any internet lookup (see Decisions). Then Phase 5 (interaction map), then Phase 6.
