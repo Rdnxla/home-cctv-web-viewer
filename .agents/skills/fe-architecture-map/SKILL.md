@@ -6,25 +6,25 @@ description: Architecture map and conventions for this frontend project (React, 
 # fe-architecture-map
 
 Freshness metadata:
-- Map commit: `a630f2c` + uncommitted work in the working tree: camera page (new `entities/camera`, `shared/{config,lib}`; `pages/cam-page` and `widgets/camera-control` moved to `ui/` + `index.ts`) and event log (new `entities/event`, `shared/ui`, `shared/api/{pagination,retry}.ts`, `shared/lib/{isOneOf,pluralize}.ts`, `mocks/{data,handlers}/events.ts`; `pages/event-list` moved to `ui/` + `model/` + `index.ts`) and dashboard (`pages/client-dashboard` and `widgets/info` moved to `ui/` + `index.ts` and rewritten on real data; new `entities/camera/ui/{CameraLiveView,StreamPlaceholder}.tsx` (the latter moved from `pages/cam-page`), `shared/ui/{load-error,inline-error}`, `shared/config/layout.ts`, `shared/lib/formatRelativeTime.ts`). After that work is committed, replace `a630f2c` below with the new commit hash.
-- Date: 2026-10-17
+- Map commit: `8014d73` (contains the camera page, event log and dashboard work) + uncommitted work in the working tree: archive page (new `pages/archive`, `entities/recording`, `entities/bookmark`; `entities/camera` gained playback (`useCameraPlaybackQuery`, `PLAYBACK_SPEEDS`, optional `CameraPlayer` props, `PlayerState` re-export); `entities/event` gained `useEventsInRangeQuery`; `shared/lib/{formatDuration,formatFileSize,useNow}.ts`; `ROUTES.archive`/`cameraArchive`; 3 new `ApiErrorCode`s; MSW `mocks/handlers/archive.ts`, `mocks/data/{recordings,bookmarks}.ts`, `to` param in `GET /api/events`, archive clock in `mockWhep.ts`; route `/archive`; «Архив» button on the camera page). After that work is committed, replace `8014d73` below with the new commit hash.
+- Date: 2026-10-18
 - Versions: react `19.2.4`, react-router `7.13.2`, @tanstack/react-query `5.95.2`, msw `2.12.14`, @biomejs/biome `2.4.9`, vite `8.0.3`, typescript `6.0.2`, @radix-ui/themes `3.3.0`
 
 ## Freshness check (do this first)
 
 ```bash
-git rev-list --count a630f2c..HEAD
-git diff --name-status a630f2c HEAD -- src | rg '^(A|D|R)'
+git rev-list --count 8014d73..HEAD
+git diff --name-status 8014d73 HEAD -- src | rg '^(A|D|R)'
 git status --short -- src
 ```
 
-- While that work is uncommitted, `git status --short -- src` lists exactly the files described in `references/interaction-map.md` (cards `pages/cam-page`, `pages/client-dashboard`, `pages/event-list`, `widgets/camera-control`, `widgets/info`, `entities/camera`, `entities/event`, `shared`, `?mocks`) plus `src/router/routes.ts` and `src/entities/camera-card/CameraCard.tsx`; that is expected, not drift.
+- While the archive work is uncommitted, `git status --short -- src` lists exactly: new `src/pages/archive/`, `src/entities/{recording,bookmark}/`, `src/entities/camera/model/playback.ts`, `src/shared/lib/{formatDuration,formatFileSize,useNow}.ts`, `src/mocks/data/{recordings,bookmarks}.ts`, `src/mocks/handlers/archive.ts`; modified `src/entities/camera/{index.ts,api/*,model/types.ts,ui/CameraPlayer.tsx}`, `src/entities/event/{index.ts,api/*,model/types.ts}`, `src/mocks/{browser.js,server.js,handlers/index.js,handlers/events.ts,handlers/mockWhep.ts}`, `src/pages/cam-page/ui/CameraView.tsx`, `src/router/routes.ts`, `src/shared/api/authErrorCodes.ts`, `src/shared/config/routes.ts`. That is expected, not drift.
 - If there are no added, deleted, or renamed files in `src`, the map can be trusted (changes within existing files do not affect the structure).
 - If there are A/D/R changes in slice directories, `index.*` files, or MSW handlers, the map is outdated in those areas. Regenerate the graph using `node docs/ai/scripts/fsd-imports.mjs`, inspect the changed slices, and inform the user that the map needs to be updated (see the procedure in `docs/ai/README.md`, section "Updating the Map").
 
 ## Project at a glance
 
-- Client SPA for a video surveillance NVR: list of IP cameras with live WebRTC (WHEP) video, camera detail page, event log (alarms, warnings, detections; server-side filtering, sorting, pagination), login with 2FA. Backend is not connected yet — all `/api/*` traffic is served by MSW in DEV.
+- Client SPA for a video surveillance NVR: list of IP cameras with live WebRTC (WHEP) video, camera detail page, event log (alarms, warnings, detections; server-side filtering, sorting, pagination), archive (playback of a camera's recordings from any moment of a day, zoomable timeline with recordings/events/bookmarks, saved bookmarks, file list), login with 2FA. Backend is not connected yet — all `/api/*` traffic is served by MSW in DEV.
 - Stack: React 19 + react-router 7 (data router, lazy routes), TanStack Query v5, MSW v2, Radix Themes + radix-ui, SCSS Modules (+ Tailwind 4 plugin), valibot (installed, unused), Vite 8, TypeScript 6 (strict, `exactOptionalPropertyTypes`).
 - Package manager: yarn 4 (`yarn exec <bin>`; never `npx`). Alias: `@/*` → `src/*`.
 - Layout: FSD layers `src/{app,pages,widgets,features,entities,shared}`; `features/` is an empty placeholder. Outside layers (legacy): `src/router`, `src/api`, `src/mocks` (dev-only), `src/assets`. Entry: `src/main.tsx` (providers + MSW start).
@@ -34,16 +34,16 @@ git status --short -- src
 
 1. Imports go only to strictly lower layers: `app > pages > widgets > features > entities > shared`. Today there are 0 cross-slice imports and 0 cycles — keep it that way.
 2. Slices of the same layer never import each other (`entities` only via `@x`).
-3. Outside a slice, import only its Public API `index.ts`. Have one: `pages/cam-page`, `pages/client-dashboard`, `pages/event-list`, `widgets/camera-control`, `widgets/info`, `entities/camera`, `entities/event` (7 of 11), plus the `shared/ui` segment (`@/shared/ui`). Still without: `pages/auth`, `widgets/the-header`, `entities/camera-card` (unused), `entities/user-profile-card`. When you touch another slice, add `index.ts` with explicit named re-exports and `export type` for types (no `export *`). `noBarrelFile` is already off for `src/{pages,widgets,features,entities}/*/index.ts` and `src/shared/*/index.ts` (`biome.json`). Inside a slice use relative imports, never the slice's own `index.ts`.
+3. Outside a slice, import only its Public API `index.ts`. Have one: `pages/archive`, `pages/cam-page`, `pages/client-dashboard`, `pages/event-list`, `widgets/camera-control`, `widgets/info`, `entities/bookmark`, `entities/camera`, `entities/event`, `entities/recording` (10 of 14), plus the `shared/ui` segment (`@/shared/ui`). Still without: `pages/auth`, `widgets/the-header`, `entities/camera-card` (unused), `entities/user-profile-card`. When you touch another slice, add `index.ts` with explicit named re-exports and `export type` for types (no `export *`). `noBarrelFile` is already off for `src/{pages,widgets,features,entities}/*/index.ts` and `src/shared/*/index.ts` (`biome.json`). Inside a slice use relative imports, never the slice's own `index.ts`.
 4. Segments are named by purpose: `ui`, `api`, `model`, `lib`, `config`. Never create `components`, `utils`, `hooks`, `types`, `helpers` (existing `shared/components`, `shared/utils` are legacy).
-5. New API functions and query hooks go to `src/entities/<entity>/api/`, domain types to `src/entities/<entity>/model/` (agreed target: `session`, `user`, `camera`). Do not add files to `src/api` or `src/pages/*/model` for API code. Camera queries already exist: `cameraKeys`, `useCamerasQuery`, `useCameraQuery`, `useCameraStreamQuery` from `@/entities/camera`; event log — `eventKeys`, `useEventsQuery` from `@/entities/event`. Reuse them, and `retryUnlessClientError` (`@/shared/api/retry`) for new queries. Live video of one camera anywhere — `CameraLiveView` from `@/entities/camera` (stream query + player + placeholder; put `key={camera.id}` on it). Page-specific URL state (filters, sorting, page) may live in `src/pages/*/model` — it is not API code.
+5. New API functions and query hooks go to `src/entities/<entity>/api/`, domain types to `src/entities/<entity>/model/` (agreed target: `session`, `user`, `camera`). Do not add files to `src/api` or `src/pages/*/model` for API code. Camera queries already exist: `cameraKeys`, `useCamerasQuery`, `useCameraQuery`, `useCameraStreamQuery`, `useCameraPlaybackQuery` (archive playback) from `@/entities/camera`; event log — `eventKeys`, `useEventsQuery`, `useEventsInRangeQuery` (a camera's events in `[from, to)`) from `@/entities/event`; archive files — `useRecordingsQuery` from `@/entities/recording`; bookmarks — `useBookmarksQuery`, `useCreateBookmarkMutation`, `useDeleteBookmarkMutation` from `@/entities/bookmark` (the reference example for mutations). Optional queries take `params | null` and use `skipToken`. Reuse them, and `retryUnlessClientError` (`@/shared/api/retry`) for new queries. Live video of one camera anywhere — `CameraLiveView` from `@/entities/camera` (stream query + player + placeholder; put `key={camera.id}` on it). Archive playback reuses `CameraPlayer` with `badge`/`paused`/`onStateChange`/`onReconnect`/`getSnapshotDate` (see `pages/archive/ui/ArchivePlayer.tsx`); don't add a second player. Page-specific URL state (filters, sorting, page) may live in `src/pages/*/model` — it is not API code.
 6. `src/mocks` is dev/test-only: only `src/main.tsx`, `src/app/**` and test infrastructure may import it. Production code never imports `@/mocks/**`. Known legacy exceptions: `entities/camera-card` and `entities/camera` (`model/types.ts`, `ui/CameraPlayer.tsx`; owner decision 2026-10-17, until M-2). Need camera types or the player elsewhere? Import them from `@/entities/camera`, never from `@/mocks`. The opposite direction is fine: mocks import types, catalogs and error codes from `@/entities/*` and `@/shared/*` (as `mocks/{data,handlers}/events.ts` do) — define domain types in the entity, not in `src/mocks`.
 7. Pages and layouts export `function Component()` — react-router `lazy` relies on it (`src/router/routes.ts`). Router target location is `src/app/router/`.
 8. HTTP only via `apiFetch<T>` from `@/shared/api/http`; check errors with `isApiError(err)` and `ApiErrorCode` (`@/shared/api/authErrorCodes`). Mock error bodies must be `{error: '<CODE>', message}`.
 9. TanStack Query v5 object syntax; query keys start with the entity name (`['cameras', 'list']`) so they can be invalidated by prefix.
-10. MSW v2 (`http`, `HttpResponse`, `delay`). A new handler array must be added to `src/mocks/handlers/index.js`, `src/mocks/browser.js` and `src/mocks/server.js`.
+10. MSW v2 (`http`, `HttpResponse`, `delay`). A new handler array must be added to `src/mocks/handlers/index.js`, `src/mocks/browser.js` and `src/mocks/server.js` (today: `authHandlers`, `nvrHandlers`, `eventHandlers`, `archiveHandlers`).
 11. Code style: named exports only; components as `export function Name()`; props as `interface NameProps`; `.tsx` files PascalCase, other files camelCase, directories kebab-case; cross-folder imports via `@/`, same-folder via `./`; `import type` on its own line.
-12. Styles: one `Name.module.scss` per component, classes `block__element`; `@/assets/scss/variables.scss` is auto-injected — do not import it.
+12. Styles: one `Name.module.scss` per component, classes `block__element`; `@/assets/scss/variables.scss` is auto-injected — do not import it. No `style` attribute in JSX (`nursery/noInlineStyles` is an error): position computed from data with SVG attributes in percent, like `pages/archive/ui/Timeline.tsx`.
 13. Do not run `--write`/`--unsafe` Biome commands or the `yarn lint`/`check`/`format` scripts (they modify files) unless the user asks.
 14. Do not delete scaffolding or "unused" code (owner decision, see "What not to do").
 
@@ -69,6 +69,7 @@ git status --short -- src
 
 Before finishing any task:
 1. `yarn exec biome check <changed files>`
+   Repo-wide `yarn exec biome ci .` currently has 1 known error that is not yours: formatting of `src/pages/cam-page/ui/CamPage.tsx` (already in `8014d73`; fix only on the owner's request).
 2. `yarn exec tsc --noEmit -p tsconfig.app.json` — baseline is 2 known errors (`src/main.tsx:16`, `src/testSetup.ts:3`; `docs/ai/reports/generated/tsc-app.txt`, refreshed after the dashboard refactor — was 5); do not add new ones.
 3. For new or moved files: `node docs/ai/scripts/fsd-imports.mjs` and check `docs/ai/reports/generated/slices.md` (note: folders outside FSD layers get rank −1 — imports *from* them are reported as `layer-upward`, imports *into* them are not checked).
 
@@ -79,6 +80,7 @@ Before finishing any task:
 - Add API code to `src/api/` or query hooks to `pages/*/model/` (legacy locations).
 - Return `{code, message}` error bodies from new mocks (the client reads `error`).
 - Use relative imports that leave the slice (`../../../api/...`).
+- Put `style={…}` on JSX elements or add `biome-ignore` for `noInlineStyles`; use classes or SVG attributes.
 - `biome-ignore` without a specific rule and a reason.
 
 Accepted exceptions (owner decision, 2026-10-17):
