@@ -5,18 +5,16 @@ description: Architecture map and conventions for this frontend project (React, 
 
 # fe-architecture-map
 
-> STATUS: TEMPLATE. Populated during phase 6 of the audit (`docs/ai/prompts/06-synthesis.md`). While this notice is present, do not trust empty sections: inspect the code and inform the user that the map is not ready.
-
 Freshness metadata:
-- Map commit: `<not filled in>`
-- Date: `<not filled in>`
-- Versions: react `?`, @tanstack/react-query `?`, msw `?`, @biomejs/biome `?`
+- Map commit: `9e5be8f` (`src/` identical to `a22ced1`)
+- Date: 2026-10-17
+- Versions: react `19.2.4`, react-router `7.13.2`, @tanstack/react-query `5.95.2`, msw `2.12.14`, @biomejs/biome `2.4.9`, vite `8.0.3`, typescript `6.0.2`
 
 ## Freshness check (do this first)
 
 ```bash
-git rev-list --count <commit>..HEAD
-git diff --name-status <commit> HEAD -- src | rg '^(A|D|R)'
+git rev-list --count 9e5be8f..HEAD
+git diff --name-status 9e5be8f HEAD -- src | rg '^(A|D|R)'
 ```
 
 - If there are no added, deleted, or renamed files in `src`, the map can be trusted (changes within existing files do not affect the structure).
@@ -24,32 +22,66 @@ git diff --name-status <commit> HEAD -- src | rg '^(A|D|R)'
 
 ## Project at a glance
 
-<!-- FILL IN (phase 6): application purpose, tech stack, package manager, path aliases, 5–8 lines. -->
+- Client SPA for a video surveillance NVR: list of IP cameras with live WebRTC (WHEP) video, camera detail page, events stub, login with 2FA. Backend is not connected yet — all `/api/*` traffic is served by MSW in DEV.
+- Stack: React 19 + react-router 7 (data router, lazy routes), TanStack Query v5, MSW v2, Radix Themes + radix-ui, SCSS Modules (+ Tailwind 4 plugin), valibot (installed, unused), Vite 8, TypeScript 6 (strict, `exactOptionalPropertyTypes`).
+- Package manager: yarn 4 (`yarn exec <bin>`; never `npx`). Alias: `@/*` → `src/*`.
+- Layout: FSD layers `src/{app,pages,widgets,features,entities,shared}`; `features/` is an empty placeholder. Outside layers (legacy): `src/router`, `src/api`, `src/mocks` (dev-only), `src/assets`. Entry: `src/main.tsx` (providers + MSW start).
+- No tests yet (owner decision: tests come after the components are ready).
 
 ## Core rules
 
-<!-- FILL IN (phase 6): 10–15 rules derived from the audit. Baseline rules (already applicable to any FSD project):
-1. Imports are allowed only from strictly lower layers: app > pages > widgets > features > entities > shared.
-2. Slices within the same layer must not import from one another (the @x notation is allowed for entities).
-3. Access a slice from outside only through its `index` (Public API).
-4. Name segments according to their purpose: ui, api, model, lib, config.
-5. All code must comply with Biome: before finishing work, run `<pm> exec biome check <changed files>`.
-Supplement project-specific rules using references/conventions.md and reports/. -->
+1. Imports go only to strictly lower layers: `app > pages > widgets > features > entities > shared`. Today there are 0 cross-slice imports and 0 cycles — keep it that way.
+2. Slices of the same layer never import each other (`entities` only via `@x`).
+3. Outside a slice, import only its Public API `index.ts`. No slice has one yet: when you touch a slice, add `index.ts` with explicit named re-exports (no `export *`). The Biome rule `noBarrelFile` will likely flag it — an override is required first (`UNVERIFIED`, see `docs/ai/reports/06-roadmap.md`).
+4. Segments are named by purpose: `ui`, `api`, `model`, `lib`, `config`. Never create `components`, `utils`, `hooks`, `types`, `helpers` (existing `shared/components`, `shared/utils` are legacy).
+5. New API functions and query hooks go to `src/entities/<entity>/api/`, domain types to `src/entities/<entity>/model/` (agreed target: `session`, `user`, `camera`). Do not add files to `src/api` or `src/pages/*/model` for API code.
+6. `src/mocks` is dev/test-only: only `src/main.tsx`, `src/app/**` and test infrastructure may import it. Production code never imports `@/mocks/**` (the existing `entities/camera-card` import is a known legacy violation).
+7. Pages and layouts export `function Component()` — react-router `lazy` relies on it (`src/router/routes.ts`). Router target location is `src/app/router/`.
+8. HTTP only via `apiFetch<T>` from `@/shared/api/http`; check errors with `isApiError(err)` and `ApiErrorCode` (`@/shared/api/authErrorCodes`). Mock error bodies must be `{error: '<CODE>', message}`.
+9. TanStack Query v5 object syntax; query keys start with the entity name (`['cameras', 'list']`) so they can be invalidated by prefix.
+10. MSW v2 (`http`, `HttpResponse`, `delay`). A new handler array must be added to `src/mocks/handlers/index.js`, `src/mocks/browser.js` and `src/mocks/server.js`.
+11. Code style: named exports only; components as `export function Name()`; props as `interface NameProps`; `.tsx` files PascalCase, other files camelCase, directories kebab-case; cross-folder imports via `@/`, same-folder via `./`; `import type` on its own line.
+12. Styles: one `Name.module.scss` per component, classes `block__element`; `@/assets/scss/variables.scss` is auto-injected — do not import it.
+13. Do not run `--write`/`--unsafe` Biome commands or the `yarn lint`/`check`/`format` scripts (they modify files) unless the user asks.
+14. Do not delete scaffolding or "unused" code (owner decision, see "What not to do").
 
 ## Where to look next
 
 | Task | Read |
 |---|---|
 | Where to put a file, whether X can be imported from Y, assessing violations | `references/fsd-rules.md` |
-| Dependencies, impact analysis, scenario flows | `references/interaction-map.md` |
+| Dependencies, impact analysis ("if changing X, check Y"), scenario flows, routes | `references/interaction-map.md` |
 | Code style, naming, formatting, Biome rules | `references/conventions.md` |
-| A new query or mutation, query keys, a new MSW handler, fixtures | `references/data-layer.md` |
+| A new query or mutation, query keys, a new MSW handler, fixtures, test accounts | `references/data-layer.md` |
+| Why something is the way it is, findings and the improvement plan | `docs/ai/reports/02..04`, `docs/ai/reports/06-roadmap.md` |
+| Owner decisions and open questions | `docs/ai/audit-plan.md` |
 
 ## How to add common items
 
-<!-- FILL IN (phase 6): 3–5 short recipes based on actual project examples, including example file paths:
-- A new page; a new feature; a new entity; a new query + mock; a new shared UI component. -->
+- **Page**: `src/pages/<kebab-name>/ui/<Name>.tsx` exporting `function Component()` + `<Name>.module.scss`; `src/pages/<kebab-name>/index.ts` re-exporting `Component`; route in `src/router/routes.ts` (`lazy: () => import('@/pages/<kebab-name>')`, inside the `MainLayout` or empty-layout branch). Route paths are hardcoded elsewhere too — see `references/interaction-map.md`, section 7, rule 5.
+- **Feature** (only for a user scenario reused in ≥ 2 places, otherwise keep it in the page/widget): `src/features/<verb-noun>/{ui,model,api}/` + `index.ts`; may import `entities/*` and `shared/*` only.
+- **Entity**: `src/entities/<noun>/{model/types.ts, api/<fn>.ts, ui/<Name>.tsx}` + `index.ts`. Example to follow: target layout of `entities/camera` in `docs/ai/reports/02-fsd-audit.md`.
+- **Query + mock**: follow `references/data-layer.md`, recipe 1 (types → API function → hook → index → MSW handler → fixture → checks).
+- **Shared UI component**: `src/shared/ui/<kebab-name>/<Name>.tsx` (+ `src/shared/ui/index.ts`); no domain knowledge, no imports from upper layers. Note: the existing callout lives in legacy `src/shared/components/callout/`.
+
+Before finishing any task:
+1. `yarn exec biome check <changed files>`
+2. `yarn exec tsc --noEmit -p tsconfig.app.json` — baseline at `9e5be8f` is 5 known errors (`docs/ai/reports/generated/tsc-app.txt`); do not add new ones.
+3. For new or moved files: `node docs/ai/scripts/fsd-imports.mjs` and check `docs/ai/reports/generated/slices.md` (note: folders outside FSD layers get rank −1 — imports *from* them are reported as `layer-upward`, imports *into* them are not checked).
 
 ## What not to do
 
-<!-- FILL IN (phase 6): anti-patterns found in this project and accepted exceptions (mark each exception with "owner decision" and the date). -->
+- Import `@/mocks/**` from production code (anything except `src/main.tsx`, `src/app/**`, test setup); put production logic (hooks, domain types) into `src/mocks`.
+- Deep-import another slice's internals once it has an `index.ts`; use `export *` in a Public API.
+- Add API code to `src/api/` or query hooks to `pages/*/model/` (legacy locations).
+- Return `{code, message}` error bodies from new mocks (the client reads `error`).
+- Use relative imports that leave the slice (`../../../api/...`).
+- `biome-ignore` without a specific rule and a reason.
+
+Accepted exceptions (owner decision, 2026-10-17):
+- `widgets/info` and `widgets/camera-control` stay in `widgets` although each has one consumer — they will be reused.
+- Do not remove: `entities/user-profile-card`, `pages/client-dashboard/model/useClientDashboard.ts`, `api/user/types.user.ts` (`User`), `useCalloutMessage`, commented-out blocks in `ClientDashboard.tsx`/`EventList.tsx`, placeholder in `CameraControls.tsx`.
+- `src/features/` is an intentional empty placeholder.
+- `src/mocks` stays outside FSD layers as dev-only infrastructure.
+- No tests and no coverage for now; `public/mockServiceWorker.js` being git-ignored is not an issue to raise.
+- `docs/ai/**` is excluded from Biome (`biome.json`, last override).

@@ -1,5 +1,7 @@
 # FSD Rules (benchmark for audit and development)
 
+> Commit: `9e5be8f` · Date: 2026-10-17 · Generic FSD rules + project-specific placement (section "Project placement"), agreed with the owner on 2026-10-17.
+
 Consult the up-to-date documentation at https://feature-sliced.design whenever in doubt (this is the source of truth for the rules). This file defines the criteria used for audits.
 
 ## Layers (top to bottom)
@@ -58,4 +60,24 @@ Names to avoid: `components`, `hooks`, `types`, `utils`, `helpers`, `common`, `m
 
 Can do: edges between slices, `layer-upward`, `cross-slice`, `non-public-api`, `deprecated-layer`, slices without `index`, loops, third-party layer packages. Doesn't know how to: evaluate the contents of `shared`, boundaries of entities and features, size of slices, names of segments by meaning, dynamic imports with variables, aliases from `vite.config` (reads only `paths` from tsconfig). These are manual phase 2 checks.
 
+Project-specific behaviour:
+- Folders outside FSD layers (`src/api`, `src/mocks`, `src/router`) appear as `?api`, `?mocks`, `?router` with rank −1. Imports *from* them into any layer are reported as `layer-upward` (false positives); imports *into* them from layers are NOT reported. Check `entities|features|widgets|pages → ?mocks|?api` edges manually in `imports.json`.
+- Root files `src/main.tsx`, `src/testSetup.ts`, `src/TestUtils.tsx` are not part of the graph.
+- Only JS/TS is scanned; SCSS `@use` dependencies are invisible.
+
 For automatic control in CI, you can consider Steiger (the official FSD linter). Installation requires a separate decision from the owner.
+
+## Project placement (agreed with the owner, 2026-10-17)
+
+| What | Where (target) | Legacy location still in use |
+|---|---|---|
+| Router config | `src/app/router/` | `src/router/routes.ts` |
+| Providers (QueryClient, Theme) | `src/app/providers/` | `src/main.tsx`, both layouts |
+| Session/auth API + types | `src/entities/session/{api,model}` | `src/api/auth/*` |
+| User API + types | `src/entities/user/{api,model,ui}` | `src/api/user/*`, `src/entities/user-profile-card` |
+| Camera types, WebRTC player, camera UI | `src/entities/camera/{model,lib,ui,api}` | `src/mocks/data/nvrtypes.ts`, `src/mocks/handlers/webrtc.ts`, `src/entities/camera-card` |
+| Shared UI / helpers | `src/shared/ui`, `src/shared/lib` | `src/shared/components`, `src/shared/utils` |
+| MSW (handlers, fixtures, in-memory db) | `src/mocks/**` — outside layers, dev/test-only | — |
+| Reusable user scenarios | `src/features/` (empty placeholder) | — |
+
+Accepted exceptions: `widgets/info` and `widgets/camera-control` stay widgets despite a single consumer (planned reuse).

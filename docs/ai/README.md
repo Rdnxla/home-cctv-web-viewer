@@ -56,6 +56,15 @@ Severity: `high` breaks layers or creates cycles; `medium` violates conventions 
 
 After Phase 06, the `fe-architecture-map` skill contains everything a new session needs: rules, the map, and conventions. To connect it without relying on AGENTS.md, copy the folder to the location where your version of Codex reads skills (check current documentation: previously `~/.codex/skills`, now usually `.agents/skills` inside the repository). While it remains in the repository, AGENTS.md already references it, and any version will work.
 
-## Updating the Map
+## Updating the Map (Map Regeneration)
 
-The map is tied to a specific commit. When the structure in `src` changes
+The map is tied to a specific commit (see "Freshness metadata" in `.agents/skills/fe-architecture-map/SKILL.md`). When the structure in `src` changes (files or slices added, deleted, or renamed; `index.*` files or MSW handlers changed), run this sequence from the repository root:
+
+1. Find what changed: `git diff --name-status <map commit> HEAD -- src | rg '^(A|D|R)'`.
+2. Regenerate the graph: `node docs/ai/scripts/fsd-imports.mjs` → `docs/ai/reports/generated/{imports.json,slices.md}`.
+3. Run Phase 5 in update mode (`docs/ai/prompts/05-interaction-map.md`): compare the new graph with `references/interaction-map.md` and edit only the changed blocks (graphs, slice cards, chains, rules).
+4. If queries, mutations, or MSW handlers changed: update the tables in `references/data-layer.md`.
+5. If slices were moved to their target location: update the "Project placement" table in `references/fsd-rules.md`.
+6. If `biome.json` changed: update the Biome section in `references/conventions.md`.
+7. Update the commit and date in the headers of `SKILL.md` and every reference you touched, and add a session-log row in `docs/ai/audit-plan.md`.
+8. Run `git status` to check that only `docs/ai/**` and `.agents/skills/**` changed.

@@ -1,6 +1,7 @@
 # Data Layer: TanStack Query and MSW
 
-> Коммит: `e599d53` · Дата: 2026-10-17 · Источник: `docs/ai/reports/04-data-and-mocks.md`
+> Commit: `9e5be8f` (measured at `e599d53`; `src/` identical) · Date: 2026-10-17 · Source: `docs/ai/reports/04-data-and-mocks.md`
+> `UNVERIFIED`: library defaults (TanStack Query v5 `retry`/`staleTime`, MSW v2 `onUnhandledRequest`) are taken from version docs, not checked locally.
 > Описывает, как слой данных устроен СЕЙЧАС и как вносить изменения. Находки и обоснования — только в отчёте.
 
 ## Versions and Configuration
@@ -72,10 +73,10 @@
 
 ## Known Issues
 
-- Два формата тела ошибки (`{error}` и `{code}`); `apiFetch` понимает только `{error}`.
-- `POST /api/auth/login` (503) в `auth.js:253` недостижим.
-- `GET /api/me/context` вызывается `getDashboard`, мока нет.
-- `apiFetch` превращает не-JSON успешный ответ в `{}` и не валидирует данные (`valibot` установлен, не используется).
-- Токены пишутся в `localStorage` (`Auth.tsx:34-35`), но не отправляются; refresh/me/logout на клиенте нет.
-- `CameraCard` использует захардкоженный `StreamInfo`; 5 эндпоинтов nvr/cameras без клиента.
-- Мок-ветка `window.__MSW_ACTIVE__` в плеере не активируется (флаг не устанавливается).
+Факты, которые нужно учитывать при работе (полный список и обоснования — `docs/ai/reports/04-data-and-mocks.md`, план — `docs/ai/reports/06-roadmap.md`):
+
+- Ошибки nvr/cameras приходят как `{code, message}` и в клиенте превращаются в `UNKNOWN_ERROR`. Не полагаться на `err.code` для этих эндпоинтов.
+- Чтобы получить 503 для `POST /api/auth/login`, используйте `server.use(...)`: хендлер в `auth.js:253` не срабатывает.
+- У `GET /api/me/context` нет мока. Прежде чем включать `useClientDashboard`, добавьте хендлер.
+- `apiFetch` возвращает `{}`, если успешный ответ не JSON, и не отправляет `Authorization` и `Content-Type`.
+- Видео в DEV идёт через `mockWhep.ts` по обычному пути WHEP; ветка `window.__MSW_ACTIVE__` в плеере не выполняется.

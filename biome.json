@@ -229,6 +229,18 @@
       "linter": {
         "enabled": false
       }
+    },
+    {
+      "includes": ["docs/ai/**"],
+      "assist": {
+        "enabled": false
+      },
+      "formatter": {
+        "enabled": false
+      },
+      "linter": {
+        "enabled": false
+      }
     }
   ]
 }
