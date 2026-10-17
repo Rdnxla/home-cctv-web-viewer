@@ -1,0 +1,462 @@
+{
+  "aliases": [
+    [
+      "@/",
+      "src"
+    ]
+  ],
+  "aliasFallback": false,
+  "slices": [
+    {
+      "id": "app",
+      "layer": "app",
+      "slice": null,
+      "rank": 6,
+      "files": 2,
+      "segments": [
+        "layouts"
+      ],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 2
+    },
+    {
+      "id": "pages/auth",
+      "layer": "pages",
+      "slice": "auth",
+      "rank": 5,
+      "files": 2,
+      "segments": [
+        "model"
+      ],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 2
+    },
+    {
+      "id": "pages/cam-page",
+      "layer": "pages",
+      "slice": "cam-page",
+      "rank": 5,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 2
+    },
+    {
+      "id": "pages/client-dashboard",
+      "layer": "pages",
+      "slice": "client-dashboard",
+      "rank": 5,
+      "files": 2,
+      "segments": [
+        "model"
+      ],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 3
+    },
+    {
+      "id": "pages/event-list",
+      "layer": "pages",
+      "slice": "event-list",
+      "rank": 5,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 0
+    },
+    {
+      "id": "widgets/camera-control",
+      "layer": "widgets",
+      "slice": "camera-control",
+      "rank": 4,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 0
+    },
+    {
+      "id": "widgets/info",
+      "layer": "widgets",
+      "slice": "info",
+      "rank": 4,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 1
+    },
+    {
+      "id": "widgets/the-header",
+      "layer": "widgets",
+      "slice": "the-header",
+      "rank": 4,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 1
+    },
+    {
+      "id": "entities/camera-card",
+      "layer": "entities",
+      "slice": "camera-card",
+      "rank": 2,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 2,
+      "fanOut": 1
+    },
+    {
+      "id": "entities/user-profile-card",
+      "layer": "entities",
+      "slice": "user-profile-card",
+      "rank": 2,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 0,
+      "fanOut": 0
+    },
+    {
+      "id": "shared",
+      "layer": "shared",
+      "slice": null,
+      "rank": 1,
+      "files": 6,
+      "segments": [
+        "api",
+        "components",
+        "utils"
+      ],
+      "hasPublicApi": false,
+      "fanIn": 6,
+      "fanOut": 0
+    },
+    {
+      "id": "?api",
+      "layer": "api",
+      "slice": null,
+      "rank": -1,
+      "files": 4,
+      "segments": [
+        "auth",
+        "user"
+      ],
+      "hasPublicApi": false,
+      "fanIn": 2,
+      "fanOut": 1
+    },
+    {
+      "id": "?mocks",
+      "layer": "mocks",
+      "slice": null,
+      "rank": -1,
+      "files": 10,
+      "segments": [
+        "data",
+        "handlers"
+      ],
+      "hasPublicApi": false,
+      "fanIn": 1,
+      "fanOut": 1
+    },
+    {
+      "id": "?router",
+      "layer": "router",
+      "slice": null,
+      "rank": -1,
+      "files": 1,
+      "segments": [],
+      "hasPublicApi": false,
+      "fanIn": 0,
+      "fanOut": 5
+    }
+  ],
+  "edges": [
+    {
+      "from": "?api",
+      "to": "shared",
+      "count": 2,
+      "typeOnly": 0
+    },
+    {
+      "from": "?mocks",
+      "to": "shared",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "?router",
+      "to": "app",
+      "count": 2,
+      "typeOnly": 0
+    },
+    {
+      "from": "?router",
+      "to": "pages/auth",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "?router",
+      "to": "pages/cam-page",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "?router",
+      "to": "pages/client-dashboard",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "?router",
+      "to": "pages/event-list",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "app",
+      "to": "shared",
+      "count": 2,
+      "typeOnly": 0
+    },
+    {
+      "from": "app",
+      "to": "widgets/the-header",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "entities/camera-card",
+      "to": "?mocks",
+      "count": 2,
+      "typeOnly": 1
+    },
+    {
+      "from": "pages/auth",
+      "to": "?api",
+      "count": 2,
+      "typeOnly": 1
+    },
+    {
+      "from": "pages/auth",
+      "to": "shared",
+      "count": 2,
+      "typeOnly": 0
+    },
+    {
+      "from": "pages/cam-page",
+      "to": "entities/camera-card",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "pages/cam-page",
+      "to": "widgets/camera-control",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "pages/client-dashboard",
+      "to": "?api",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "pages/client-dashboard",
+      "to": "entities/camera-card",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "pages/client-dashboard",
+      "to": "widgets/info",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "widgets/info",
+      "to": "shared",
+      "count": 1,
+      "typeOnly": 1
+    },
+    {
+      "from": "widgets/the-header",
+      "to": "shared",
+      "count": 1,
+      "typeOnly": 0
+    }
+  ],
+  "cycles": [],
+  "violations": [
+    {
+      "kind": "layer-upward",
+      "from": "src/api/auth/auth.ts",
+      "to": "shared/api/http",
+      "spec": "@/shared/api/http",
+      "note": "api imports from the higher-level shared"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/api/user/user.ts",
+      "to": "shared/api/http",
+      "spec": "@/shared/api/http",
+      "note": "api imports from the higher-level shared"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/app/layouts/main/MainLayout.tsx",
+      "to": "widgets/the-header/TheHeader",
+      "spec": "@/widgets/the-header/TheHeader",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/auth.js",
+      "to": "shared/utils/auth",
+      "spec": "../../shared/utils/auth",
+      "note": "mocks imports from the higher-level shared"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/pages/cam-page/CamPage.tsx",
+      "to": "widgets/camera-control/CameraControls",
+      "spec": "@/widgets/camera-control/CameraControls",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/pages/cam-page/CamPage.tsx",
+      "to": "entities/camera-card/CameraCard",
+      "spec": "@/entities/camera-card/CameraCard",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/pages/client-dashboard/ClientDashboard.tsx",
+      "to": "widgets/info/InfoBlock",
+      "spec": "@/widgets/info/InfoBlock",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/pages/client-dashboard/ClientDashboard.tsx",
+      "to": "entities/camera-card/CameraCard",
+      "spec": "@/entities/camera-card/CameraCard",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/router/routes.ts",
+      "to": "app/layouts/empty/EmptyLayout",
+      "spec": "@/app/layouts/empty/EmptyLayout",
+      "note": "router imports from the higher-level app"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/router/routes.ts",
+      "to": "app/layouts/main/MainLayout",
+      "spec": "@/app/layouts/main/MainLayout",
+      "note": "router imports from the higher-level app"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/router/routes.ts",
+      "to": "pages/auth/Auth",
+      "spec": "@/pages/auth/Auth",
+      "note": "router imports from the higher-level pages"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/router/routes.ts",
+      "to": "pages/auth/Auth",
+      "spec": "@/pages/auth/Auth",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/router/routes.ts",
+      "to": "pages/client-dashboard/ClientDashboard",
+      "spec": "@/pages/client-dashboard/ClientDashboard",
+      "note": "router imports from the higher-level pages"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/router/routes.ts",
+      "to": "pages/client-dashboard/ClientDashboard",
+      "spec": "@/pages/client-dashboard/ClientDashboard",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/router/routes.ts",
+      "to": "pages/cam-page/CamPage",
+      "spec": "@/pages/cam-page/CamPage",
+      "note": "router imports from the higher-level pages"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/router/routes.ts",
+      "to": "pages/cam-page/CamPage",
+      "spec": "@/pages/cam-page/CamPage",
+      "note": "import bypassing index (slice Public API)"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/router/routes.ts",
+      "to": "pages/event-list/EventList",
+      "spec": "@/pages/event-list/EventList",
+      "note": "router imports from the higher-level pages"
+    },
+    {
+      "kind": "non-public-api",
+      "from": "src/router/routes.ts",
+      "to": "pages/event-list/EventList",
+      "spec": "@/pages/event-list/EventList",
+      "note": "import bypassing index (slice Public API)"
+    }
+  ],
+  "externalsByLayer": {
+    "app": {
+      "@radix-ui/themes": 2,
+      "react-router": 2
+    },
+    "entities": {
+      "@radix-ui/themes": 2,
+      "react": 2,
+      "react-router": 1
+    },
+    "mocks": {
+      "msw": 4,
+      "react": 1
+    },
+    "pages": {
+      "@radix-ui/themes": 3,
+      "radix-ui": 1,
+      "react": 1,
+      "react-router": 1,
+      "@tanstack/react-query": 2
+    },
+    "router": {
+      "react-router": 1
+    },
+    "shared": {
+      "@radix-ui/react-icons": 1,
+      "@radix-ui/themes": 1,
+      "react": 3
+    },
+    "widgets": {
+      "@radix-ui/themes": 3,
+      "@radix-ui/react-icons": 2,
+      "react": 1,
+      "react-router": 1
+    }
+  }
+}
