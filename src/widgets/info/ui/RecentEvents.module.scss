@@ -1,0 +1,24 @@
+.recentEvents__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recentEvents__item {
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background-color: var(--gray-a2);
+}
+
+// Тревоги выделены полосой слева, как в журнале событий
+.recentEvents__alarm {
+  box-shadow: inset 3px 0 0 var(--red-9);
+}
+
+.recentEvents__time {
+  white-space: nowrap;
+}

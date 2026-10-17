@@ -2,6 +2,7 @@ import {Box, Text} from '@radix-ui/themes';
 import type {ReactNode} from 'react';
 import {useCallback} from 'react';
 import {useNavigate} from 'react-router';
+import {ROUTES} from '@/shared/config/routes';
 import type {StreamInfo} from '@/mocks/data/nvrtypes';
 import {useWebRtcPlayer} from '@/mocks/handlers/webrtc';
 import styles from './CameraCard.module.scss';
@@ -12,7 +13,8 @@ interface CameraCardProps {
   children?: ReactNode;
 }
 
-const currCamId = 1;
+// Совпадает с захардкоженным потоком ниже (cam-1), пока карточка не получает камеру через props (M-2, M-5)
+const currCamId = 'cam-1';
 
 export function CameraCard(props: CameraCardProps) {
   const {className, children} = props;
@@ -33,7 +35,7 @@ export function CameraCard(props: CameraCardProps) {
   const {videoRef} = useWebRtcPlayer(stream, 'Входная дверь');
 
   const openCamPage = useCallback(() => {
-    navigate(`/${currCamId}/detail`);
+    navigate(ROUTES.cameraDetail(currCamId));
   }, [navigate]);
 
   return (

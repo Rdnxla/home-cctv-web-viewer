@@ -1,0 +1,103 @@
+import {Badge, Button, DropdownMenu} from '@radix-ui/themes';
+import {Fragment, useCallback} from 'react';
+import type {EventCategory, EventType} from '@/entities/event';
+import {
+  EVENT_CATEGORIES,
+  EVENT_CATEGORY_META,
+  EVENT_TYPES,
+  EventTypeLabel,
+  getEventTypesByCategory,
+} from '@/entities/event';
+
+/** Меню с флажками не закрывается после каждого выбора */
+function keepMenuOpen(event: Event) {
+  event.preventDefault();
+}
+
+interface TypeOptionProps {
+  checked: boolean;
+  onToggle: (type: EventType, checked: boolean) => void;
+  type: EventType;
+}
+
+function TypeOption(props: TypeOptionProps) {
+  const {checked, onToggle, type} = props;
+
+  const toggle = useCallback(
+    (next: boolean) => {
+      onToggle(type, next);
+    },
+    [onToggle, type]
+  );
+
+  return (
+    <DropdownMenu.CheckboxItem checked={checked} onCheckedChange={toggle} onSelect={keepMenuOpen}>
+      <EventTypeLabel type={type} />
+    </DropdownMenu.CheckboxItem>
+  );
+}
+
+interface EventTypeFilterProps {
+  /** Выбранная категория сужает список типов; `null` — все категории */
+  category: EventCategory | null;
+  onChange: (types: EventType[]) => void;
+  value: EventType[];
+}
+
+/** Мультивыбор типов событий, сгруппированных по категориям */
+export function EventTypeFilter(props: EventTypeFilterProps) {
+  const {category, onChange, value} = props;
+  const categories = category === null ? EVENT_CATEGORIES : [category];
+
+  const toggle = useCallback(
+    (type: EventType, checked: boolean) => {
+      const selected = new Set(value);
+      if (checked) {
+        selected.add(type);
+      } else {
+        selected.delete(type);
+      }
+      onChange(EVENT_TYPES.filter(item => selected.has(item)));
+    },
+    [onChange, value]
+  );
+
+  const clear = useCallback(() => {
+    onChange([]);
+  }, [onChange]);
+
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Button color='gray' variant='surface'>
+          Тип события
+          {value.length > 0 ? (
+            <Badge radius='full' size='1' variant='solid'>
+              {value.length}
+            </Badge>
+          ) : null}
+          <DropdownMenu.TriggerIcon />
+        </Button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        {categories.map((item, index) => (
+          <Fragment key={item}>
+            {index > 0 ? <DropdownMenu.Separator /> : null}
+            <DropdownMenu.Group>
+              <DropdownMenu.Label>{EVENT_CATEGORY_META[item].pluralLabel}</DropdownMenu.Label>
+              {getEventTypesByCategory(item).map(type => (
+                <TypeOption checked={value.includes(type)} key={type} onToggle={toggle} type={type} />
+              ))}
+            </DropdownMenu.Group>
+          </Fragment>
+        ))}
+        {value.length > 0 ? (
+          <>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item onSelect={clear}>Сбросить выбор типов</DropdownMenu.Item>
+          </>
+        ) : null}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
