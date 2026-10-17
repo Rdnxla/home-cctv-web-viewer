@@ -1,0 +1,60 @@
+.archiveList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 440px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.archiveList__item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.archiveList__button {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--gray-a2);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  // Содержимое кнопки — строчные элементы; во flex они становятся блоками и могут обрезаться многоточием
+  > * {
+    min-width: 0;
+  }
+
+  time {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    background-color: var(--gray-a3);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-8);
+    outline-offset: -2px;
+  }
+}
+
+.archiveList__current {
+  background-color: var(--accent-a3);
+  box-shadow: inset 3px 0 0 var(--accent-9);
+
+  &:hover {
+    background-color: var(--accent-a4);
+  }
+}

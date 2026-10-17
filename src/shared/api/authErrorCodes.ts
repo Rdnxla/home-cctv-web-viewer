@@ -1,5 +1,7 @@
 export const ApiErrorCode = {
   accountLocked: 'ACCOUNT_LOCKED',
+  bookmarkNotFound: 'BOOKMARK_NOT_FOUND',
+  cameraNotFound: 'CAMERA_NOT_FOUND',
   emailNotVerified: 'EMAIL_NOT_VERIFIED',
   internalError: 'INTERNAL_ERROR',
   invalidBody: 'INVALID_BODY',
@@ -9,6 +11,7 @@ export const ApiErrorCode = {
   invalidSession: 'INVALID_SESSION',
   passwordResetRequired: 'PASSWORD_RESET_REQUIRED',
   rateLimited: 'RATE_LIMITED',
+  recordingNotFound: 'RECORDING_NOT_FOUND',
   serviceUnavailable: 'SERVICE_UNAVAILABLE',
   unauthenticated: 'UNAUTHENTICATED',
   unknownError: 'UNKNOWN_ERROR',

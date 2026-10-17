@@ -27,6 +27,10 @@ export const router = createBrowserRouter([
         lazy: () => import('@/pages/event-list'),
         path: '/events',
       },
+      {
+        lazy: () => import('@/pages/archive'),
+        path: '/archive',
+      },
     ],
   },
 ]);

@@ -1,0 +1,131 @@
+$timeline-height: 56px;
+
+.timeline__slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: $timeline-height;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+
+.timeline__track {
+  position: relative;
+  flex-grow: 1;
+  height: 100%;
+  border-radius: 6px;
+  background-color: var(--gray-3);
+  overflow: hidden;
+}
+
+.timeline__layers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.timeline__grid {
+  stroke: var(--gray-a5);
+  stroke-width: 1;
+}
+
+// Будущее время текущего дня: записей там быть не может
+.timeline__hatch {
+  fill: var(--gray-a4);
+}
+
+// Режимы записи: и отрезок на шкале (SVG), и образец в легенде (HTML)
+.timeline__continuous {
+  background-color: var(--teal-9);
+  fill: var(--teal-9);
+}
+
+.timeline__event {
+  background-color: var(--orange-9);
+  fill: var(--orange-9);
+}
+
+// Верхняя дорожка — события по категориям и закладки
+.timeline__alarm {
+  fill: var(--red-9);
+}
+
+.timeline__warning {
+  fill: var(--amber-9);
+}
+
+.timeline__detection {
+  fill: var(--blue-9);
+}
+
+.timeline__bookmark {
+  fill: var(--violet-9);
+  stroke: var(--gray-1);
+  stroke-width: 1;
+}
+
+.timeline__hoverLine {
+  stroke: var(--gray-a10);
+  stroke-width: 1;
+}
+
+.timeline__thumb {
+  display: block;
+  width: 3px;
+  height: $timeline-height;
+  border-radius: 2px;
+  background-color: var(--gray-12);
+  box-shadow: 0 0 0 1px var(--gray-1);
+  cursor: grab;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-8);
+    outline-offset: 2px;
+  }
+}
+
+// Момент не выбран: ползунок виден только при фокусе с клавиатуры
+.timeline__thumbEmpty:not(:focus-visible) {
+  opacity: 0;
+}
+
+.timeline__ticks {
+  display: block;
+  width: 100%;
+  height: 18px;
+  margin-top: 2px;
+  overflow: visible;
+}
+
+.timeline__tick {
+  fill: var(--gray-10);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline__hoverLabel {
+  fill: var(--gray-12);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.timeline__swatch {
+  display: inline-block;
+  width: 12px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.timeline__swatchEvents {
+  background: linear-gradient(90deg, var(--red-9) 0 33%, var(--amber-9) 33% 66%, var(--blue-9) 66%);
+}
+
+.timeline__swatchBookmark {
+  width: 8px;
+  border-radius: 0;
+  background-color: var(--violet-9);
+  transform: rotate(45deg);
+}

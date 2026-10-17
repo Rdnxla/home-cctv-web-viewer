@@ -26,6 +26,14 @@
   - **M-1** — частично: 7 из 11 слайсов с Public API; `non-public-api` 5 → 2 (остались `MainLayout → the-header`, `routes → auth`).
   - **Переиспользование**: `StreamPlaceholder` перенесён из `pages/cam-page` в `entities/camera/ui`; новый `CameraLiveView` (запрос потока + плеер + заглушка) — на странице камеры и в сетке дашборда; `LoadError`/`InlineError` в `shared/ui` заменили 3 локальные копии; `CONTENT_WITH_ASIDE_COLUMNS` в `shared/config/layout.ts` — общий макет страницы камеры и дашборда; `formatRelativeTime` в `shared/lib` — общий для времени активности камеры и ленты событий.
   - **M-2 / L-1** — новый вопрос Q11: `entities/camera-card` без потребителей; удалить или влить в `entities/camera/ui` — решение владельца (агент не удаляет без разрешения).
+- Сделано 2026-10-18 при создании страницы архива (рабочая копия поверх `8014d73`, по запросу владельца):
+  - **D5 / MAP-1** — сняты: пункт «Архив» в шапке ведёт на новый маршрут `/archive` (`pages/archive`, lazy через Public API). Владелец выбрал «страница», а не «скрыть пункт».
+  - **M-6** — частично: в `ROUTES` добавлены `archive` и `cameraArchive(id)`; `TheHeader.tsx`, `Auth.tsx` по-прежнему со строками путей.
+  - **Новые сущности в целевом виде**: `entities/recording` (файлы архива) и `entities/bookmark` (закладки, первые мутации проекта с инвалидацией по префиксу ключа); типы определены в сущностях, моки импортируют их оттуда (FSD-001 не повторяется).
+  - **Новые эндпоинты** (`mocks/handlers/archive.ts`, ошибки в формате `{error, message}`, коды `CAMERA_NOT_FOUND`, `RECORDING_NOT_FOUND`, `BOOKMARK_NOT_FOUND` добавлены в `ApiErrorCode`): `GET /api/cameras/:id/recordings`, `GET /api/cameras/:id/playback`, `POST|DELETE /api/playback/:id/whep[/:session]`, `GET|POST /api/bookmarks`, `DELETE /api/bookmarks/:id`. У `GET /api/events` появился параметр `to`.
+  - **M-2** — не сделано (решение владельца): воспроизведение архива идёт через тот же `CameraPlayer` (новые необязательные props), поэтому новых импортов из `src/mocks` вне `entities/camera` нет; в `entities/camera/model/types.ts` добавлен реэкспорт `PlayerState` из `mocks/handlers/webrtc.ts` (ребро `entities/camera → ?mocks`: 2 → 3 импорта).
+  - **M-1** — частично: 10 из 14 слайсов с Public API; `non-public-api` без изменений (2).
+  - Найдено, не исправлено: `biome ci .` на `8014d73` уже падает на форматировании `src/pages/cam-page/ui/CamPage.tsx` (многострочные импорты) — правка вне задачи, нужна команда владельца.
 - Закрыто решениями владельца, в план не входит: FSD-010 (виджеты остаются), FSD-013 (ничего не удалять), пустой `features/`, `mockServiceWorker.js` в `.gitignore`.
 - Отложено до появления тестов (решение владельца): DATA-015, BIO-011, FSD-012.
 
@@ -39,7 +47,7 @@
 | D2 | Контракт ошибок API для реального бэкенда | `{error, message, ...data}` (уже понимает клиент) или `{code, message}` (как в nvr-моках) | QW-4 (выбор формата), L-2 |
 | D3 | Валидация ответов в рантайме | valibot-схемы в `entities/*/model` или оставить приведение типов | M-3, M-5 |
 | D4 | Защита маршрутов и поведение без сессии | guard на `MainLayout`, редирект на `/` | M-4 |
-| D5 | Пункт «Архив» (`/archive`) в шапке без маршрута (MAP-1) | заготовка-страница или временно скрыть пункт | M-6 |
+| D5 | ~~Пункт «Архив» (`/archive`) в шапке без маршрута (MAP-1)~~ — закрыто 2026-10-18: владелец поручил сделать страницу, маршрут `/archive` есть | — | — |
 | D6 | Линтинг SCSS (BIO-006) | stylelint (новая зависимость) или не контролировать | M-8 |
 
 ## Порядок выполнения
@@ -84,7 +92,7 @@
 | M-3 | FSD-003, FSD-008, DATA-014 | `src/api/auth/*` → `entities/session/{api,model}` (+ хуки мутаций из `pages/auth/model`), `src/api/user/*` → `entities/user/{api,model}`, `entities/user-profile-card` → `entities/user/ui` (не удалять); тип пользователя без `password`, тип записи фикстуры — в `src/mocks/data`. Удалить пустой `src/api` | средний: типы, которые использует `Auth.tsx` | сканер: узла `?api` нет; вход и 2FA в DEV | QW-3 |
 | M-4 | DATA-005, DATA-011 | Слой сессии в `entities/session`: хранение токенов, `Authorization` в `apiFetch`, функции и хуки `refresh`/`me`/`logout`, `setQueryData` после логина, guard маршрутов (D4) | средний: смена потока входа | вход → `GET /api/auth/me` 200; выход → 401; `/dashboard` без сессии — по D4 | M-3, D4 |
 | M-5 | DATA-007, DATA-010, DATA-003 | Queries камер в `entities/camera/api` (`getCameras`, `getCamera`, `getCameraStream`) с фабрикой ключей; `CameraCard` получает `StreamInfo` из `/stream`. Это снимает MAP-2 (4 WHEP-сессии к `cam-1`) и MAP-3 (`/1/detail` при id `cam-N`). `CamPage` читает `:id`. Мок для `GET /api/me/context` — перед включением `useClientDashboard` | средний: поведение плеера при ошибках камер (`cam-3` — задержка 3 с, `cam-4` — 404) | `yarn dev`: 2 online-камеры с видео, 2 — с ошибками; переход в детальный просмотр нужной камеры | M-2, QW-4, D3 |
-| M-6 | MAP-1, MAP-4 | Маршрут или скрытие пункта `archive` (D5); вынести пути маршрутов в одну константу (`app/router/paths.ts`) вместо строк в 4 файлах | низкий | клик по каждому пункту шапки | QW-8, D5 |
+| M-6 | MAP-4 (MAP-1 снято) | ~~Маршрут или скрытие пункта `archive` (D5)~~ — маршрут сделан 2026-10-18; осталось: пути в `TheHeader.tsx` и `Auth.tsx` перевести на `ROUTES` (`src/shared/config/routes.ts`) | низкий | клик по каждому пункту шапки | QW-8 |
 | M-7 | Контроль границ (`03-biome-audit.md`) | Автоматическая проверка FSD по D1; в любом случае — `node docs/ai/scripts/fsd-imports.mjs` в CI с проверкой отсутствия нарушений | ложные срабатывания на внеслойном `src/mocks` → исключение для него | искусственный импорт вверх → CI падает | M-1…M-3, D1 |
 | M-8 | BIO-006, FSD-011 | По D6 — линтинг SCSS; презентационный `CalloutItem` (иконка + цвет) в `shared/ui/callout`, переиспользуемый `InfoBlock` и `CalloutMessage` | низкий | визуальная проверка toast и блока «Обзор» | QW-9, D6 |
 
@@ -127,7 +135,7 @@
 
 | ID | Факт | Где |
 |---|---|---|
-| MAP-1 | пункт навигации `archive` без маршрута | `src/widgets/the-header/TheHeader.tsx:11`, `src/router/routes.ts` |
+| MAP-1 | ~~пункт навигации `archive` без маршрута~~ — снято 2026-10-18 (маршрут `/archive`) | `src/widgets/the-header/TheHeader.tsx:11`, `src/router/routes.ts` |
 | MAP-2 | 4 `CameraCard` на дашборде открывают 4 WHEP-сессии к `cam-1` | `ClientDashboard.tsx:34-36`, `CameraCard.tsx:22-33` |
 | MAP-3 | «Открыть» ведёт на `/1/detail`, id камер — `cam-N`; `CamPage` не читает `:id` | `CameraCard.tsx:15,36`, `mocks/data/nvr.ts` |
 | MAP-4 | пути маршрутов захардкожены в 4 файлах | `Auth.tsx:36`, `CameraCard.tsx:36`, `TheHeader.tsx:9-11`, `CamPage.tsx:37` |

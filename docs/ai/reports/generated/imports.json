@@ -21,6 +21,21 @@
       "fanOut": 2
     },
     {
+      "id": "pages/archive",
+      "layer": "pages",
+      "slice": "archive",
+      "rank": 5,
+      "files": 22,
+      "segments": [
+        "lib",
+        "model",
+        "ui"
+      ],
+      "hasPublicApi": true,
+      "fanIn": 1,
+      "fanOut": 5
+    },
+    {
       "id": "pages/auth",
       "layer": "pages",
       "slice": "auth",
@@ -112,11 +127,25 @@
       "fanOut": 1
     },
     {
+      "id": "entities/bookmark",
+      "layer": "entities",
+      "slice": "bookmark",
+      "rank": 2,
+      "files": 5,
+      "segments": [
+        "api",
+        "model"
+      ],
+      "hasPublicApi": true,
+      "fanIn": 2,
+      "fanOut": 1
+    },
+    {
       "id": "entities/camera",
       "layer": "entities",
       "slice": "camera",
       "rank": 2,
-      "files": 13,
+      "files": 14,
       "segments": [
         "api",
         "lib",
@@ -124,7 +153,7 @@
         "ui"
       ],
       "hasPublicApi": true,
-      "fanIn": 5,
+      "fanIn": 6,
       "fanOut": 2
     },
     {
@@ -151,7 +180,22 @@
         "ui"
       ],
       "hasPublicApi": true,
-      "fanIn": 3,
+      "fanIn": 4,
+      "fanOut": 1
+    },
+    {
+      "id": "entities/recording",
+      "layer": "entities",
+      "slice": "recording",
+      "rank": 2,
+      "files": 7,
+      "segments": [
+        "api",
+        "model",
+        "ui"
+      ],
+      "hasPublicApi": true,
+      "fanIn": 2,
       "fanOut": 1
     },
     {
@@ -170,7 +214,7 @@
       "layer": "shared",
       "slice": null,
       "rank": 1,
-      "files": 23,
+      "files": 26,
       "segments": [
         "api",
         "components",
@@ -180,7 +224,7 @@
         "utils"
       ],
       "hasPublicApi": false,
-      "fanIn": 12,
+      "fanIn": 15,
       "fanOut": 0
     },
     {
@@ -202,14 +246,14 @@
       "layer": "mocks",
       "slice": null,
       "rank": -1,
-      "files": 12,
+      "files": 15,
       "segments": [
         "data",
         "handlers"
       ],
       "hasPublicApi": false,
       "fanIn": 2,
-      "fanOut": 2
+      "fanOut": 4
     },
     {
       "id": "?router",
@@ -220,7 +264,7 @@
       "segments": [],
       "hasPublicApi": false,
       "fanIn": 0,
-      "fanOut": 5
+      "fanOut": 6
     }
   ],
   "edges": [
@@ -232,20 +276,38 @@
     },
     {
       "from": "?mocks",
+      "to": "entities/bookmark",
+      "count": 3,
+      "typeOnly": 2
+    },
+    {
+      "from": "?mocks",
       "to": "entities/event",
-      "count": 4,
+      "count": 6,
+      "typeOnly": 4
+    },
+    {
+      "from": "?mocks",
+      "to": "entities/recording",
+      "count": 2,
       "typeOnly": 2
     },
     {
       "from": "?mocks",
       "to": "shared",
-      "count": 4,
-      "typeOnly": 1
+      "count": 6,
+      "typeOnly": 2
     },
     {
       "from": "?router",
       "to": "app",
       "count": 2,
+      "typeOnly": 0
+    },
+    {
+      "from": "?router",
+      "to": "pages/archive",
+      "count": 1,
       "typeOnly": 0
     },
     {
@@ -285,10 +347,16 @@
       "typeOnly": 0
     },
     {
+      "from": "entities/bookmark",
+      "to": "shared",
+      "count": 2,
+      "typeOnly": 0
+    },
+    {
       "from": "entities/camera",
       "to": "?mocks",
-      "count": 2,
-      "typeOnly": 1
+      "count": 3,
+      "typeOnly": 2
     },
     {
       "from": "entities/camera",
@@ -315,6 +383,42 @@
       "typeOnly": 1
     },
     {
+      "from": "entities/recording",
+      "to": "shared",
+      "count": 2,
+      "typeOnly": 0
+    },
+    {
+      "from": "pages/archive",
+      "to": "entities/bookmark",
+      "count": 6,
+      "typeOnly": 3
+    },
+    {
+      "from": "pages/archive",
+      "to": "entities/camera",
+      "count": 9,
+      "typeOnly": 5
+    },
+    {
+      "from": "pages/archive",
+      "to": "entities/event",
+      "count": 8,
+      "typeOnly": 6
+    },
+    {
+      "from": "pages/archive",
+      "to": "entities/recording",
+      "count": 9,
+      "typeOnly": 6
+    },
+    {
+      "from": "pages/archive",
+      "to": "shared",
+      "count": 19,
+      "typeOnly": 0
+    },
+    {
       "from": "pages/auth",
       "to": "?api",
       "count": 2,
@@ -335,7 +439,7 @@
     {
       "from": "pages/cam-page",
       "to": "shared",
-      "count": 7,
+      "count": 8,
       "typeOnly": 0
     },
     {
@@ -442,6 +546,20 @@
     },
     {
       "kind": "layer-upward",
+      "from": "src/mocks/data/bookmarks.ts",
+      "to": "entities/bookmark",
+      "spec": "@/entities/bookmark",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/data/bookmarks.ts",
+      "to": "entities/event",
+      "spec": "@/entities/event",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
       "from": "src/mocks/data/events.ts",
       "to": "entities/event",
       "spec": "@/entities/event",
@@ -453,6 +571,55 @@
       "to": "entities/event",
       "spec": "@/entities/event",
       "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/data/recordings.ts",
+      "to": "entities/event",
+      "spec": "@/entities/event",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/data/recordings.ts",
+      "to": "entities/recording",
+      "spec": "@/entities/recording",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/archive.ts",
+      "to": "entities/bookmark",
+      "spec": "@/entities/bookmark",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/archive.ts",
+      "to": "entities/bookmark",
+      "spec": "@/entities/bookmark",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/archive.ts",
+      "to": "entities/recording",
+      "spec": "@/entities/recording",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/archive.ts",
+      "to": "shared/api/authErrorCodes",
+      "spec": "@/shared/api/authErrorCodes",
+      "note": "mocks imports from the higher-level shared"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/archive.ts",
+      "to": "shared/api/authErrorCodes",
+      "spec": "@/shared/api/authErrorCodes",
+      "note": "mocks imports from the higher-level shared"
     },
     {
       "kind": "layer-upward",
@@ -544,6 +711,13 @@
       "to": "pages/event-list",
       "spec": "@/pages/event-list",
       "note": "router imports from the higher-level pages"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/router/routes.ts",
+      "to": "pages/archive",
+      "spec": "@/pages/archive",
+      "note": "router imports from the higher-level pages"
     }
   ],
   "externalsByLayer": {
@@ -552,23 +726,23 @@
       "react-router": 2
     },
     "entities": {
-      "@tanstack/react-query": 2,
+      "@tanstack/react-query": 4,
       "@radix-ui/react-icons": 5,
-      "@radix-ui/themes": 10,
+      "@radix-ui/themes": 11,
       "react": 6,
       "react-router": 2
     },
     "mocks": {
-      "msw": 5,
+      "msw": 6,
       "react": 1
     },
     "pages": {
-      "@radix-ui/themes": 12,
-      "radix-ui": 1,
-      "react": 9,
-      "react-router": 5,
-      "@tanstack/react-query": 2,
-      "@radix-ui/react-icons": 6
+      "react": 26,
+      "react-router": 10,
+      "@radix-ui/react-icons": 14,
+      "@radix-ui/themes": 24,
+      "@tanstack/react-query": 7,
+      "radix-ui": 2
     },
     "router": {
       "react-router": 1
@@ -576,7 +750,7 @@
     "shared": {
       "@radix-ui/react-icons": 5,
       "@radix-ui/themes": 6,
-      "react": 9
+      "react": 10
     },
     "widgets": {
       "@radix-ui/react-icons": 2,
