@@ -1,10 +1,4 @@
-import {setupWorker} from 'msw/browser'
-import {
-  authHandlers,
-  nvrHandlers,
-} from './handlers'
+import {setupWorker} from 'msw/browser';
+import {authHandlers, nvrHandlers} from './handlers';
 
-export const worker = setupWorker(
-  ...authHandlers,
-  ...nvrHandlers,
-)
+export const worker = setupWorker(...authHandlers, ...nvrHandlers);

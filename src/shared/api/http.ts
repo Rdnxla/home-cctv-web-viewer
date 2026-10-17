@@ -1,9 +1,10 @@
-import {ApiErrorCode, type ApiErrorCodeType} from './authErrorCodes'
+import type {ApiErrorCodeType} from './authErrorCodes';
+import {ApiErrorCode} from './authErrorCodes';
 
 export interface ApiError extends Error {
-  status: number
-  code: ApiErrorCodeType
-  data: Record<string, unknown>
+  status: number;
+  code: ApiErrorCodeType;
+  data: Record<string, unknown>;
 }
 
 export function createApiError(
@@ -12,26 +13,22 @@ export function createApiError(
   message: string,
   data: Record<string, unknown> = {}
 ): ApiError {
-  const error = new Error(message) as ApiError
-  error.name = 'ApiError'
-  error.status = status
-  error.code = code
-  error.data = data
-  return error
+  const error = new Error(message) as ApiError;
+  error.name = 'ApiError';
+  error.status = status;
+  error.code = code;
+  error.data = data;
+  return error;
 }
 
-export const isApiError = (error: unknown): error is ApiError =>
-  error instanceof Error && error.name === 'ApiError'
+export const isApiError = (error: unknown): error is ApiError => error instanceof Error && error.name === 'ApiError';
 
-export async function apiFetch<T>(
-  url: string,
-  options?: RequestInit
-): Promise<T> {
+export async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
-    ...options
-  })
+    ...options,
+  });
 
-  const body = await res.json().catch(() => ({}))
+  const body = await res.json().catch(() => ({}));
 
   if (!res.ok) {
     throw createApiError(
@@ -39,8 +36,8 @@ export async function apiFetch<T>(
       body.error ?? ApiErrorCode.unknownError,
       body.message ?? 'Something went wrong',
       body
-    )
+    );
   }
 
-  return body as T
+  return body as T;
 }

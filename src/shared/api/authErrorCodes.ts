@@ -1,18 +1,18 @@
 export const ApiErrorCode = {
-  validationError: 'VALIDATION_ERROR',
-  invalidCredentials: 'INVALID_CREDENTIALS',
   accountLocked: 'ACCOUNT_LOCKED',
   emailNotVerified: 'EMAIL_NOT_VERIFIED',
+  internalError: 'INTERNAL_ERROR',
+  invalidBody: 'INVALID_BODY',
+  invalidCode: 'INVALID_CODE',
+  invalidCredentials: 'INVALID_CREDENTIALS',
+  invalidRefreshToken: 'INVALID_REFRESH_TOKEN',
+  invalidSession: 'INVALID_SESSION',
   passwordResetRequired: 'PASSWORD_RESET_REQUIRED',
   rateLimited: 'RATE_LIMITED',
-  invalidSession: 'INVALID_SESSION',
-  invalidCode: 'INVALID_CODE',
-  invalidRefreshToken: 'INVALID_REFRESH_TOKEN',
-  unauthenticated: 'UNAUTHENTICATED',
-  invalidBody: 'INVALID_BODY',
-  internalError: 'INTERNAL_ERROR',
   serviceUnavailable: 'SERVICE_UNAVAILABLE',
-  unknownError: 'UNKNOWN_ERROR'
-} as const
+  unauthenticated: 'UNAUTHENTICATED',
+  unknownError: 'UNKNOWN_ERROR',
+  validationError: 'VALIDATION_ERROR',
+} as const;
 
-export type ApiErrorCodeType = (typeof ApiErrorCode)[keyof typeof ApiErrorCode]
+export type ApiErrorCodeType = (typeof ApiErrorCode)[keyof typeof ApiErrorCode];

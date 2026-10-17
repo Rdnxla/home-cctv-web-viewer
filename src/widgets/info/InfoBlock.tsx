@@ -1,117 +1,95 @@
-import styles from './InfoBlock.module.scss'
-import {
-  Box,
-  Callout,
-  Heading,
-  Text,
-} from "@radix-ui/themes";
-import {
-  CheckCircledIcon,
-  CrossCircledIcon,
-  ExclamationTriangleIcon,
-  InfoCircledIcon,
-} from '@radix-ui/react-icons'
-import type {
-  MessageType,
-} from "@/shared/components/callout/types";
+import {CheckCircledIcon, CrossCircledIcon, ExclamationTriangleIcon, InfoCircledIcon} from '@radix-ui/react-icons';
+import {Box, Callout, Heading, Text} from '@radix-ui/themes';
+import type {MessageType} from '@/shared/components/callout/types';
+import styles from './InfoBlock.module.scss';
 
 const messages = [
   {
     id: 1,
+    message: 'Обнаружено движение!',
     type: 'error',
-    message: 'Обнаружено движение!'
   },
   {
     id: 1,
+    message: 'Сигнал восстановлен',
     type: 'success',
-    message: 'Сигнал восстановлен'
   },
   {
     id: 1,
+    message: 'Нет электричества!',
     type: 'warn',
-    message: 'Нет электричества!'
   },
   {
     id: 1,
+    message: 'Нет электричества!',
     type: 'warn',
-    message: 'Нет электричества!'
   },
   {
     id: 1,
+    message: 'Нет электричества!',
     type: 'warn',
-    message: 'Нет электричества!'
   },
   {
     id: 1,
+    message: 'Нет электричества!',
     type: 'warn',
-    message: 'Нет электричества!'
   },
   {
     id: 1,
+    message: 'Нет электричества!',
     type: 'warn',
-    message: 'Нет электричества!'
   },
   {
     id: 1,
+    message: 'Нет электричества!',
     type: 'warn',
-    message: 'Нет электричества!'
   },
   {
     id: 1,
+    message: 'Нет электричества!',
     type: 'warn',
-    message: 'Нет электричества!'
   },
-]
+];
 
 const colors = {
   error: 'tomato',
   info: 'blue',
   success: 'green',
   warn: 'yellow',
-} as const
+} as const;
 
 function renderIcon(type: MessageType): React.ReactNode {
   switch (type) {
-    case 'error': 
-      return (
-        <CrossCircledIcon />
-      )
+    case 'error':
+      return <CrossCircledIcon />;
     case 'success':
-      return (
-        <CheckCircledIcon />
-      )
+      return <CheckCircledIcon />;
     case 'warn':
-      return (
-        <ExclamationTriangleIcon />
-      )
+      return <ExclamationTriangleIcon />;
     default:
-      return (
-        <InfoCircledIcon />
-      )
+      return <InfoCircledIcon />;
   }
 }
 
 export function InfoBlock() {
   return (
-    <Box
-      className={styles.infoBlock}
-    >
-      <Heading as='h2' size='4'>Обзор</Heading>
+    <Box className={styles.infoBlock}>
+      <Heading as='h2' size='4'>
+        Обзор
+      </Heading>
       <Text>Камер в сети: 3 из 4</Text>
-      <Heading as='h4' my='2' size='3'>Последние события:</Heading>
+      <Heading as='h4' my='2' size='3'>
+        Последние события:
+      </Heading>
       <Box height='800px' overflow='scroll'>
         <Box>
-          {messages.map((m) => (
+          {messages.map(m => (
             <div className={styles.callout} key={m.id}>
               <Callout.Root color={colors[m.type]}>
-                <Callout.Icon>
-                  {renderIcon(m.type)}
-                </Callout.Icon>
-                <Callout.Text>
-                  {m.message}
-                </Callout.Text>
+                <Callout.Icon>{renderIcon(m.type)}</Callout.Icon>
+                <Callout.Text>{m.message}</Callout.Text>
               </Callout.Root>
-            </ div>
+            </div>
           ))}
         </Box>
       </Box>

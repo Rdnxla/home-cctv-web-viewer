@@ -1,11 +1,31 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": { "clientKind": "git", "enabled": true, "useIgnoreFile": true },
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  },
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "off",
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              [":URL:", ":PACKAGE_WITH_PROTOCOL:", ":NODE:", ":BUN:", ":PACKAGE:"],
+              ["@/app", "@/app/**"],
+              ["@/pages", "@/pages/**"],
+              ["@/widgets", "@/widgets/**"],
+              ["@/features", "@/features/**"],
+              ["@/entities", "@/entities/**"],
+              ["@/shared", "@/shared/**"],
+              ":ALIAS:",
+              ":PATH:"
+            ]
+          }
+        },
         "useSortedAttributes": "on",
+        "useSortedKeys": "on",
         "useSortedProperties": "on"
       }
     },
@@ -14,20 +34,28 @@
   "css": {
     "parser": {
       "tailwindDirectives": true
+    },
+    "formatter": {
+      "quoteStyle": "double"
     }
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120
   },
   "javascript": {
     "formatter": {
       "arrowParentheses": "asNeeded",
       "bracketSpacing": false,
       "jsxQuoteStyle": "single",
+      "quoteProperties": "asNeeded",
       "quoteStyle": "single",
-      "semicolons": "asNeeded",
-      "trailingCommas": "none"
+      "semicolons": "always",
+      "trailingCommas": "es5",
+      "expand": "auto"
     }
   },
   "linter": {
@@ -79,7 +107,6 @@
           "style": {
             "noMagicNumbers": "off",
             "noImplicitBoolean": "off",
-            "useExportsLast": "off",
             "useBlockStatements": "off",
             "useNamingConvention": "off",
             "useComponentExportOnlyModules": "off",
@@ -88,7 +115,13 @@
               "options": {
                 "strictCase": false,
                 "requireAscii": true,
-                "filenameCases": ["camelCase", "kebab-case", "PascalCase"]
+                "filenameCases": ["camelCase"]
+              }
+            },
+            "useImportType": {
+              "level": "error",
+              "options": {
+                "style": "separatedType"
               }
             },
             "noJsxLiterals": "off"
@@ -98,6 +131,57 @@
               "level": "error",
               "options": {
                 "entropyThreshold": 100
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false,
+                "requireAscii": true,
+                "filenameCases": ["PascalCase"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/index.tsx", "src/main.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false,
+                "requireAscii": true,
+                "filenameCases": ["camelCase"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false,
+                "requireAscii": true,
+                "filenameCases": ["camelCase", "kebab-case"]
               }
             }
           }
@@ -123,6 +207,16 @@
         "rules": {
           "performance": {
             "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.json", "**/*.jsonc"],
+      "assist": {
+        "actions": {
+          "source": {
+            "useSortedKeys": "off"
           }
         }
       }

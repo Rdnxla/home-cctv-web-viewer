@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -16,22 +18,35 @@ html {
 
 body {
   min-height: 100vh;
-  margin: 0;
   padding: 0;
-  line-height: 1.5;
-  text-rendering: optimizeLegibility;
+  margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: inherit;
   font-weight: inherit;
   line-height: 1.1;
   overflow-wrap: break-word;
 }
 
-img, picture, video, canvas, svg, embed, iframe, object, audio {
+img,
+picture,
+video,
+canvas,
+svg,
+embed,
+iframe,
+object,
+audio {
   display: block;
   max-width: 100%;
   height: auto;
@@ -46,7 +61,10 @@ button {
   border: none;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
   -webkit-appearance: none;
   appearance: none;
@@ -64,7 +82,8 @@ a {
   color: inherit;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -77,21 +96,28 @@ th {
 }
 
 fieldset {
-  border: none;
   padding: 0;
+  border: none;
 }
 
 sub,
 sup {
+  position: relative;
   font-size: 75%;
   line-height: 0;
-  position: relative;
   vertical-align: baseline;
 }
-sub { bottom: -0.25em; }
-sup { top: -0.5em; }
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
 
-pre, code, kbd, samp {
+pre,
+code,
+kbd,
+samp {
   font-family: monospace;
   font-size: inherit;
 }

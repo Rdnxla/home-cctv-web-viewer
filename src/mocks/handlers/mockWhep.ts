@@ -34,16 +34,16 @@ function createCanvasStream(label: string) {
   const stream = canvas.captureStream(25);
 
   return {
-    stream,
     stop: () => {
       clearInterval(timer);
-      stream.getTracks().forEach((t) => t.stop());
+      stream.getTracks().forEach(t => t.stop());
     },
+    stream,
   };
 }
 
 function waitForIce(pc: RTCPeerConnection) {
-  return new Promise<void>((resolve) => {
+  return new Promise<void>(resolve => {
     if (pc.iceGatheringState === 'complete') return resolve();
     pc.addEventListener('icegatheringstatechange', () => {
       if (pc.iceGatheringState === 'complete') resolve();
@@ -54,12 +54,12 @@ function waitForIce(pc: RTCPeerConnection) {
 
 export async function createMockWhepSession(offerSdp: string, label: string) {
   // STUN не нужен: обе стороны в одной вкладке
-  const pc = new RTCPeerConnection({ iceServers: [] });
+  const pc = new RTCPeerConnection({iceServers: []});
   const media = createCanvasStream(label);
 
-  media.stream.getTracks().forEach((track) => pc.addTrack(track, media.stream));
+  media.stream.getTracks().forEach(track => pc.addTrack(track, media.stream));
 
-  await pc.setRemoteDescription({ type: 'offer', sdp: offerSdp });
+  await pc.setRemoteDescription({sdp: offerSdp, type: 'offer'});
   await pc.setLocalDescription(await pc.createAnswer());
   await waitForIce(pc);
 
@@ -72,7 +72,7 @@ export async function createMockWhepSession(offerSdp: string, label: string) {
     },
   });
 
-  return { sessionId, answerSdp: pc.localDescription!.sdp };
+  return {answerSdp: pc.localDescription!.sdp, sessionId};
 }
 
 export function closeMockWhepSession(sessionId: string) {

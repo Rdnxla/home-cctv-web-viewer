@@ -1,21 +1,14 @@
-import styles from './TheHeader.module.scss'
-import { useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router';
-import {
-  Box,
-  Flex,
-  Heading,
-  IconButton,
-  SegmentedControl,
-  Text,
-} from "@radix-ui/themes";
-import { CheckIcon, GearIcon } from "@radix-ui/react-icons"
-import { useMediaQuery } from '@/shared/utils/useMediaQuery'
+import {CheckIcon, GearIcon} from '@radix-ui/react-icons';
+import {Box, Flex, Heading, IconButton, SegmentedControl, Text} from '@radix-ui/themes';
+import {useCallback} from 'react';
+import {useLocation, useNavigate} from 'react-router';
+import {useMediaQuery} from '@/shared/utils/useMediaQuery';
+import styles from './TheHeader.module.scss';
 
 const SEGMENTS_CONFIG = [
-  { value: 'dashboard', label: 'Камеры', icon: 'К' },
-  { value: 'events', label: 'Уведомления', icon: 'У' },
-  { value: 'archive', label: 'Архив', icon: 'А' },
+  {icon: 'К', label: 'Камеры', value: 'dashboard'},
+  {icon: 'У', label: 'Уведомления', value: 'events'},
+  {icon: 'А', label: 'Архив', value: 'archive'},
 ];
 
 export function TheHeader() {
@@ -32,44 +25,36 @@ export function TheHeader() {
       <SegmentedControl.Root
         className={styles.headerItem}
         onValueChange={redirectToPage}
-        radius="medium"
-        size="2"
+        radius='medium'
+        size='2'
         value={currentPath}
       >
-        {
-          SEGMENTS_CONFIG.map((tab) => (
-            <SegmentedControl.Item key={tab.value} value={tab.value}>
-              { isMobile ? tab.icon : tab.label }
-            </SegmentedControl.Item>
-          ))
-        }
+        {SEGMENTS_CONFIG.map(tab => (
+          <SegmentedControl.Item key={tab.value} value={tab.value}>
+            {isMobile ? tab.icon : tab.label}
+          </SegmentedControl.Item>
+        ))}
       </SegmentedControl.Root>
     );
   }
 
   return (
-    <Box
-      className={styles.header}
-      px="4"
-      py="4"
-    >
-      <Flex align="center" justify="between">
-        <Flex
-          className={styles.headerItem}
-          direction="column"
-        >
-          <Heading as="h1" color="indigo" size="4">Устройство</Heading>
-          <Flex align="center" gap="1">
-            <CheckIcon color='green' height="15px" width="15px"/>
-            <Text color='green' size="1">В сети</Text>
+    <Box className={styles.header} px='4' py='4'>
+      <Flex align='center' justify='between'>
+        <Flex className={styles.headerItem} direction='column'>
+          <Heading as='h1' color='indigo' size='4'>
+            Устройство
+          </Heading>
+          <Flex align='center' gap='1'>
+            <CheckIcon color='green' height='15px' width='15px' />
+            <Text color='green' size='1'>
+              В сети
+            </Text>
           </Flex>
         </Flex>
         {getSegmentComponent()}
-        <Flex
-          className={styles.headerItem}
-          justify="end"
-        >
-          <IconButton color="indigo" variant="outline">
+        <Flex className={styles.headerItem} justify='end'>
+          <IconButton color='indigo' variant='outline'>
             <GearIcon />
           </IconButton>
         </Flex>

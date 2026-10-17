@@ -2,7 +2,7 @@ import accounts from './data/accounts.json';
 
 // Глубокое клонирование, чтобы каждый запуск (например, каждый тест)
 // начинался с чистого состояния и не мутировал исходные json-модули.
-const clone = (data) => JSON.parse(JSON.stringify(data));
+const clone = data => JSON.parse(JSON.stringify(data));
 const idCounters = {};
 
 function createStore() {
@@ -26,9 +26,4 @@ function nowIso() {
   return new Date().toISOString();
 }
 
-export {
-  db,
-  resetDb,
-  nextId,
-  nowIso,
-}
+export {db, nextId, nowIso, resetDb};

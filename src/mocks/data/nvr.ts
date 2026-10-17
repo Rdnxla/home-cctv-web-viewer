@@ -1,4 +1,4 @@
-import type { Camera, CameraStatus, NvrInfo, PoePort } from './nvrtypes';
+import type {Camera, CameraStatus, NvrInfo, PoePort} from './nvrtypes';
 
 const now = Date.now();
 const minutesAgo = (m: number) => new Date(now - m * 60_000).toISOString();
@@ -11,104 +11,102 @@ export const NVR_IP = '192.168.1.10';
  */
 export const cameras: Camera[] = [
   {
+    codec: null,
+    error: null,
+    fps: null,
     id: 'cam-4',
-    name: 'Задний двор',
-    portId: 4,
-    status: 'no_connection',
     ip: null,
+    lastSeen: null,
     mac: null,
     model: null,
+    name: 'Задний двор',
+    portId: 4,
     resolution: null,
-    fps: null,
-    codec: null,
-    lastSeen: null,
-    error: null,
+    status: 'no_connection',
   },
   {
+    codec: 'H.265',
+    error: null,
+    fps: 25,
     id: 'cam-1',
-    name: 'Входная дверь',
-    portId: 1,
-    status: 'online',
     ip: '192.168.254.2',
+    lastSeen: minutesAgo(0),
     mac: 'A4:11:62:3F:00:01',
     model: 'IPC-HFW2431S',
+    name: 'Входная дверь',
+    portId: 1,
     resolution: '2688x1520',
-    fps: 25,
-    codec: 'H.265',
-    lastSeen: minutesAgo(0),
-    error: null,
+    status: 'online',
   },
   {
-    id: 'cam-3',
-    name: 'Парковка',
-    portId: 3,
-    status: 'error',
-    ip: '192.168.254.4',
-    mac: 'A4:11:62:3F:00:03',
-    model: 'IPC-HFW2431S',
-    resolution: '2688x1520',
-    fps: 25,
     codec: 'H.265',
-    lastSeen: minutesAgo(47),
     error: {
       code: 'CONNECTION_TIMEOUT',
       message: 'Камера не отвечает: превышено время ожидания RTSP (10 с)',
     },
+    fps: 25,
+    id: 'cam-3',
+    ip: '192.168.254.4',
+    lastSeen: minutesAgo(47),
+    mac: 'A4:11:62:3F:00:03',
+    model: 'IPC-HFW2431S',
+    name: 'Парковка',
+    portId: 3,
+    resolution: '2688x1520',
+    status: 'error',
   },
   {
+    codec: 'H.264',
+    error: null,
+    fps: 20,
     id: 'cam-2',
-    name: 'Гараж',
-    portId: 2,
-    status: 'online',
     ip: '192.168.254.3',
+    lastSeen: minutesAgo(0),
     mac: 'A4:11:62:3F:00:02',
     model: 'IPC-HDW1431T',
+    name: 'Гараж',
+    portId: 2,
     resolution: '2560x1440',
-    fps: 20,
-    codec: 'H.264',
-    lastSeen: minutesAgo(0),
-    error: null,
+    status: 'online',
   },
 ];
 
 /** online → error → no_connection */
 export const STATUS_ORDER: Record<CameraStatus, number> = {
-  online: 0,
   error: 1,
   no_connection: 2,
+  online: 0,
 };
 
 export function sortCameras(list: Camera[]): Camera[] {
   return [...list].sort(
-    (a, b) =>
-      STATUS_ORDER[a.status] - STATUS_ORDER[b.status] ||
-      a.portId - b.portId, // внутри группы — по номеру порта
+    (a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.portId - b.portId // внутри группы — по номеру порта
   );
 }
 
 export const poePorts: PoePort[] = [
-  { id: 1, number: 1, linkUp: true, poeEnabled: true, powerW: 6.8, maxPowerW: 30, cameraId: 'cam-1' },
-  { id: 2, number: 2, linkUp: true, poeEnabled: true, powerW: 5.2, maxPowerW: 30, cameraId: 'cam-2' },
+  {cameraId: 'cam-1', id: 1, linkUp: true, maxPowerW: 30, number: 1, poeEnabled: true, powerW: 6.8},
+  {cameraId: 'cam-2', id: 2, linkUp: true, maxPowerW: 30, number: 2, poeEnabled: true, powerW: 5.2},
   // Питание подаётся, линк есть, но камера не отвечает по RTSP
-  { id: 3, number: 3, linkUp: true, poeEnabled: true, powerW: 1.1, maxPowerW: 30, cameraId: 'cam-3' },
+  {cameraId: 'cam-3', id: 3, linkUp: true, maxPowerW: 30, number: 3, poeEnabled: true, powerW: 1.1},
   // Ничего не подключено
-  { id: 4, number: 4, linkUp: false, poeEnabled: true, powerW: 0, maxPowerW: 30, cameraId: null },
+  {cameraId: null, id: 4, linkUp: false, maxPowerW: 30, number: 4, poeEnabled: true, powerW: 0},
 ];
 
 export function getNvrInfo(): NvrInfo {
   const poeUsedW = Number(poePorts.reduce((sum, p) => sum + p.powerW, 0).toFixed(1));
   return {
-    id: 'nvr-1',
-    name: 'NVR Главный',
-    model: 'NVR2104-P-4KS2',
     firmware: 'V4.001.0000000.2',
-    serialNumber: '8K02A1DPAZ12345',
+    id: 'nvr-1',
     ip: NVR_IP,
-    poePorts: poePorts.length,
+    model: 'NVR2104-P-4KS2',
+    name: 'NVR Главный',
     poeBudgetW: 60,
+    poePorts: poePorts.length,
     poeUsedW,
+    serialNumber: '8K02A1DPAZ12345',
+    storage: {status: 'ok', totalGb: 2000, usedGb: 1243},
     uptimeSec: 12 * 24 * 3600 + 5 * 3600,
-    storage: { totalGb: 2000, usedGb: 1243, status: 'ok' },
   };
 }
 

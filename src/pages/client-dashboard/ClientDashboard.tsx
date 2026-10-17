@@ -1,10 +1,7 @@
+import {Flex, Heading} from '@radix-ui/themes';
+import {InfoBlock} from '@/widgets/info/InfoBlock';
+import {CameraCard} from '@/entities/camera-card/CameraCard';
 import styles from './ClientDashboard.module.scss';
-import {
-  Flex,
-  Heading,
-} from "@radix-ui/themes";
-import { CameraCard } from '@/entities/camera-card/CameraCard'
-import { InfoBlock } from '@/widgets/info/InfoBlock'
 // import { useState, useEffect } from 'react';
 // import { useClientDashboard } from './model/useClientDashboard';
 // import { useCalloutMessage } from '@/shared/components/callout/CalloutMessage';
@@ -29,18 +26,14 @@ export function Component() {
 
   return (
     <section className={styles.clientDashboard}>
-      <Heading as="h2" mb="2" size="4">Камеры</Heading>
-      <Flex align='start' gap="2" wrap="nowrap">
-        <Flex
-          flexGrow="1"
-          flexShrink="1"
-          wrap="wrap"
-        >
-          {
-            [1,2,3,4].map((item) => (
-              <CameraCard className={styles.clientDashboard__cameraCard} key={item} />
-            ))
-          }
+      <Heading as='h2' mb='2' size='4'>
+        Камеры
+      </Heading>
+      <Flex align='start' gap='2' wrap='nowrap'>
+        <Flex flexGrow='1' flexShrink='1' wrap='wrap'>
+          {[1, 2, 3, 4].map(item => (
+            <CameraCard className={styles.clientDashboard__cameraCard} key={item} />
+          ))}
         </Flex>
         <InfoBlock />
       </Flex>

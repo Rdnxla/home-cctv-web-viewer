@@ -21,9 +21,5 @@ export function Component() {
   //   }
   // }, [isError, showMessage]);
 
-  return (
-    <div className={styles.eventList}>
-      EVENTS
-    </div>
-  );
+  return <div className={styles.eventList}>EVENTS</div>;
 }

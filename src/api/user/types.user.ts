@@ -10,6 +10,4 @@ interface User {
   instructorsCount: number;
 }
 
-export type {
-  User,
-}
+export type {User};

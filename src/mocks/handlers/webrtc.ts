@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import type { StreamInfo } from '../data/nvrtypes';
+import {useEffect, useRef, useState} from 'react';
+import type {StreamInfo} from '../data/nvrtypes';
 
 export type PlayerState = 'idle' | 'connecting' | 'playing' | 'failed';
 
@@ -26,16 +26,16 @@ function createMockMediaStream(label: string) {
   const stream = canvas.captureStream(25);
 
   return {
-    stream,
     stop: () => {
       clearInterval(timer);
-      stream.getTracks().forEach((t) => t.stop());
+      stream.getTracks().forEach(t => t.stop());
     },
+    stream,
   };
 }
 
 function waitForIceGathering(pc: RTCPeerConnection) {
-  return new Promise<void>((resolve) => {
+  return new Promise<void>(resolve => {
     if (pc.iceGatheringState === 'complete') return resolve();
     const onChange = () => {
       if (pc.iceGatheringState === 'complete') {
@@ -86,12 +86,12 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
     }
 
     // --- Реальный WHEP ---
-    const pc = new RTCPeerConnection({ iceServers: JSON.parse(iceKey || '[]') });
+    const pc = new RTCPeerConnection({iceServers: JSON.parse(iceKey || '[]')});
     const abort = new AbortController();
     let sessionUrl: string | null = null;
 
-    pc.addTransceiver('video', { direction: 'recvonly' });
-    pc.ontrack = (e) => {
+    pc.addTransceiver('video', {direction: 'recvonly'});
+    pc.ontrack = e => {
       video.srcObject = e.streams[0];
       setState('playing');
     };
@@ -104,14 +104,14 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
         await pc.setLocalDescription(await pc.createOffer());
         await waitForIceGathering(pc);
         const res = await fetch(whepUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/sdp' },
           body: pc.localDescription!.sdp,
+          headers: {'Content-Type': 'application/sdp'},
+          method: 'POST',
           signal: abort.signal,
         });
         if (!res.ok) throw new Error(`WHEP ${res.status}`);
         sessionUrl = res.headers.get('Location');
-        await pc.setRemoteDescription({ type: 'answer', sdp: await res.text() });
+        await pc.setRemoteDescription({sdp: await res.text(), type: 'answer'});
       } catch {
         if (!abort.signal.aborted) setState('failed');
       }
@@ -121,9 +121,9 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
       abort.abort();
       pc.close();
       video.srcObject = null;
-      if (sessionUrl) fetch(sessionUrl, { method: 'DELETE' }).catch(() => {});
+      if (sessionUrl) fetch(sessionUrl, {method: 'DELETE'}).catch(() => {});
     };
   }, [whepUrl, iceKey]);
 
-  return { videoRef, state };
+  return {state, videoRef};
 }
