@@ -1,6 +1,6 @@
 # FSD Rules (benchmark for audit and development)
 
-> Commit: `a630f2c` + незакоммиченные доработки страницы камеры, журнала событий и дашборда · Date: 2026-10-17 · Generic FSD rules + project-specific placement (section "Project placement"), agreed with the owner on 2026-10-17.
+> Commit: `8014d73` + незакоммиченная страница архива · Date: 2026-10-18 · Generic FSD rules + project-specific placement (section "Project placement"), agreed with the owner on 2026-10-17.
 
 Consult the up-to-date documentation at https://feature-sliced.design whenever in doubt (this is the source of truth for the rules). This file defines the criteria used for audits.
 
@@ -78,6 +78,8 @@ For automatic control in CI, you can consider Steiger (the official FSD linter).
 | Camera types, WebRTC player, camera UI | `src/entities/camera/{model,lib,ui,api}` — **слайс создан**: `api/` (запросы), `ui/` (плеер, `CameraLiveView`, `StreamPlaceholder`, статус, сведения, плитка), `model/status.ts`, `lib/format.ts`, `index.ts` | ещё не перенесены (решение владельца 2026-10-17, M-2): определения типов — `src/mocks/data/nvrtypes.ts` (реэкспорт в `entities/camera/model/types.ts`), плеер — `src/mocks/handlers/webrtc.ts`. `src/entities/camera-card` — без потребителей с рефакторинга дашборда, удаление/слияние ждёт решения владельца (Q11) |
 | Route paths for links below `app` | `src/shared/config/routes.ts` (`ROUTES`) — `pages`/`entities` не могут импортировать `app`, поэтому не `app/router/paths.ts` из M-6 | строки путей в `Auth.tsx:36`, `TheHeader.tsx:9-11` |
 | Event log entity (types, catalog, query, badge) | `src/entities/event/{model,api,lib,ui}` + `index.ts` — **создан сразу в целевом виде**: типы определены в сущности, моки импортируют их из `@/entities/event` | — |
+| Archive recordings, bookmarks | `src/entities/recording/{model,api,ui}` и `src/entities/bookmark/{model,api}` + `index.ts` — **созданы в целевом виде** (2026-10-18): типы в сущностях, моки (`mocks/{data,handlers}`) импортируют их оттуда. Воспроизведение архива — в `entities/camera` (`useCameraPlaybackQuery`, `PLAYBACK_SPEEDS`), потому что ему нужен плеер камеры | — |
+| Archive page logic (URL, playback clock, timeline math) | `src/pages/archive/{model,lib}` — используется одной страницей, поэтому не в `features`/`shared`; доменно-нейтральные форматтеры, нужные шире, — `shared/lib` (`formatDuration`, `formatFileSize`, `useNow`) | — |
 | Shared UI / helpers | `src/shared/ui` (создан: `inline-error/`, `load-error/`, `pagination/`, `search-field/`, `sortable-header-cell/` + `ui/index.ts`), `src/shared/lib` (создан: `useFullscreen`, `captureVideoFrame`, `downloadBlob`, `isOneOf`, `pluralize`, `formatRelativeTime`), `src/shared/api` (`pagination.ts`, `retry.ts`), `src/shared/config` (`routes.ts`, `layout.ts`) | `src/shared/components`, `src/shared/utils` |
 | UI, нужный двум страницам | не в одной из страниц (cross-slice), а ниже: доменный — в `entities/<x>/ui` (пример: `StreamPlaceholder` перенесён из `pages/cam-page` в `entities/camera`), без домена — в `shared/ui` или `shared/config` (пример: `CONTENT_WITH_ASIDE_COLUMNS`) | — |
 | Page-specific URL state, parsing | `src/pages/<page>/model/` (пример: `pages/event-list/model/eventListParams.ts`) — это не API-код, правило «no API code in `pages/*/model`» не нарушается | — |
