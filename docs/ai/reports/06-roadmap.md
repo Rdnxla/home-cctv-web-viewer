@@ -3,6 +3,29 @@
 - Коммит: `9e5be8f` (`src/` идентичен `a22ced1`) · Дата: 2026-10-17
 - Источники: `02-fsd-audit.md` (FSD-*), `03-biome-audit.md` (BIO-*), `04-data-and-mocks.md` (DATA-*), факты карты `references/interaction-map.md` (MAP-*)
 - Уже сделано: BIO-001 — `docs/ai/**` исключён из Biome (`biome.json`, последний override), `yarn exec biome ci .` → exit 0.
+- Сделано 2026-10-17 при доработке страницы камеры (рабочая копия поверх `a630f2c`, по запросу владельца):
+  - **QW-3** — выполнено: override `performance/noBarrelFile: off` для `src/{pages,widgets,features,entities}/*/index.ts` и `src/shared/*/index.ts` (4+1 явных glob). FACT: без override `biome check` выдал `noBarrelFile` на `src/entities/camera/index.ts:1`, так что пункт больше не `UNVERIFIED`.
+  - **MAP-3** — снято: `CamPage` читает `:id`; «Открыть» в `CameraCard` ведёт на `/cam-1/detail` (совпадает с захардкоженным потоком).
+  - **M-5** — частично: `entities/camera/api` (`getCameras`/`getCamera`/`getCameraStream`, фабрика `cameraKeys`, 3 хука) используется страницей камеры. Не сделано: дашборд и `CameraCard` по-прежнему без запросов (MAP-2 остаётся), мок `GET /api/me/context`.
+  - **M-1** — частично: Public API и сегмент `ui/` у `pages/cam-page`, `widgets/camera-control`, нового `entities/camera` (3 из 10 слайсов; `non-public-api` 9 → 6 по сканеру).
+  - **M-2** — не сделано (решение владельца): слайс `entities/camera` создан, но типы и плеер остаются в `src/mocks` и реэкспортируются/импортируются оттуда. При M-2 меняются только `entities/camera/model/types.ts` и `ui/CameraPlayer.tsx`, затем `entities/camera-card` вливается в `entities/camera/ui`.
+  - **M-6** — уточнение: пути для ссылок ниже `app` — `src/shared/config/routes.ts` (`ROUTES`), а не `app/router/paths.ts` (`pages`/`entities` не могут импортировать `app`). Используется страницей камеры и `CameraCard`; `Auth.tsx`, `TheHeader.tsx` — ещё строки.
+- Сделано 2026-10-17 при доработке журнала событий (рабочая копия поверх `a630f2c`, по запросу владельца):
+  - **Новая сущность `entities/event`** создана сразу в целевом виде: типы в сущности, моки импортируют их из `@/entities/event` (FSD-001 не повторяется).
+  - **Новый эндпоинт `GET /api/events`** (`mocks/handlers/events.ts`) в формате ошибок `{error, message}` (QW-4/D2 для него не нужен); коды — из `ApiErrorCode` (`VALIDATION_ERROR`, `INTERNAL_ERROR`).
+  - **M-1** — частично: Public API и сегменты у `pages/event-list` и `entities/event`; 5 из 11 слайсов + `shared/ui`; `non-public-api` 6 → 5 по сканеру.
+  - **QW-9** — частично: создан целевой сегмент `src/shared/ui` (`Pagination`, `SearchField`, `SortableHeaderCell` + `index.ts`); legacy `shared/components/callout` не переносился.
+  - **QW-10** — частично: общая политика `retryUnlessClientError` (`src/shared/api/retry.ts`) у запросов камер и событий; глобальные `defaultOptions` по-прежнему не заданы.
+  - **FSD-013** — `useCalloutMessage` получил первого потребителя (`pages/event-list`); закомментированная заготовка в `EventList.tsx` заменена работающей реализацией (решение владельца, см. `audit-plan.md`).
+  - Не сделано: `widgets/info` («Последние события» на дашборде) по-прежнему на статичных данных — кандидат на `useEventsQuery` с `pageSize=10`. *(Сделано при рефакторинге дашборда, см. ниже.)*
+- Сделано 2026-10-17 при рефакторинге дашборда (рабочая копия поверх `a630f2c`, по запросу владельца):
+  - **MAP-2** — снято: сетка дашборда строится по `GET /api/cameras`, у каждой камеры в сети своя WHEP-сессия (в фикстуре 2), `cam-3`/`cam-4` — заглушка без запроса `/stream`.
+  - **M-5** — дашбордная часть сделана: `CameraCard` с захардкоженным `StreamInfo` больше не используется. Остаётся мок `GET /api/me/context` (заготовка `useClientDashboard` закомментирована владельцем).
+  - **QW-1 / BIO-002** — частично: ошибок `tsc` 5 → 2 (ушли `ClientDashboard.tsx:35` и `InfoBlock.tsx:88-89` вместе с переписанным кодом); остались `main.tsx:16`, `testSetup.ts:3` (JS-модули моков).
+  - **FSD-011** — снято: `widgets/info` больше не дублирует иконки/цвета callout и не зависит от `shared/components/callout`.
+  - **M-1** — частично: 7 из 11 слайсов с Public API; `non-public-api` 5 → 2 (остались `MainLayout → the-header`, `routes → auth`).
+  - **Переиспользование**: `StreamPlaceholder` перенесён из `pages/cam-page` в `entities/camera/ui`; новый `CameraLiveView` (запрос потока + плеер + заглушка) — на странице камеры и в сетке дашборда; `LoadError`/`InlineError` в `shared/ui` заменили 3 локальные копии; `CONTENT_WITH_ASIDE_COLUMNS` в `shared/config/layout.ts` — общий макет страницы камеры и дашборда; `formatRelativeTime` в `shared/lib` — общий для времени активности камеры и ленты событий.
+  - **M-2 / L-1** — новый вопрос Q11: `entities/camera-card` без потребителей; удалить или влить в `entities/camera/ui` — решение владельца (агент не удаляет без разрешения).
 - Закрыто решениями владельца, в план не входит: FSD-010 (виджеты остаются), FSD-013 (ничего не удалять), пустой `features/`, `mockServiceWorker.js` в `.gitignore`.
 - Отложено до появления тестов (решение владельца): DATA-015, BIO-011, FSD-012.
 

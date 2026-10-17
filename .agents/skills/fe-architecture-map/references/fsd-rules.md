@@ -1,6 +1,6 @@
 # FSD Rules (benchmark for audit and development)
 
-> Commit: `9e5be8f` · Date: 2026-10-17 · Generic FSD rules + project-specific placement (section "Project placement"), agreed with the owner on 2026-10-17.
+> Commit: `a630f2c` + незакоммиченные доработки страницы камеры, журнала событий и дашборда · Date: 2026-10-17 · Generic FSD rules + project-specific placement (section "Project placement"), agreed with the owner on 2026-10-17.
 
 Consult the up-to-date documentation at https://feature-sliced.design whenever in doubt (this is the source of truth for the rules). This file defines the criteria used for audits.
 
@@ -75,9 +75,13 @@ For automatic control in CI, you can consider Steiger (the official FSD linter).
 | Providers (QueryClient, Theme) | `src/app/providers/` | `src/main.tsx`, both layouts |
 | Session/auth API + types | `src/entities/session/{api,model}` | `src/api/auth/*` |
 | User API + types | `src/entities/user/{api,model,ui}` | `src/api/user/*`, `src/entities/user-profile-card` |
-| Camera types, WebRTC player, camera UI | `src/entities/camera/{model,lib,ui,api}` | `src/mocks/data/nvrtypes.ts`, `src/mocks/handlers/webrtc.ts`, `src/entities/camera-card` |
-| Shared UI / helpers | `src/shared/ui`, `src/shared/lib` | `src/shared/components`, `src/shared/utils` |
-| MSW (handlers, fixtures, in-memory db) | `src/mocks/**` — outside layers, dev/test-only | — |
+| Camera types, WebRTC player, camera UI | `src/entities/camera/{model,lib,ui,api}` — **слайс создан**: `api/` (запросы), `ui/` (плеер, `CameraLiveView`, `StreamPlaceholder`, статус, сведения, плитка), `model/status.ts`, `lib/format.ts`, `index.ts` | ещё не перенесены (решение владельца 2026-10-17, M-2): определения типов — `src/mocks/data/nvrtypes.ts` (реэкспорт в `entities/camera/model/types.ts`), плеер — `src/mocks/handlers/webrtc.ts`. `src/entities/camera-card` — без потребителей с рефакторинга дашборда, удаление/слияние ждёт решения владельца (Q11) |
+| Route paths for links below `app` | `src/shared/config/routes.ts` (`ROUTES`) — `pages`/`entities` не могут импортировать `app`, поэтому не `app/router/paths.ts` из M-6 | строки путей в `Auth.tsx:36`, `TheHeader.tsx:9-11` |
+| Event log entity (types, catalog, query, badge) | `src/entities/event/{model,api,lib,ui}` + `index.ts` — **создан сразу в целевом виде**: типы определены в сущности, моки импортируют их из `@/entities/event` | — |
+| Shared UI / helpers | `src/shared/ui` (создан: `inline-error/`, `load-error/`, `pagination/`, `search-field/`, `sortable-header-cell/` + `ui/index.ts`), `src/shared/lib` (создан: `useFullscreen`, `captureVideoFrame`, `downloadBlob`, `isOneOf`, `pluralize`, `formatRelativeTime`), `src/shared/api` (`pagination.ts`, `retry.ts`), `src/shared/config` (`routes.ts`, `layout.ts`) | `src/shared/components`, `src/shared/utils` |
+| UI, нужный двум страницам | не в одной из страниц (cross-slice), а ниже: доменный — в `entities/<x>/ui` (пример: `StreamPlaceholder` перенесён из `pages/cam-page` в `entities/camera`), без домена — в `shared/ui` или `shared/config` (пример: `CONTENT_WITH_ASIDE_COLUMNS`) | — |
+| Page-specific URL state, parsing | `src/pages/<page>/model/` (пример: `pages/event-list/model/eventListParams.ts`) — это не API-код, правило «no API code in `pages/*/model`» не нарушается | — |
+| MSW (handlers, fixtures, in-memory db) | `src/mocks/**` — outside layers, dev/test-only; may import `entities/*` and `shared/*` (типы, каталоги, коды ошибок) | — |
 | Reusable user scenarios | `src/features/` (empty placeholder) | — |
 
-Accepted exceptions: `widgets/info` and `widgets/camera-control` stay widgets despite a single consumer (planned reuse).
+Accepted exceptions: `widgets/info` and `widgets/camera-control` stay widgets despite a single consumer (planned reuse). `entities/camera` и `entities/camera-card` импортируют `@/mocks/**` (legacy, решение владельца 2026-10-17 до M-2); новые потребители берут типы и плеер только из `@/entities/camera`, не из моков.

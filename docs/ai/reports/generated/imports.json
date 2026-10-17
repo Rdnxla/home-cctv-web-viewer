@@ -38,57 +38,67 @@
       "layer": "pages",
       "slice": "cam-page",
       "rank": 5,
-      "files": 1,
-      "segments": [],
-      "hasPublicApi": false,
+      "files": 4,
+      "segments": [
+        "ui"
+      ],
+      "hasPublicApi": true,
       "fanIn": 1,
-      "fanOut": 2
+      "fanOut": 3
     },
     {
       "id": "pages/client-dashboard",
       "layer": "pages",
       "slice": "client-dashboard",
       "rank": 5,
-      "files": 2,
+      "files": 5,
       "segments": [
-        "model"
+        "model",
+        "ui"
       ],
-      "hasPublicApi": false,
+      "hasPublicApi": true,
       "fanIn": 1,
-      "fanOut": 3
+      "fanOut": 4
     },
     {
       "id": "pages/event-list",
       "layer": "pages",
       "slice": "event-list",
       "rank": 5,
-      "files": 1,
-      "segments": [],
-      "hasPublicApi": false,
+      "files": 8,
+      "segments": [
+        "model",
+        "ui"
+      ],
+      "hasPublicApi": true,
       "fanIn": 1,
-      "fanOut": 0
+      "fanOut": 3
     },
     {
       "id": "widgets/camera-control",
       "layer": "widgets",
       "slice": "camera-control",
       "rank": 4,
-      "files": 1,
-      "segments": [],
-      "hasPublicApi": false,
+      "files": 2,
+      "segments": [
+        "ui"
+      ],
+      "hasPublicApi": true,
       "fanIn": 1,
-      "fanOut": 0
+      "fanOut": 1
     },
     {
       "id": "widgets/info",
       "layer": "widgets",
       "slice": "info",
       "rank": 4,
-      "files": 1,
-      "segments": [],
-      "hasPublicApi": false,
+      "files": 4,
+      "segments": [
+        "ui"
+      ],
+      "hasPublicApi": true,
       "fanIn": 1,
-      "fanOut": 1
+      "fanOut": 3
     },
     {
       "id": "widgets/the-header",
@@ -102,6 +112,22 @@
       "fanOut": 1
     },
     {
+      "id": "entities/camera",
+      "layer": "entities",
+      "slice": "camera",
+      "rank": 2,
+      "files": 13,
+      "segments": [
+        "api",
+        "lib",
+        "model",
+        "ui"
+      ],
+      "hasPublicApi": true,
+      "fanIn": 5,
+      "fanOut": 2
+    },
+    {
       "id": "entities/camera-card",
       "layer": "entities",
       "slice": "camera-card",
@@ -109,7 +135,23 @@
       "files": 1,
       "segments": [],
       "hasPublicApi": false,
-      "fanIn": 2,
+      "fanIn": 0,
+      "fanOut": 2
+    },
+    {
+      "id": "entities/event",
+      "layer": "entities",
+      "slice": "event",
+      "rank": 2,
+      "files": 9,
+      "segments": [
+        "api",
+        "lib",
+        "model",
+        "ui"
+      ],
+      "hasPublicApi": true,
+      "fanIn": 3,
       "fanOut": 1
     },
     {
@@ -128,14 +170,17 @@
       "layer": "shared",
       "slice": null,
       "rank": 1,
-      "files": 6,
+      "files": 23,
       "segments": [
         "api",
         "components",
+        "config",
+        "lib",
+        "ui",
         "utils"
       ],
       "hasPublicApi": false,
-      "fanIn": 6,
+      "fanIn": 12,
       "fanOut": 0
     },
     {
@@ -157,14 +202,14 @@
       "layer": "mocks",
       "slice": null,
       "rank": -1,
-      "files": 10,
+      "files": 12,
       "segments": [
         "data",
         "handlers"
       ],
       "hasPublicApi": false,
-      "fanIn": 1,
-      "fanOut": 1
+      "fanIn": 2,
+      "fanOut": 2
     },
     {
       "id": "?router",
@@ -187,9 +232,15 @@
     },
     {
       "from": "?mocks",
+      "to": "entities/event",
+      "count": 4,
+      "typeOnly": 2
+    },
+    {
+      "from": "?mocks",
       "to": "shared",
-      "count": 1,
-      "typeOnly": 0
+      "count": 4,
+      "typeOnly": 1
     },
     {
       "from": "?router",
@@ -234,9 +285,33 @@
       "typeOnly": 0
     },
     {
+      "from": "entities/camera",
+      "to": "?mocks",
+      "count": 2,
+      "typeOnly": 1
+    },
+    {
+      "from": "entities/camera",
+      "to": "shared",
+      "count": 6,
+      "typeOnly": 0
+    },
+    {
       "from": "entities/camera-card",
       "to": "?mocks",
       "count": 2,
+      "typeOnly": 1
+    },
+    {
+      "from": "entities/camera-card",
+      "to": "shared",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "entities/event",
+      "to": "shared",
+      "count": 3,
       "typeOnly": 1
     },
     {
@@ -253,8 +328,14 @@
     },
     {
       "from": "pages/cam-page",
-      "to": "entities/camera-card",
-      "count": 1,
+      "to": "entities/camera",
+      "count": 5,
+      "typeOnly": 2
+    },
+    {
+      "from": "pages/cam-page",
+      "to": "shared",
+      "count": 7,
       "typeOnly": 0
     },
     {
@@ -271,8 +352,14 @@
     },
     {
       "from": "pages/client-dashboard",
-      "to": "entities/camera-card",
-      "count": 1,
+      "to": "entities/camera",
+      "count": 4,
+      "typeOnly": 1
+    },
+    {
+      "from": "pages/client-dashboard",
+      "to": "shared",
+      "count": 4,
       "typeOnly": 0
     },
     {
@@ -282,10 +369,46 @@
       "typeOnly": 0
     },
     {
+      "from": "pages/event-list",
+      "to": "entities/camera",
+      "count": 1,
+      "typeOnly": 0
+    },
+    {
+      "from": "pages/event-list",
+      "to": "entities/event",
+      "count": 10,
+      "typeOnly": 5
+    },
+    {
+      "from": "pages/event-list",
+      "to": "shared",
+      "count": 10,
+      "typeOnly": 1
+    },
+    {
+      "from": "widgets/camera-control",
+      "to": "entities/camera",
+      "count": 2,
+      "typeOnly": 1
+    },
+    {
+      "from": "widgets/info",
+      "to": "entities/camera",
+      "count": 2,
+      "typeOnly": 1
+    },
+    {
+      "from": "widgets/info",
+      "to": "entities/event",
+      "count": 2,
+      "typeOnly": 1
+    },
+    {
       "from": "widgets/info",
       "to": "shared",
-      "count": 1,
-      "typeOnly": 1
+      "count": 4,
+      "typeOnly": 0
     },
     {
       "from": "widgets/the-header",
@@ -319,38 +442,59 @@
     },
     {
       "kind": "layer-upward",
+      "from": "src/mocks/data/events.ts",
+      "to": "entities/event",
+      "spec": "@/entities/event",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/data/events.ts",
+      "to": "entities/event",
+      "spec": "@/entities/event",
+      "note": "mocks imports from the higher-level entities"
+    },
+    {
+      "kind": "layer-upward",
       "from": "src/mocks/handlers/auth.js",
       "to": "shared/utils/auth",
       "spec": "../../shared/utils/auth",
       "note": "mocks imports from the higher-level shared"
     },
     {
-      "kind": "non-public-api",
-      "from": "src/pages/cam-page/CamPage.tsx",
-      "to": "widgets/camera-control/CameraControls",
-      "spec": "@/widgets/camera-control/CameraControls",
-      "note": "import bypassing index (slice Public API)"
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/events.ts",
+      "to": "entities/event",
+      "spec": "@/entities/event",
+      "note": "mocks imports from the higher-level entities"
     },
     {
-      "kind": "non-public-api",
-      "from": "src/pages/cam-page/CamPage.tsx",
-      "to": "entities/camera-card/CameraCard",
-      "spec": "@/entities/camera-card/CameraCard",
-      "note": "import bypassing index (slice Public API)"
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/events.ts",
+      "to": "entities/event",
+      "spec": "@/entities/event",
+      "note": "mocks imports from the higher-level entities"
     },
     {
-      "kind": "non-public-api",
-      "from": "src/pages/client-dashboard/ClientDashboard.tsx",
-      "to": "widgets/info/InfoBlock",
-      "spec": "@/widgets/info/InfoBlock",
-      "note": "import bypassing index (slice Public API)"
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/events.ts",
+      "to": "shared/api/authErrorCodes",
+      "spec": "@/shared/api/authErrorCodes",
+      "note": "mocks imports from the higher-level shared"
     },
     {
-      "kind": "non-public-api",
-      "from": "src/pages/client-dashboard/ClientDashboard.tsx",
-      "to": "entities/camera-card/CameraCard",
-      "spec": "@/entities/camera-card/CameraCard",
-      "note": "import bypassing index (slice Public API)"
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/events.ts",
+      "to": "shared/api/pagination",
+      "spec": "@/shared/api/pagination",
+      "note": "mocks imports from the higher-level shared"
+    },
+    {
+      "kind": "layer-upward",
+      "from": "src/mocks/handlers/events.ts",
+      "to": "shared/lib/isOneOf",
+      "spec": "@/shared/lib/isOneOf",
+      "note": "mocks imports from the higher-level shared"
     },
     {
       "kind": "layer-upward",
@@ -383,44 +527,23 @@
     {
       "kind": "layer-upward",
       "from": "src/router/routes.ts",
-      "to": "pages/client-dashboard/ClientDashboard",
-      "spec": "@/pages/client-dashboard/ClientDashboard",
+      "to": "pages/client-dashboard",
+      "spec": "@/pages/client-dashboard",
       "note": "router imports from the higher-level pages"
-    },
-    {
-      "kind": "non-public-api",
-      "from": "src/router/routes.ts",
-      "to": "pages/client-dashboard/ClientDashboard",
-      "spec": "@/pages/client-dashboard/ClientDashboard",
-      "note": "import bypassing index (slice Public API)"
     },
     {
       "kind": "layer-upward",
       "from": "src/router/routes.ts",
-      "to": "pages/cam-page/CamPage",
-      "spec": "@/pages/cam-page/CamPage",
+      "to": "pages/cam-page",
+      "spec": "@/pages/cam-page",
       "note": "router imports from the higher-level pages"
-    },
-    {
-      "kind": "non-public-api",
-      "from": "src/router/routes.ts",
-      "to": "pages/cam-page/CamPage",
-      "spec": "@/pages/cam-page/CamPage",
-      "note": "import bypassing index (slice Public API)"
     },
     {
       "kind": "layer-upward",
       "from": "src/router/routes.ts",
-      "to": "pages/event-list/EventList",
-      "spec": "@/pages/event-list/EventList",
+      "to": "pages/event-list",
+      "spec": "@/pages/event-list",
       "note": "router imports from the higher-level pages"
-    },
-    {
-      "kind": "non-public-api",
-      "from": "src/router/routes.ts",
-      "to": "pages/event-list/EventList",
-      "spec": "@/pages/event-list/EventList",
-      "note": "import bypassing index (slice Public API)"
     }
   ],
   "externalsByLayer": {
@@ -429,34 +552,37 @@
       "react-router": 2
     },
     "entities": {
-      "@radix-ui/themes": 2,
-      "react": 2,
-      "react-router": 1
+      "@tanstack/react-query": 2,
+      "@radix-ui/react-icons": 5,
+      "@radix-ui/themes": 10,
+      "react": 6,
+      "react-router": 2
     },
     "mocks": {
-      "msw": 4,
+      "msw": 5,
       "react": 1
     },
     "pages": {
-      "@radix-ui/themes": 3,
+      "@radix-ui/themes": 12,
       "radix-ui": 1,
-      "react": 1,
-      "react-router": 1,
-      "@tanstack/react-query": 2
+      "react": 9,
+      "react-router": 5,
+      "@tanstack/react-query": 2,
+      "@radix-ui/react-icons": 6
     },
     "router": {
       "react-router": 1
     },
     "shared": {
-      "@radix-ui/react-icons": 1,
-      "@radix-ui/themes": 1,
-      "react": 3
+      "@radix-ui/react-icons": 5,
+      "@radix-ui/themes": 6,
+      "react": 9
     },
     "widgets": {
-      "@radix-ui/themes": 3,
       "@radix-ui/react-icons": 2,
-      "react": 1,
-      "react-router": 1
+      "@radix-ui/themes": 5,
+      "react": 3,
+      "react-router": 2
     }
   }
 }

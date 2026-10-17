@@ -1,6 +1,6 @@
 # Data Layer: TanStack Query and MSW
 
-> Commit: `9e5be8f` (measured at `e599d53`; `src/` identical) · Date: 2026-10-17 · Source: `docs/ai/reports/04-data-and-mocks.md`
+> Commit: `a630f2c` + незакоммиченные доработки страницы камеры, журнала событий и дашборда (рабочая копия; остальное measured at `e599d53`) · Date: 2026-10-17 · Source: `docs/ai/reports/04-data-and-mocks.md`, запросы камер и событий — код `src/entities/{camera,event}/api/`, мок журнала — `src/mocks/{data,handlers}/events.ts`
 > `UNVERIFIED`: library defaults (TanStack Query v5 `retry`/`staleTime`, MSW v2 `onUnhandledRequest`) are taken from version docs, not checked locally.
 > Описывает, как слой данных устроен СЕЙЧАС и как вносить изменения. Находки и обоснования — только в отчёте.
 
@@ -14,22 +14,29 @@
 
 ## Query Keys and Hooks
 
-- Стратегия ключей: не сложилась, фабрики нет. Единственный ключ — литерал `['sidebar']` (`src/pages/client-dashboard/model/useClientDashboard.ts:7`).
-- Расположение сейчас (legacy): API-функции — `src/api/<domain>/<domain>.ts`, типы — `src/api/<domain>/*types*.ts` и `src/mocks/data/nvrtypes.ts`, хуки — `src/pages/<page>/model/use*.ts`.
+- Стратегия ключей: фабрика `cameraKeys` в `src/entities/camera/api/cameraQueries.ts` — `all: ['cameras']`, `list() → ['cameras','list']`, `detail(id) → ['cameras','detail',id]`, `stream(id) → ['cameras','stream',id]`; инвалидация по префиксу `cameraKeys.all`. Это образец для новых сущностей. Фабрика `eventKeys` (`src/entities/event/api/eventQueries.ts`): `all: ['events']`, `list(params) → ['events','list', EventListParams]` — объект параметров целиком в ключе; массивы `categories`/`types` нормализованы в порядке констант, поэтому одинаковые выборки дают одинаковый ключ. Legacy-литерал — `['sidebar']` (`src/pages/client-dashboard/model/useClientDashboard.ts:7`).
+- Имена хуков: query — `use<Noun>Query` (`useCamerasQuery`, `useCameraQuery`, `useCameraStreamQuery`, `useEventsQuery`), mutation — `use<Action>Mutation`.
+- Списки с серверной пагинацией: ответ `PaginatedResponse<T>` (`src/shared/api/pagination.ts`: `{items, page, pageSize, total}`, `page` с 1), `placeholderData: keepPreviousData` — при смене страницы/фильтра таблица не пропадает. Образец — `useEventsQuery`.
+- Повторы: `retryUnlessClientError` (`src/shared/api/retry.ts`) у запросов камер и событий — 4xx не повторяются, 5xx и сетевые ошибки — до 2 раз (глобальные `defaultOptions` — QW-10, не сделано).
+- Расположение сейчас: камеры — целевое `src/entities/camera/api/` (функции `cameraApi.ts`, ключи и хуки `cameraQueries.ts`), но типы камеры по-прежнему в `src/mocks/data/nvrtypes.ts` (реэкспорт `src/entities/camera/model/types.ts`, решение владельца 2026-10-17). Legacy: API-функции — `src/api/<domain>/<domain>.ts`, типы — `src/api/<domain>/*types*.ts`, хуки — `src/pages/<page>/model/use*.ts`.
 - Целевое расположение (согласовано владельцем 2026-10-17): `src/entities/<entity>/api/` (функции + хуки + ключи), `src/entities/<entity>/model/` (типы). Сущности: `session` (auth), `user`, `camera`. Новый код писать сразу туда.
 
 ## Queries and Mutations
 
 | Hook | File | queryKey | API function | Method and path | Consumers |
 |---|---|---|---|---|---|
-| `useClientDashboard` | `src/pages/client-dashboard/model/useClientDashboard.ts` | `['sidebar']` | `getDashboard` (`src/api/user/user.ts`) | `GET /api/me/context` (мока нет) | нет (заготовка) |
+| `useClientDashboard` | `src/pages/client-dashboard/model/useClientDashboard.ts` | `['sidebar']` | `getDashboard` (`src/api/user/user.ts`) | `GET /api/me/context` (мока нет) | нет (заготовка; вызов закомментирован в `pages/client-dashboard/ui/ClientDashboard.tsx`) |
+| `useCamerasQuery` | `src/entities/camera/api/cameraQueries.ts` | `cameraKeys.list()` | `getCameras` (`src/entities/camera/api/cameraApi.ts`) | `GET /api/cameras` | `pages/cam-page/ui/OtherCameras.tsx`, `pages/client-dashboard/ui/{ClientDashboard,CameraGrid}.tsx`, `pages/event-list/ui/EventFilters.tsx`, `widgets/info/ui/CameraSummary.tsx` |
+| `useCameraQuery(id)` | то же | `cameraKeys.detail(id)` | `getCamera` | `GET /api/cameras/:id` | `pages/cam-page/ui/CamPage.tsx`; `placeholderData` — камера из кеша `cameraKeys.list()` |
+| `useCameraStreamQuery(id, enabled)` | то же | `cameraKeys.stream(id)` | `getCameraStream` | `GET /api/cameras/:id/stream` | `entities/camera/ui/CameraLiveView.tsx` (→ страница камеры и каждая ячейка сетки дашборда); `enabled` только при `status === 'online'`, `refetchOnWindowFocus: false` |
+| `useEventsQuery(params)` | `src/entities/event/api/eventQueries.ts` | `eventKeys.list(params)` | `getEvents` (`src/entities/event/api/eventApi.ts`; период → `from` в момент запроса) | `GET /api/events` | `pages/event-list/ui/EventList.tsx` (параметры из URL); `widgets/info/ui/RecentEvents.tsx` (`RECENT_EVENTS_PARAMS`: `period: '24h'`, `pageSize: 10`, новые сверху); `keepPreviousData` |
 
 | Mutation | File | What it invalidates | Error handling |
 |---|---|---|---|
 | `useLoginMutation` → `login` | `src/pages/auth/model/useAuth.ts` | ничего | `onError` в `mutate`, `src/pages/auth/Auth.tsx:53-89` |
 | `useVerifyTwoFactorMutation` → `verifyTwoFactor` | `src/pages/auth/model/useAuth.ts` | ничего | `src/pages/auth/Auth.tsx:126-139` |
 
-Вне TanStack Query: `useWebRtcPlayer` (`src/mocks/handlers/webrtc.ts`, целевое место — `entities/camera/lib`) делает прямой `fetch` на WHEP (`POST` SDP, `DELETE` сессии).
+Вне TanStack Query: `useWebRtcPlayer` (`src/mocks/handlers/webrtc.ts`, целевое место — `entities/camera/lib`) делает прямой `fetch` на WHEP (`POST` SDP, `DELETE` сессии). Потребители — `entities/camera/ui/CameraPlayer.tsx` (`StreamInfo` из `useCameraStreamQuery` через `CameraLiveView`) и неиспользуемый `entities/camera-card/CameraCard.tsx` (захардкоженный `cam-1`). На дашборде WHEP-сессий столько, сколько камер `online` (в фикстуре — 2).
 
 ## MSW Mocks
 
@@ -42,25 +49,32 @@
 | `POST /api/auth/logout` | `auth.js:259` | `activeSessions` | — | — |
 | `GET /api/nvr` | `src/mocks/handlers/nvr.ts:34` | `getNvrInfo()` (`data/nvr.ts`) | — | — |
 | `GET /api/nvr/ports` | `nvr.ts:39` | `poePorts` | — | — |
-| `GET /api/cameras` | `nvr.ts:45` | `cameras` + `sortCameras` | — | — |
-| `GET /api/cameras/:id` | `nvr.ts:50` | `cameras` | — | — |
-| `GET /api/cameras/:id/stream` | `nvr.ts:60` | `cameras`, `whepUrl()` | — | — |
+| `GET /api/cameras` | `nvr.ts:45` | `cameras` + `sortCameras` | `getCameras` | `useCamerasQuery` |
+| `GET /api/cameras/:id` | `nvr.ts:50` | `cameras` | `getCamera` | `useCameraQuery` |
+| `GET /api/cameras/:id/stream` | `nvr.ts:60` | `cameras`, `whepUrl()` | `getCameraStream` | `useCameraStreamQuery` |
 | `POST /api/webrtc/:id/whep` | `nvr.ts:80` | `createMockWhepSession` (`mockWhep.ts`) | `fetch` в плеере | `useWebRtcPlayer` |
 | `DELETE /api/webrtc/:id/whep/:session` | `nvr.ts:106` | `closeMockWhepSession` | `fetch` в плеере | `useWebRtcPlayer` |
+| `GET /api/events` | `src/mocks/handlers/events.ts` | `events` (`data/events.ts`, генератор) | `getEvents` | `useEventsQuery` |
 
-- Организация: по домену — `handlers/auth.js`, `handlers/nvr.ts` (+ `handlers/mockWhep.ts` — серверная сторона WHEP). `handlers/index.js` реэкспортирует массивы; `browser.js` и `server.js` перечисляют их явно (`...authHandlers, ...nvrHandlers`).
+- Организация: по домену — `handlers/auth.js`, `handlers/nvr.ts` (+ `handlers/mockWhep.ts` — серверная сторона WHEP), `handlers/events.ts`. `handlers/index.js` реэкспортирует массивы; `browser.js` и `server.js` перечисляют их явно (`...authHandlers, ...nvrHandlers, ...eventHandlers`).
+- Типы для новых моков: импортировать из сущности (`import type {NvrEvent} from '@/entities/event'`), не объявлять в `src/mocks` (так сделан журнал событий; камеры — legacy, типы пока в `data/nvrtypes.ts`).
+- `GET /api/events` — параметры и поведение:
+  - `page` (целое ≥ 1, по умолчанию 1), `pageSize` (10 | 25 | 50 | 100, по умолчанию 25), `sort` (`occurredAt` | `category` | `type` | `source`), `order` (`asc` | `desc`), `category` и `type` (повторяемые), `source` (id камеры или `device` — события самого NVR), `from` (ISO 8601), `q` (поиск без учёта регистра по описанию, названию типа и источнику).
+  - Порядок обработки: валидация → фильтры, кроме категории → `categoryCounts` → фильтр категории → сортировка (`category` — по `rank`, `type`/`source` — по русской подписи через `Intl.Collator('ru')`; при равенстве — новые выше, затем `id`) → срез страницы. Ответ — `EventListResponse` = `PaginatedResponse<NvrEvent>` + `categoryCounts`.
+  - Страница за пределами выборки → `items: []` с реальным `total` (UI сам переходит на последнюю страницу).
+  - Ошибки: неверный параметр → 400 `{error: 'VALIDATION_ERROR', message}` (текст называет параметр); `q=error500` → 500 `{error: 'INTERNAL_ERROR', message}`.
 - Дубль `POST /api/auth/login` в `auth.js:253` (503) недостижим: срабатывает первый хендлер.
 - Формат ошибок: auth — `{error, message, ...}` (совместим с `apiFetch`); nvr — `{code, message}` (`ApiErrorBody`, `apiFetch` его не распознаёт → `UNKNOWN_ERROR`). Новые хендлеры писать в формате `{error, message}`.
-- Fixtures: статичные — `data/accounts.json` (7 аккаунтов, все `active`; 2FA у `olga@example.com`, `petr.client@example.com`; пароль `Password123!`; OTP `123456`), `data/nvr.ts` (4 камеры: `cam-1`, `cam-2` online, `cam-3` error, `cam-4` no_connection; 4 PoE-порта). `db.js` клонирует JSON при старте.
-- Сценарные email (`auth.js`): `error500@example.com` → 500; `timeout@example.com` → бесконечная задержка; `ratelimited@example.com` → 429; 3 неверных пароля → 423.
-- Задержки: nvr 200–400 мс, `cam-3` (error) — 3000 мс.
+- Fixtures: статичные — `data/accounts.json` (7 аккаунтов, все `active`; 2FA у `olga@example.com`, `petr.client@example.com`; пароль `Password123!`; OTP `123456`), `data/nvr.ts` (4 камеры: `cam-1`, `cam-2` online, `cam-3` error, `cam-4` no_connection; 4 PoE-порта). `db.js` клонирует JSON при старте. Генерируемая — `data/events.ts`: 640 событий за 30 дней + 1 `video_loss` для `cam-3` в момент её `lastSeen`; ГПСЧ Park–Miller с фиксированным зерном — набор одинаков при каждом запуске, время отсчитывается от загрузки модуля; события камер — только `cam-1`…`cam-3` и только до их `lastSeen` (`cam-4` не подключалась), `disk_*`, `power_failure`, `login_failed` — без камеры; id `evt-00001` — самое старое.
+- Сценарные email (`auth.js`): `error500@example.com` → 500; `timeout@example.com` → бесконечная задержка; `ratelimited@example.com` → 429; 3 неверных пароля → 423. Журнал: поиск `error500` → 500.
+- Задержки: nvr 200–400 мс, `cam-3` (error) — 3000 мс, `GET /api/events` — 350 мс.
 - In-memory состояние: `auth.js:8-11` (Maps/Set), `db.js`. Сброс: `resetMockState()` (`auth.js`), `resetDb()` (`db.js`); сейчас нигде не вызываются.
 - `onUnhandledRequest`: не задан (дефолт v2 — `'warn'`).
 
 ## Recipes
 
 1. **Новый query + мок** (пример: список камер):
-   1. Типы — `src/entities/camera/model/types.ts` (пока типы камеры лежат в `src/mocks/data/nvrtypes.ts`; при первом касании перенести, моки импортируют из `@/entities/camera`).
+   1. Типы — `src/entities/camera/model/types.ts`. Сейчас это реэкспорт из `src/mocks/data/nvrtypes.ts` (владелец 2026-10-17 решил пока не переносить); перенос определений и импорт типов моками из `@/entities/camera` — по M-2. Готовые запросы камер — `src/entities/camera/api/` (образец для шагов 2–4).
    2. API-функция — `src/entities/camera/api/getCameras.ts`: `apiFetch<Camera[]>('/api/cameras')` из `@/shared/api/http`.
    3. Хук и ключ — там же: `useQuery({queryKey: ['cameras', 'list'], queryFn: getCameras})`. Ключ начинать с имени сущности, чтобы инвалидировать по префиксу.
    4. Public API — экспорт хука из `src/entities/camera/index.ts`.
@@ -75,7 +89,8 @@
 
 Факты, которые нужно учитывать при работе (полный список и обоснования — `docs/ai/reports/04-data-and-mocks.md`, план — `docs/ai/reports/06-roadmap.md`):
 
-- Ошибки nvr/cameras приходят как `{code, message}` и в клиенте превращаются в `UNKNOWN_ERROR`. Не полагаться на `err.code` для этих эндпоинтов.
+- Ошибки nvr/cameras приходят как `{code, message}` и в клиенте превращаются в `UNKNOWN_ERROR`. Не полагаться на `err.code` для этих эндпоинтов: различать по `err.status` (так сделано в `pages/cam-page/ui/CamPage.tsx` для 404), текст брать из `err.message` (его `apiFetch` читает из `body.message`).
+- `GET /api/cameras/:id/stream` для `cam-3` (`error`) отвечает через 3 с кодом 504, для `cam-4` — 404. Статус камеры известен заранее из `GET /api/cameras/:id`, поэтому `/stream` запрашивается только для `online`.
 - Чтобы получить 503 для `POST /api/auth/login`, используйте `server.use(...)`: хендлер в `auth.js:253` не срабатывает.
 - У `GET /api/me/context` нет мока. Прежде чем включать `useClientDashboard`, добавьте хендлер.
 - `apiFetch` возвращает `{}`, если успешный ответ не JSON, и не отправляет `Authorization` и `Content-Type`.

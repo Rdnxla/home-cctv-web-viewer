@@ -1,5 +1,2 @@
 src/main.tsx(16,33): error TS7016: Could not find a declaration file for module './mocks/browser'. '/home/plotva/DEV/react-proj/src/mocks/browser.js' implicitly has an 'any' type.
-src/pages/client-dashboard/ClientDashboard.tsx(35,14): error TS2375: Type '{ className: string | undefined; key: number; }' is not assignable to type 'CameraCardProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
 src/testSetup.ts(3,22): error TS7016: Could not find a declaration file for module './mocks/server'. '/home/plotva/DEV/react-proj/src/mocks/server.js' implicitly has an 'any' type.
-src/widgets/info/InfoBlock.tsx(88,36): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ readonly error: "tomato"; readonly info: "blue"; readonly success: "green"; readonly warn: "yellow"; }'.
-src/widgets/info/InfoBlock.tsx(89,43): error TS2345: Argument of type 'string' is not assignable to parameter of type 'MessageType'.

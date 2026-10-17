@@ -212,6 +212,22 @@
       }
     },
     {
+      "includes": [
+        "src/pages/*/index.ts",
+        "src/widgets/*/index.ts",
+        "src/features/*/index.ts",
+        "src/entities/*/index.ts",
+        "src/shared/*/index.ts"
+      ],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noBarrelFile": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": ["**/*.json", "**/*.jsonc"],
       "assist": {
         "actions": {
