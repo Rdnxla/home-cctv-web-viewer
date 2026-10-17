@@ -1,4 +1,4 @@
 import {setupServer} from 'msw/node';
-import {authHandlers, nvrHandlers} from './handlers';
+import {authHandlers, eventHandlers, nvrHandlers} from './handlers';
 
-export const server = setupServer(...authHandlers, ...nvrHandlers);
+export const server = setupServer(...authHandlers, ...nvrHandlers, ...eventHandlers);

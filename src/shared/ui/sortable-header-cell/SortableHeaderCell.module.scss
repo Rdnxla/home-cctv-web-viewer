@@ -1,0 +1,28 @@
+.sortableHeaderCell__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-8);
+    outline-offset: 2px;
+  }
+
+  &[data-active='true'] .sortableHeaderCell__icon {
+    color: var(--accent-11);
+  }
+}
+
+.sortableHeaderCell__icon {
+  flex-shrink: 0;
+  color: var(--gray-9);
+}

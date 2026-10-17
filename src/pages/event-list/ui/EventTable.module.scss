@@ -1,0 +1,31 @@
+.eventTable {
+  transition: opacity .15s ease-in-out;
+}
+
+.eventTable__stale {
+  opacity: .6;
+}
+
+.eventTable__time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.eventTable__nowrap {
+  white-space: nowrap;
+}
+
+// Тревоги выделены полосой слева, чтобы их было видно при беглом просмотре
+.eventTable__alarmRow > :first-child {
+  box-shadow: inset 3px 0 0 var(--red-9);
+}
+
+.eventTable__empty {
+  padding: 40px 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eventTable {
+    transition: none;
+  }
+}

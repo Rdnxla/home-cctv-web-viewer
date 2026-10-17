@@ -1,0 +1,90 @@
+.cameraPlayer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $base-radius;
+  background-color: var(--gray-1);
+  color: var(--gray-12);
+  overflow: hidden;
+
+  &:fullscreen {
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+
+  &:hover,
+  &:focus-within {
+    .cameraPlayer__toolbar {
+      opacity: 1;
+    }
+  }
+}
+
+.cameraPlayer__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cameraPlayer__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.cameraPlayer__badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  pointer-events: none;
+}
+
+.cameraPlayer__liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: cameraPlayerPulse 1.6s ease-in-out infinite;
+}
+
+.cameraPlayer__toolbar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 32px 12px 12px;
+  background: linear-gradient(to top, var(--black-a9), transparent);
+  opacity: 0;
+  transition: opacity .2s ease-in-out;
+}
+
+// На сенсорных экранах наведения нет — панель видна всегда
+@media (hover: none) {
+  .cameraPlayer__toolbar {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cameraPlayer__liveDot {
+    animation: none;
+  }
+
+  .cameraPlayer__toolbar {
+    transition: none;
+  }
+}
+
+@keyframes cameraPlayerPulse {
+  50% {
+    opacity: .3;
+  }
+}

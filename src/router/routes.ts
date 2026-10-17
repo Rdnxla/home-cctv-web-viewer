@@ -16,15 +16,15 @@ export const router = createBrowserRouter([
     Component: MainLayout,
     children: [
       {
-        lazy: () => import('@/pages/client-dashboard/ClientDashboard'),
+        lazy: () => import('@/pages/client-dashboard'),
         path: '/dashboard',
       },
       {
-        lazy: () => import('@/pages/cam-page/CamPage'),
+        lazy: () => import('@/pages/cam-page'),
         path: '/:id/detail',
       },
       {
-        lazy: () => import('@/pages/event-list/EventList'),
+        lazy: () => import('@/pages/event-list'),
         path: '/events',
       },
     ],
