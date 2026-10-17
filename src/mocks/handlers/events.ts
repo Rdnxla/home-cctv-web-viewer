@@ -33,6 +33,7 @@ interface EventQuery {
   query: string;
   sort: EventSortField;
   source: string | null;
+  to: number | null;
   types: NvrEvent['type'][];
 }
 
@@ -59,6 +60,8 @@ function parseQuery(search: URLSearchParams): EventQuery | string {
   const types = rawTypes.filter(value => isOneOf(EVENT_TYPES, value));
   const fromParam = search.get('from');
   const from = fromParam === null ? null : Date.parse(fromParam);
+  const toParam = search.get('to');
+  const to = toParam === null ? null : Date.parse(toParam);
 
   if (!Number.isInteger(page) || page < 1) return 'page: ожидается целое число не меньше 1';
   if (!PAGE_SIZES.includes(pageSize)) return `pageSize: допустимые значения ${PAGE_SIZES.join(', ')}`;
@@ -67,6 +70,7 @@ function parseQuery(search: URLSearchParams): EventQuery | string {
   if (categories.length !== rawCategories.length) return `category: допустимые значения ${EVENT_CATEGORIES.join(', ')}`;
   if (types.length !== rawTypes.length) return 'type: неизвестный тип события';
   if (from !== null && Number.isNaN(from)) return 'from: ожидается дата в формате ISO 8601';
+  if (to !== null && Number.isNaN(to)) return 'to: ожидается дата в формате ISO 8601';
 
   return {
     categories,
@@ -77,6 +81,7 @@ function parseQuery(search: URLSearchParams): EventQuery | string {
     query: (search.get('q') ?? '').trim().toLocaleLowerCase('ru'),
     sort,
     source: search.get('source'),
+    to,
     types,
   };
 }
@@ -106,7 +111,7 @@ export const eventHandlers = [
   /**
    * Журнал событий с серверной фильтрацией, сортировкой и пагинацией.
    * Параметры: page, pageSize (10|25|50|100), sort (occurredAt|category|type|source), order (asc|desc),
-   * category и type (можно повторять), source (id камеры или `device`), from (ISO), q (поиск).
+   * category и type (можно повторять), source (id камеры или `device`), from и to (ISO, `[from, to)`), q (поиск).
    */
   http.get(API, async ({request}) => {
     await delay(RESPONSE_DELAY_MS);
@@ -121,12 +126,13 @@ export const eventHandlers = [
       );
     }
 
-    const {categories, from, order, page, pageSize, query, sort, source, types} = parsed;
+    const {categories, from, order, page, pageSize, query, sort, source, to, types} = parsed;
 
     // Все фильтры, кроме категории: по этой выборке считаются счётчики вкладок категорий
     const base = events.filter(
       event =>
         (from === null || Date.parse(event.occurredAt) >= from) &&
+        (to === null || Date.parse(event.occurredAt) < to) &&
         (types.length === 0 || types.includes(event.type)) &&
         matchesSource(event, source) &&
         matchesQuery(event, query)

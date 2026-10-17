@@ -31,6 +31,13 @@ export interface EventListParams {
   types: EventType[];
 }
 
+/** События камеры за период `[from, to)` (ISO 8601) по возрастанию времени — для шкалы архива */
+export interface EventRangeParams {
+  cameraId: string;
+  from: string;
+  to: string;
+}
+
 export interface EventListResponse extends PaginatedResponse<NvrEvent> {
   /** Число событий по категориям с учётом всех фильтров, кроме самой категории */
   categoryCounts: Record<EventCategory, number>;

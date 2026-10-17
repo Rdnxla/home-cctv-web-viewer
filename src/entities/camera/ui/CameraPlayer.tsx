@@ -7,14 +7,14 @@ import {
 } from '@radix-ui/react-icons';
 import {Badge, Button, Flex, IconButton, Spinner, Text, Theme, Tooltip} from '@radix-ui/themes';
 import type {ReactNode} from 'react';
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {captureVideoFrame} from '@/shared/lib/captureVideoFrame';
 import {downloadBlob} from '@/shared/lib/downloadBlob';
 import {useFullscreen} from '@/shared/lib/useFullscreen';
 // Legacy (FSD-001, roadmap M-2): плеер пока лежит в src/mocks
 import {useWebRtcPlayer} from '@/mocks/handlers/webrtc';
 import {formatFps, formatResolution, formatSnapshotFileName} from '../lib/format';
-import type {StreamInfo} from '../model/types';
+import type {PlayerState, StreamInfo} from '../model/types';
 import styles from './CameraPlayer.module.scss';
 
 interface FullscreenControl {
@@ -24,18 +24,32 @@ interface FullscreenControl {
 }
 
 interface CameraPlayerProps {
+  /** Метка режима поверх видео; по умолчанию — LIVE */
+  badge?: ReactNode;
   className?: string | undefined;
   /** Содержимое вместо видео, пока параметров потока нет (камера не в сети, параметры загружаются и т.п.) */
   fallback?: ReactNode;
+  /** Момент показанного кадра для имени файла снимка; по умолчанию — текущее время */
+  getSnapshotDate?: (() => Date) | undefined;
+  /** Своя реакция на «Переподключить»; по умолчанию плеер сам пересоздаёт WHEP-сессию */
+  onReconnect?: (() => void) | undefined;
+  /** Состояние подключения: начало показа, ошибка */
+  onStateChange?: ((state: PlayerState) => void) | undefined;
+  /** Остановить картинку на текущем кадре; сеанс при этом не закрывается */
+  paused?: boolean | undefined;
   stream: StreamInfo | undefined;
   /** Название камеры: подпись видео и имя файла снимка */
   title: string;
 }
 
 interface PlayerSurfaceProps {
+  badge: ReactNode;
   fallback: ReactNode;
   fullscreen: FullscreenControl;
+  getSnapshotDate: (() => Date) | undefined;
   onReconnect: () => void;
+  onStateChange: ((state: PlayerState) => void) | undefined;
+  paused: boolean;
   stream: StreamInfo | undefined;
   title: string;
 }
@@ -50,26 +64,41 @@ function getStreamSummary(stream: StreamInfo) {
 }
 
 function PlayerSurface(props: PlayerSurfaceProps) {
-  const {fallback, fullscreen, onReconnect, stream, title} = props;
+  const {badge, fallback, fullscreen, getSnapshotDate, onReconnect, onStateChange, paused, stream, title} = props;
   const {state, videoRef} = useWebRtcPlayer(stream, title);
   const isPlaying = state === 'playing';
   const summary = stream ? getStreamSummary(stream) : '';
 
+  useEffect(() => {
+    onStateChange?.(state);
+  }, [onStateChange, state]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (paused) {
+      video.pause();
+      return;
+    }
+    if (video.srcObject !== null && video.paused) video.play().catch(() => ({}));
+  }, [paused, videoRef]);
+
   const takeSnapshot = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
+    const frameDate = getSnapshotDate?.();
     captureVideoFrame(video)
       .then(blob => {
-        if (blob) downloadBlob(blob, formatSnapshotFileName(title));
+        if (blob) downloadBlob(blob, formatSnapshotFileName(title, frameDate));
       })
       .catch(() => ({}));
-  }, [title, videoRef]);
+  }, [getSnapshotDate, title, videoRef]);
 
   return (
     <>
       <video
         aria-label={`Видео с камеры «${title}»`}
-        autoPlay
+        autoPlay={!paused}
         className={styles.cameraPlayer__video}
         muted
         playsInline
@@ -102,10 +131,12 @@ function PlayerSurface(props: PlayerSurfaceProps) {
 
       {isPlaying ? (
         <Flex className={styles.cameraPlayer__badges} gap='2'>
-          <Badge color='red' size='1' variant='solid'>
-            <span aria-hidden='true' className={styles.cameraPlayer__liveDot} />
-            LIVE
-          </Badge>
+          {badge ?? (
+            <Badge color='red' size='1' variant='solid'>
+              <span aria-hidden='true' className={styles.cameraPlayer__liveDot} />
+              LIVE
+            </Badge>
+          )}
           {summary ? (
             <Badge color='gray' size='1' variant='surface'>
               {summary}
@@ -151,11 +182,22 @@ function PlayerSurface(props: PlayerSurfaceProps) {
 }
 
 /**
- * Живое видео камеры (WHEP) с оверлеями состояния и панелью действий:
- * переподключение, снимок кадра, полноэкранный режим.
+ * Видео камеры (WHEP) с оверлеями состояния и панелью действий:
+ * переподключение, снимок кадра, полноэкранный режим. По умолчанию — живое видео,
+ * для архива потребитель задаёт метку, паузу и собственное переподключение.
  */
 export function CameraPlayer(props: CameraPlayerProps) {
-  const {className, fallback, stream, title} = props;
+  const {
+    badge,
+    className,
+    fallback,
+    getSnapshotDate,
+    onReconnect,
+    onStateChange,
+    paused = false,
+    stream,
+    title,
+  } = props;
   const {isFullscreen, isSupported, ref, toggle} = useFullscreen<HTMLDivElement>();
   // Переподключение = пересоздание поверхности плеера: старая WHEP-сессия закрывается, открывается новая
   const [session, setSession] = useState(0);
@@ -167,10 +209,14 @@ export function CameraPlayer(props: CameraPlayerProps) {
   return (
     <Theme appearance='dark' className={`${styles.cameraPlayer} ${className ?? ''}`} hasBackground={false} ref={ref}>
       <PlayerSurface
+        badge={badge}
         fallback={fallback}
         fullscreen={{isActive: isFullscreen, isSupported, toggle}}
+        getSnapshotDate={getSnapshotDate}
         key={session}
-        onReconnect={reconnect}
+        onReconnect={onReconnect ?? reconnect}
+        onStateChange={onStateChange}
+        paused={paused}
         stream={stream}
         title={title}
       />

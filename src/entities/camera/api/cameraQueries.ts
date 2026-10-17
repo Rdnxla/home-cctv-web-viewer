@@ -1,7 +1,8 @@
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {skipToken, useQuery, useQueryClient} from '@tanstack/react-query';
 import {retryUnlessClientError} from '@/shared/api/retry';
+import type {CameraPlaybackParams} from '../model/playback';
 import type {Camera} from '../model/types';
-import {getCamera, getCameraStream, getCameras} from './cameraApi';
+import {getCamera, getCameraPlayback, getCameraStream, getCameras} from './cameraApi';
 
 const CAMERAS_KEY = 'cameras';
 
@@ -10,6 +11,7 @@ export const cameraKeys = {
   all: [CAMERAS_KEY] as const,
   detail: (id: string) => [CAMERAS_KEY, 'detail', id] as const,
   list: () => [CAMERAS_KEY, 'list'] as const,
+  playback: (id: string, params: CameraPlaybackParams | null) => [CAMERAS_KEY, 'playback', id, params] as const,
   stream: (id: string) => [CAMERAS_KEY, 'stream', id] as const,
 };
 
@@ -39,6 +41,16 @@ export function useCameraStreamQuery(id: string, enabled: boolean) {
     queryFn: () => getCameraStream(id),
     queryKey: cameraKeys.stream(id),
     // Плеер переподключается только при смене whepUrl, частые перезапросы параметров не нужны
+    refetchOnWindowFocus: false,
+    retry: retryUnlessClientError,
+  });
+}
+
+/** Параметры воспроизведения архива; `null` — воспроизводить нечего */
+export function useCameraPlaybackQuery(id: string, params: CameraPlaybackParams | null) {
+  return useQuery({
+    queryFn: params === null ? skipToken : () => getCameraPlayback(id, params),
+    queryKey: cameraKeys.playback(id, params),
     refetchOnWindowFocus: false,
     retry: retryUnlessClientError,
   });
