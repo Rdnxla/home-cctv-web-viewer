@@ -19,7 +19,7 @@ function sanitize(user) {
   return safe;
 }
 
-export function resetMockState() {
+function resetMockState() {
   failedAttempts.clear();
   rateLimitWindow.clear();
   pendingTwoFactor.clear();
@@ -149,7 +149,7 @@ function validateLoginBody(body) {
 }
 
 // Итоговый обработчик
-export const authHandlers = [
+const authHandlers = [
   http.post(`${BASE_URL}/login`, async ({request}) => {
     let body;
     try {
@@ -262,3 +262,5 @@ export const authHandlers = [
     return new HttpResponse(null, {status: 204});
   }),
 ];
+
+export {authHandlers, resetMockState};

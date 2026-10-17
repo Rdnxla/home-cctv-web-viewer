@@ -64,8 +64,8 @@ export interface StreamInfo {
   /** Эндпоинт WHEP: POST с SDP offer -> 201 с SDP answer */
   whepUrl: string;
   iceServers: IceServer[];
-  codec: 'H.264' | 'H.265';
-  resolution: string;
-  fps: number;
+  codec: 'H.264' | 'H.265' | null;
+  resolution: string | null;
+  fps: number | null;
   expiresAt: string;
 }

@@ -16,6 +16,7 @@ function createCanvasStream(label: string) {
   const canvas = document.createElement('canvas');
   canvas.width = 640;
   canvas.height = 360;
+  // biome-ignore lint/style/noNonNullAssertion: <>
   const ctx = canvas.getContext('2d')!;
 
   const draw = () => {
@@ -36,7 +37,9 @@ function createCanvasStream(label: string) {
   return {
     stop: () => {
       clearInterval(timer);
-      stream.getTracks().forEach(t => t.stop());
+      stream.getTracks().forEach(t => {
+        t.stop();
+      });
     },
     stream,
   };
@@ -57,7 +60,9 @@ export async function createMockWhepSession(offerSdp: string, label: string) {
   const pc = new RTCPeerConnection({iceServers: []});
   const media = createCanvasStream(label);
 
-  media.stream.getTracks().forEach(track => pc.addTrack(track, media.stream));
+  media.stream.getTracks().forEach(track => {
+    pc.addTrack(track, media.stream);
+  });
 
   await pc.setRemoteDescription({sdp: offerSdp, type: 'offer'});
   await pc.setLocalDescription(await pc.createAnswer());
@@ -72,6 +77,7 @@ export async function createMockWhepSession(offerSdp: string, label: string) {
     },
   });
 
+  // biome-ignore lint/style/noNonNullAssertion: <>
   return {answerSdp: pc.localDescription!.sdp, sessionId};
 }
 

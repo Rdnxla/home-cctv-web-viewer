@@ -27,7 +27,7 @@ async function guardCamera(camera: Camera | undefined) {
       message: `К порту ${camera.portId} камера не подключена`,
     });
   }
-  return null;
+  return undefined;
 }
 
 export const nvrHandlers = [
@@ -60,18 +60,18 @@ export const nvrHandlers = [
   http.get(`${API}/cameras/:id/stream`, async ({params}) => {
     const camera = cameras.find(c => c.id === params.id);
     const failure = await guardCamera(camera);
-    if (failure) return failure;
+    if (failure || !camera) return failure;
 
     await delay(300);
     const stream: StreamInfo = {
-      cameraId: camera!.id,
-      codec: camera!.codec!,
+      cameraId: camera.id,
+      codec: camera.codec,
       expiresAt: new Date(Date.now() + 5 * 60_000).toISOString(),
-      fps: camera!.fps!,
+      fps: camera.fps,
       iceServers: [],
       protocol: 'webrtc',
-      resolution: camera!.resolution!,
-      whepUrl: whepUrl(camera!),
+      resolution: camera.resolution,
+      whepUrl: whepUrl(camera),
     };
     return HttpResponse.json(stream);
   }),
@@ -80,7 +80,7 @@ export const nvrHandlers = [
   http.post(`${API}/webrtc/:id/whep`, async ({params, request}) => {
     const camera = cameras.find(c => c.id === params.id);
     const failure = await guardCamera(camera);
-    if (failure) return failure;
+    if (failure || !camera) return failure;
 
     const contentType = request.headers.get('content-type');
     if (contentType !== 'application/sdp') {
@@ -91,12 +91,12 @@ export const nvrHandlers = [
     }
 
     const offer = await request.text();
-    const {sessionId, answerSdp} = await createMockWhepSession(offer, camera!.name);
+    const {sessionId, answerSdp} = await createMockWhepSession(offer, camera.name);
 
     return new HttpResponse(answerSdp, {
       headers: {
         'Content-Type': 'application/sdp',
-        Location: `${API}/webrtc/${camera!.id}/whep/${sessionId}`,
+        Location: `${API}/webrtc/${camera.id}/whep/${sessionId}`,
       },
       status: 201,
     });

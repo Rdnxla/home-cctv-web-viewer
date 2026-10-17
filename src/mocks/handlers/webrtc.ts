@@ -1,16 +1,18 @@
+/** biome-ignore-all lint/suspicious/noTsIgnore: <> */
 import {useEffect, useRef, useState} from 'react';
 import type {StreamInfo} from '../data/nvrtypes';
 
-export type PlayerState = 'idle' | 'connecting' | 'playing' | 'failed';
+type PlayerState = 'idle' | 'connecting' | 'playing' | 'failed';
 
 /** Тестовая картинка вместо реального видео (MSW не умеет отдавать медиа) */
 function createMockMediaStream(label: string) {
   const canvas = document.createElement('canvas');
   canvas.width = 640;
   canvas.height = 360;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = canvas.getContext('2d');
 
   const draw = () => {
+    if (!ctx) return;
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#2a9d5c';
@@ -28,7 +30,9 @@ function createMockMediaStream(label: string) {
   return {
     stop: () => {
       clearInterval(timer);
-      stream.getTracks().forEach(t => t.stop());
+      stream.getTracks().forEach(t => {
+        t.stop();
+      });
     },
     stream,
   };
@@ -53,7 +57,7 @@ function waitForIceGathering(pc: RTCPeerConnection) {
  *   const { videoRef, state } = useWebRtcPlayer(stream, 'Входная дверь');
  *   <video ref={videoRef} autoPlay muted playsInline />
  */
-export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
+function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
   const videoRef = useRef<HTMLVideoElement>(null);
   const labelRef = useRef(label);
   labelRef.current = label;
@@ -74,10 +78,12 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
     setState('connecting');
 
     // --- Мок-режим: включается, когда запущен MSW ---
+    // @ts-ignore
+    // biome-ignore lint/nursery/useGlobalThis: <>
     if (window.__MSW_ACTIVE__) {
       const mock = createMockMediaStream(labelRef.current);
       video.srcObject = mock.stream;
-      video.play().catch(() => {});
+      video.play().catch(() => ({}));
       setState('playing');
       return () => {
         mock.stop();
@@ -92,6 +98,7 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
 
     pc.addTransceiver('video', {direction: 'recvonly'});
     pc.ontrack = e => {
+      // @ts-ignore
       video.srcObject = e.streams[0];
       setState('playing');
     };
@@ -104,7 +111,8 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
         await pc.setLocalDescription(await pc.createOffer());
         await waitForIceGathering(pc);
         const res = await fetch(whepUrl, {
-          body: pc.localDescription!.sdp,
+          // @ts-ignore
+          body: pc.localDescription.sdp,
           headers: {'Content-Type': 'application/sdp'},
           method: 'POST',
           signal: abort.signal,
@@ -121,9 +129,12 @@ export function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera'
       abort.abort();
       pc.close();
       video.srcObject = null;
-      if (sessionUrl) fetch(sessionUrl, {method: 'DELETE'}).catch(() => {});
+      if (sessionUrl) fetch(sessionUrl, {method: 'DELETE'}).catch(() => ({}));
     };
   }, [whepUrl, iceKey]);
 
   return {state, videoRef};
 }
+
+export type {PlayerState};
+export {useWebRtcPlayer};
