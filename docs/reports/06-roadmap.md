@@ -78,7 +78,7 @@
 | QW-5 | DATA-002 | Сценарий 503 по email (`maintenance@example.com`) внутри первого хендлера `POST /api/auth/login`; убрать недостижимый дубль (`auth.js:253-256`) | нет | вход с `maintenance@example.com` → сообщение 503 |
 | QW-6 | DATA-004, DATA-006 (п. 3) | `apiFetch`: не глушить ошибку парсинга при `res.ok` (учесть 204), выставлять `Content-Type: application/json` для JSON-тела | низкий: все текущие ответы — JSON | вход/2FA/ошибки входа в DEV |
 | QW-7 | DATA-013 | Добавить в `accounts.json` аккаунты со статусами `locked`, `unverified`, `password_reset_required`; перечислить сценарные email в `references/data-layer.md` (перечислены) | нет | вход каждым аккаунтом → соответствующая ошибка |
-| QW-8 | FSD-002 | `src/router/routes.ts` → `src/app/router/routes.ts`; `src/router/README.md` → `docs/api-endpoints.md` | низкий: один импорт в `main.tsx:8` | `node docs/ai/scripts/fsd-imports.mjs`: `layer-upward` 9 → 3; все 4 маршрута открываются |
+| QW-8 | FSD-002 | `src/app/routes.ts` → `src/app/app/routes.ts`; `src/router/README.md` → `docs/api-endpoints.md` | низкий: один импорт в `main.tsx:8` | `node docs/ai/scripts/fsd-imports.mjs`: `layer-upward` 9 → 3; все 4 маршрута открываются |
 | QW-9 | FSD-006, FSD-004 | `shared/components` → `shared/ui` (+ `shared/ui/index.ts`), `shared/utils/useMediaQuery.ts` → `shared/lib/`, `shared/utils/auth.ts` → `src/mocks/lib/makeToken.ts` | низкий: 5 импортов | сканер: `?mocks → shared` исчезает; `tsc`, `biome ci` |
 | QW-10 | FSD-009, DATA-009, DATA-012 | `src/app/providers/`: `QueryClient` с явными `defaultOptions` (`retry` без повторов на 4xx, `staleTime`), один `Theme` вместо двух; `errorElement` на layout-маршрутах | средний для `QueryCache.onError` → toast: провайдер toast находится внутри layout, а `QueryClient` — выше. Решение — вызывать toast из компонента-подписчика, а не из кеша | `yarn dev`: ошибка запроса → сообщение; неизвестный маршрут → `errorElement` |
 | QW-11 | BIO-007, BIO-008, BIO-009, BIO-010, BIO-004 | Гигиена конфигов: `biome.json` → `biome.jsonc` с причинами отключений, override `**/*` → `linter.rules`; порог `noSecrets` по умолчанию + послабление для `src/mocks/**` (значение по умолчанию — `UNVERIFIED`); указать правило и причину в 7 `biome-ignore`; `.vscode/settings.json` + `extensions.json` для Biome; обновлять Biome отдельным PR | низкий; при изменении порога `noSecrets` возможны новые срабатывания | `yarn exec biome ci .` → exit 0 |
@@ -131,12 +131,3 @@
 | FSD-012 | `src/TestUtils.tsx` → `src/shared/lib/test/render.tsx` |
 | Контекст | CI запускает `test:ci`/`test:e2e:ci` без тестов и без `./tests` (`03-biome-audit.md`, «Контекст») |
 
-## Факты карты, не вошедшие в отчёты 02–04
-
-| ID | Факт | Где |
-|---|---|---|
-| MAP-1 | ~~пункт навигации `archive` без маршрута~~ — снято 2026-10-18 (маршрут `/archive`) | `src/widgets/the-header/TheHeader.tsx:11`, `src/router/routes.ts` |
-| MAP-2 | 4 `CameraCard` на дашборде открывают 4 WHEP-сессии к `cam-1` | `ClientDashboard.tsx:34-36`, `CameraCard.tsx:22-33` |
-| MAP-3 | «Открыть» ведёт на `/1/detail`, id камер — `cam-N`; `CamPage` не читает `:id` | `CameraCard.tsx:15,36`, `mocks/data/nvr.ts` |
-| MAP-4 | пути маршрутов захардкожены в 4 файлах | `Auth.tsx:36`, `CameraCard.tsx:36`, `TheHeader.tsx:9-11`, `CamPage.tsx:37` |
-| MAP-5 | защиты маршрутов нет | `src/router/routes.ts` |

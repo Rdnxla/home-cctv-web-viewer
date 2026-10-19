@@ -270,7 +270,7 @@ API-функции — `src/api/**` (вне слоёв, FSD-003), хуки — �
 
 - Severity: low
 - Type: fact
-- Location: `src/pages/auth/Auth.tsx:53-89,126-139`; `src/router/routes.ts` (нет `errorElement`); `react-error-boundary` — 0 использований
+- Location: `src/pages/auth/Auth.tsx:53-89,126-139`; `src/app/routes.ts` (нет `errorElement`); `react-error-boundary` — 0 использований
 - Recommendation: `errorElement`/`ErrorBoundary` на уровне layout-маршрутов + глобальный `onError` (DATA-009); локальную обработку форм оставить
 - Effort: S
 
