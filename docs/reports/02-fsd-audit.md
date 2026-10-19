@@ -16,7 +16,7 @@
 
 | # | Нарушение из `slices.md` | Вердикт | Обоснование |
 |---|---|---|---|
-| 1 | `src/router/routes.ts` → `pages/*` (`layer-upward`) | ложное срабатывание по правилу, но симптом FSD-002 | `?router` имеет rank −1; если роутер находится в `app`, импорт страниц разрешён. Импорты — динамические `lazy: () => import(...)` (`routes.ts:10,19,23,27`), сканер их учитывает |
+| 1 | `src/app/routes.ts` → `pages/*` (`layer-upward`) | ложное срабатывание по правилу, но симптом FSD-002 | `?router` имеет rank −1; если роутер находится в `app`, импорт страниц разрешён. Импорты — динамические `lazy: () => import(...)` (`routes.ts:10,19,23,27`), сканер их учитывает |
 | 2 | `src/api/auth/auth.ts` → `shared/api/http` (`layer-upward`) | ложное срабатывание | `?api` rank −1; из любого слоя FSD импорт `shared` разрешён. Симптом FSD-003 |
 | 3 | `src/mocks/handlers/auth.js` → `shared/utils/auth` (`layer-upward`) | ложное по правилу, реальная проблема размещения | см. FSD-004 |
 | 4 | `src/app/layouts/main/MainLayout.tsx:3` → `@/widgets/the-header/TheHeader` (`non-public-api`) | подтверждено | у слайса нет `index`, импорт в файл; не type-only, не `@x` |
@@ -40,10 +40,10 @@
 
 - Severity: medium
 - Type: fact
-- Location: `src/router/routes.ts`, `src/router/README.md`
+- Location: `src/app/routes.ts`, `src/router/README.md`
 - Rule: FSD, `app` — инициализация: провайдеры, роутер (`fsd-rules.md`, «Layer Roles»)
 - Evidence: `slices.md` → `?router`: 6 из 9 `layer-upward` и 4 из 9 `non-public-api`
-- Recommendation: `src/router/routes.ts` → `src/app/router/routes.ts`. `src/router/README.md` (карта эндпоинтов `/api/nvr…`) к роутингу не относится → `docs/` или `src/entities/camera/api/README.md` после выполнения FSD-003. После переноса и добавления `index` у страниц (FSD-005) уходят 10 из 18 нарушений
+- Recommendation: `src/app/routes.ts` → `src/app/app/routes.ts`. `src/router/README.md` (карта эндпоинтов `/api/nvr…`) к роутингу не относится → `docs/` или `src/entities/camera/api/README.md` после выполнения FSD-003. После переноса и добавления `index` у страниц (FSD-005) уходят 10 из 18 нарушений
 - Effort: S
 
 ### FSD-003: API-функции и доменные типы в `src/api` вне слоёв
@@ -180,7 +180,7 @@
 
 | # | From | To | Находки | Порядок |
 |---|---|---|---|---|
-| 1 | `src/router/routes.ts` | `src/app/router/routes.ts` | FSD-002 | 1 |
+| 1 | `src/app/routes.ts` | `src/app/app/routes.ts` | FSD-002 | 1 |
 | 2 | `src/router/README.md` | `docs/api-endpoints.md` (или `entities/camera/api/README.md`) | FSD-002 | 1 |
 | 3 | `src/shared/components/callout/*` | `src/shared/ui/callout/*` + `src/shared/ui/index.ts` | FSD-006, FSD-011 | 2 |
 | 4 | `src/shared/utils/useMediaQuery.ts` | `src/shared/lib/useMediaQuery.ts` | FSD-006 | 2 |

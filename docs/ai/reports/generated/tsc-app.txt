@@ -1,2 +1,0 @@
-src/main.tsx(16,33): error TS7016: Could not find a declaration file for module './mocks/browser'. '/home/plotva/DEV/react-proj/src/mocks/browser.js' implicitly has an 'any' type.
-src/testSetup.ts(3,22): error TS7016: Could not find a declaration file for module './mocks/server'. '/home/plotva/DEV/react-proj/src/mocks/server.js' implicitly has an 'any' type.
