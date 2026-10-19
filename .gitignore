@@ -12,4 +12,3 @@ mockServiceWorker.js
 /blob-report/
 /playwright/.cache/
 .yarn/
-.claude/
