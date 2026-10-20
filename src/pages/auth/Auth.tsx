@@ -164,12 +164,18 @@ export function Component() {
   if (step.name === '2fa') {
     return (
       <div className='auth-page'>
-        <Form.Root className='auth-form' onSubmit={handleTwoFactorSubmit}>
+        <Form.Root
+          className='auth-form'
+          onSubmit={handleTwoFactorSubmit}
+        >
           <h1>Код подтверждения</h1>
 
           <p>Введите 6-значный код из приложения-аутентификатора.</p>
 
-          <Form.Field className='form-field' name='code'>
+          <Form.Field
+            className='form-field'
+            name='code'
+          >
             <Form.Label className='form-label'>Код</Form.Label>
 
             <Form.Control asChild={true}>
@@ -183,23 +189,35 @@ export function Component() {
               />
             </Form.Control>
 
-            <Form.Message className='field-error' match='valueMissing'>
+            <Form.Message
+              className='field-error'
+              match='valueMissing'
+            >
               Введите код.
             </Form.Message>
 
-            <Form.Message className='field-error' match='patternMismatch'>
+            <Form.Message
+              className='field-error'
+              match='patternMismatch'
+            >
               Код должен состоять из 6 цифр.
             </Form.Message>
           </Form.Field>
 
           {formError !== null && (
-            <p className='error' role='alert'>
+            <p
+              className='error'
+              role='alert'
+            >
               {formError}
             </p>
           )}
 
           <Form.Submit asChild={true}>
-            <button disabled={twoFactorMutation.isPending} type='submit'>
+            <button
+              disabled={twoFactorMutation.isPending}
+              type='submit'
+            >
               {twoFactorMutation.isPending ? 'Проверка...' : 'Подтвердить'}
             </button>
           </Form.Submit>
@@ -210,31 +228,61 @@ export function Component() {
 
   return (
     <div className='auth-page'>
-      <Form.Root className='auth-form' onSubmit={handleLoginSubmit}>
+      <Form.Root
+        className='auth-form'
+        onSubmit={handleLoginSubmit}
+      >
         <h1>Вход</h1>
 
-        <Form.Field className='form-field' name='email' serverInvalid={Boolean(fieldErrors.email)}>
+        <Form.Field
+          className='form-field'
+          name='email'
+          serverInvalid={Boolean(fieldErrors.email)}
+        >
           <Form.Label className='form-label'>Email</Form.Label>
 
-          <TextField.Root autoComplete='email' name='email' required type='email' />
+          <TextField.Root
+            autoComplete='email'
+            name='email'
+            required
+            type='email'
+          />
 
-          <Form.Message className='field-error' match='valueMissing'>
+          <Form.Message
+            className='field-error'
+            match='valueMissing'
+          >
             Email обязателен.
           </Form.Message>
 
-          <Form.Message className='field-error' match='typeMismatch'>
+          <Form.Message
+            className='field-error'
+            match='typeMismatch'
+          >
             Введите корректный email.
           </Form.Message>
 
           {fieldErrors.email ? <span className='field-error'>{fieldErrors.email}</span> : null}
         </Form.Field>
 
-        <Form.Field className='form-field' name='password' serverInvalid={Boolean(fieldErrors.password)}>
+        <Form.Field
+          className='form-field'
+          name='password'
+          serverInvalid={Boolean(fieldErrors.password)}
+        >
           <Form.Label className='form-label'>Пароль</Form.Label>
 
-          <TextField.Root autoComplete='current-password' name='password' required type='password' />
+          <TextField.Root
+            autoComplete='current-password'
+            name='password'
+            required
+            type='password'
+          />
 
-          <Form.Message className='field-error' match='valueMissing'>
+          <Form.Message
+            className='field-error'
+            match='valueMissing'
+          >
             Пароль обязателен.
           </Form.Message>
 
@@ -242,7 +290,10 @@ export function Component() {
         </Form.Field>
 
         {formError ? (
-          <p className={locked ? 'error error--locked' : 'error'} role='alert'>
+          <p
+            className={locked ? 'error error--locked' : 'error'}
+            role='alert'
+          >
             {formError}
           </p>
         ) : null}
@@ -250,7 +301,10 @@ export function Component() {
         {retryAfter ? <p className='hint'>Повторите попытку через {retryAfter} сек.</p> : null}
 
         <Form.Submit asChild>
-          <Button disabled={loginMutation.isPending || locked} type='submit'>
+          <Button
+            disabled={loginMutation.isPending || locked}
+            type='submit'
+          >
             {loginMutation.isPending ? 'Входим...' : 'Войти'}
           </Button>
         </Form.Submit>

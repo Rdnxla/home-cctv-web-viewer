@@ -43,7 +43,10 @@ export function CalloutMessage({children}: ProviderProps) {
       {children}
       <div className='callout-container'>
         {messages.map(m => (
-          <div className='callout' key={m.id}>
+          <div
+            className='callout'
+            key={m.id}
+          >
             <Callout.Root color={colors[m.type]}>
               <Callout.Icon>{renderIcon(m.type)}</Callout.Icon>
               <Callout.Text>{m.message}</Callout.Text>

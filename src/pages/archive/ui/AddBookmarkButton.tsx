@@ -63,26 +63,55 @@ export function AddBookmarkButton(props: AddBookmarkButtonProps) {
   );
 
   return (
-    <Popover.Root onOpenChange={changeOpen} open={moment !== null}>
+    <Popover.Root
+      onOpenChange={changeOpen}
+      open={moment !== null}
+    >
       <Popover.Trigger>
-        <Button color='gray' disabled={position === null} variant='soft'>
+        <Button
+          color='gray'
+          disabled={position === null}
+          variant='soft'
+        >
           <BookmarkIcon />В закладки
         </Button>
       </Popover.Trigger>
-      <Popover.Content maxWidth='320px' width='320px'>
+      <Popover.Content
+        maxWidth='320px'
+        width='320px'
+      >
         {moment === null ? null : (
           <form onSubmit={submit}>
-            <Flex direction='column' gap='3'>
-              <Flex direction='column' gap='1'>
-                <Text size='3' weight='medium'>
+            <Flex
+              direction='column'
+              gap='3'
+            >
+              <Flex
+                direction='column'
+                gap='1'
+              >
+                <Text
+                  size='3'
+                  weight='medium'
+                >
                   Новая закладка
                 </Text>
-                <Text color='gray' size='2'>
+                <Text
+                  color='gray'
+                  size='2'
+                >
                   {formatDateTime(moment)}
                 </Text>
               </Flex>
-              <Flex direction='column' gap='1'>
-                <Text as='label' htmlFor={titleId} size='2'>
+              <Flex
+                direction='column'
+                gap='1'
+              >
+                <Text
+                  as='label'
+                  htmlFor={titleId}
+                  size='2'
+                >
                   Название
                 </Text>
                 <TextField.Root
@@ -94,17 +123,30 @@ export function AddBookmarkButton(props: AddBookmarkButtonProps) {
                 />
               </Flex>
               {error ? (
-                <Text color='red' size='2'>
+                <Text
+                  color='red'
+                  size='2'
+                >
                   {`Не удалось сохранить закладку: ${error.message}`}
                 </Text>
               ) : null}
-              <Flex gap='2' justify='end'>
+              <Flex
+                gap='2'
+                justify='end'
+              >
                 <Popover.Close>
-                  <Button color='gray' type='button' variant='soft'>
+                  <Button
+                    color='gray'
+                    type='button'
+                    variant='soft'
+                  >
                     Отмена
                   </Button>
                 </Popover.Close>
-                <Button loading={isPending} type='submit'>
+                <Button
+                  loading={isPending}
+                  type='submit'
+                >
                   Сохранить
                 </Button>
               </Flex>

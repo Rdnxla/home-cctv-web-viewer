@@ -21,7 +21,10 @@ export function ArchiveList(props: ArchiveListProps) {
   const {children, label} = props;
 
   return (
-    <ul aria-label={label} className={styles.archiveList}>
+    <ul
+      aria-label={label}
+      className={styles.archiveList}
+    >
       {children}
     </ul>
   );

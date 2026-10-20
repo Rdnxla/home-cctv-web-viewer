@@ -11,7 +11,10 @@ export function EventCategoryBadge(props: EventCategoryBadgeProps) {
   const meta = EVENT_CATEGORY_META[category];
 
   return (
-    <Badge color={meta.color} variant={category === 'alarm' ? 'solid' : 'soft'}>
+    <Badge
+      color={meta.color}
+      variant={category === 'alarm' ? 'solid' : 'soft'}
+    >
       {meta.label}
     </Badge>
   );

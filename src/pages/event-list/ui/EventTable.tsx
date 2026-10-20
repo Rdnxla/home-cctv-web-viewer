@@ -21,7 +21,11 @@ function ColumnHeader(props: ColumnHeaderProps) {
   const {field, label, onSort, params} = props;
 
   return (
-    <SortableHeaderCell direction={params.sort === field ? params.order : null} onSort={onSort} sortKey={field}>
+    <SortableHeaderCell
+      direction={params.sort === field ? params.order : null}
+      onSort={onSort}
+      sortKey={field}
+    >
       {label}
     </SortableHeaderCell>
   );
@@ -35,7 +39,10 @@ function EventRow(props: EventRowProps) {
   const {event} = props;
 
   return (
-    <Table.Row align='center' className={event.category === 'alarm' ? styles.eventTable__alarmRow : undefined}>
+    <Table.Row
+      align='center'
+      className={event.category === 'alarm' ? styles.eventTable__alarmRow : undefined}
+    >
       <Table.RowHeaderCell className={styles.eventTable__time}>
         <time dateTime={event.occurredAt}>{formatEventTime(event.occurredAt)}</time>
       </Table.RowHeaderCell>
@@ -70,19 +77,34 @@ function SkeletonRows(props: SkeletonRowsProps) {
   return rows.map(row => (
     <Table.Row key={row}>
       <Table.RowHeaderCell>
-        <Skeleton height='16px' width='150px' />
+        <Skeleton
+          height='16px'
+          width='150px'
+        />
       </Table.RowHeaderCell>
       <Table.Cell>
-        <Skeleton height='20px' width='90px' />
+        <Skeleton
+          height='20px'
+          width='90px'
+        />
       </Table.Cell>
       <Table.Cell>
-        <Skeleton height='16px' width='140px' />
+        <Skeleton
+          height='16px'
+          width='140px'
+        />
       </Table.Cell>
       <Table.Cell>
-        <Skeleton height='16px' width='110px' />
+        <Skeleton
+          height='16px'
+          width='110px'
+        />
       </Table.Cell>
       <Table.Cell>
-        <Skeleton height='16px' width='100%' />
+        <Skeleton
+          height='16px'
+          width='100%'
+        />
       </Table.Cell>
     </Table.Row>
   ));
@@ -107,20 +129,43 @@ function EventTableBody(props: EventTableProps) {
     return (
       <Table.Row>
         <Table.Cell colSpan={COLUMN_COUNT}>
-          <Flex align='center' className={styles.eventTable__empty} direction='column' gap='2'>
-            <Text as='span' color='gray'>
-              <MagnifyingGlassIcon aria-hidden='true' height={28} width={28} />
+          <Flex
+            align='center'
+            className={styles.eventTable__empty}
+            direction='column'
+            gap='2'
+          >
+            <Text
+              as='span'
+              color='gray'
+            >
+              <MagnifyingGlassIcon
+                aria-hidden='true'
+                height={28}
+                width={28}
+              />
             </Text>
-            <Text size='3' weight='medium'>
+            <Text
+              size='3'
+              weight='medium'
+            >
               Событий не найдено
             </Text>
-            <Text align='center' color='gray' size='2'>
+            <Text
+              align='center'
+              color='gray'
+              size='2'
+            >
               {hasActiveFilters
                 ? 'Под выбранные фильтры за этот период ничего не попало.'
                 : 'За выбранный период событий не было.'}
             </Text>
             {hasActiveFilters ? (
-              <Button mt='2' onClick={onResetFilters} variant='soft'>
+              <Button
+                mt='2'
+                onClick={onResetFilters}
+                variant='soft'
+              >
                 Сбросить фильтры
               </Button>
             ) : null}
@@ -130,7 +175,12 @@ function EventTableBody(props: EventTableProps) {
     );
   }
 
-  return events.map(event => <EventRow event={event} key={event.id} />);
+  return events.map(event => (
+    <EventRow
+      event={event}
+      key={event.id}
+    />
+  ));
 }
 
 export function EventTable(props: EventTableProps) {
@@ -144,10 +194,30 @@ export function EventTable(props: EventTableProps) {
     >
       <Table.Header>
         <Table.Row>
-          <ColumnHeader field='occurredAt' label='Время' onSort={onSort} params={params} />
-          <ColumnHeader field='category' label='Категория' onSort={onSort} params={params} />
-          <ColumnHeader field='type' label='Событие' onSort={onSort} params={params} />
-          <ColumnHeader field='source' label='Источник' onSort={onSort} params={params} />
+          <ColumnHeader
+            field='occurredAt'
+            label='Время'
+            onSort={onSort}
+            params={params}
+          />
+          <ColumnHeader
+            field='category'
+            label='Категория'
+            onSort={onSort}
+            params={params}
+          />
+          <ColumnHeader
+            field='type'
+            label='Событие'
+            onSort={onSort}
+            params={params}
+          />
+          <ColumnHeader
+            field='source'
+            label='Источник'
+            onSort={onSort}
+            params={params}
+          />
           <Table.ColumnHeaderCell>Описание</Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>

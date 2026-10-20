@@ -11,7 +11,10 @@ export function RecordingTriggerBadge(props: RecordingTriggerBadgeProps) {
   const meta = RECORDING_TRIGGER_META[trigger];
 
   return (
-    <Badge color={meta.color} variant='soft'>
+    <Badge
+      color={meta.color}
+      variant='soft'
+    >
       {meta.shortLabel}
     </Badge>
   );

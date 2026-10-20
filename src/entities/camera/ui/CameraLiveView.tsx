@@ -26,7 +26,13 @@ export function CameraLiveView(props: CameraLiveViewProps) {
   return (
     <CameraPlayer
       className={className}
-      fallback={<StreamPlaceholder camera={camera} error={error} onRetry={retryStream} />}
+      fallback={
+        <StreamPlaceholder
+          camera={camera}
+          error={error}
+          onRetry={retryStream}
+        />
+      }
       stream={isOnline ? stream : undefined}
       title={camera.name}
     />

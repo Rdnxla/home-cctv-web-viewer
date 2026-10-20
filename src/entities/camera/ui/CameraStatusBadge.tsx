@@ -13,8 +13,16 @@ export function CameraStatusBadge(props: CameraStatusBadgeProps) {
   const meta = CAMERA_STATUS_META[status];
 
   return (
-    <Badge color={meta.color} radius='full' size={size} variant='soft'>
-      <span aria-hidden='true' className={styles.cameraStatusBadge__dot} />
+    <Badge
+      color={meta.color}
+      radius='full'
+      size={size}
+      variant='soft'
+    >
+      <span
+        aria-hidden='true'
+        className={styles.cameraStatusBadge__dot}
+      />
       {meta.label}
     </Badge>
   );

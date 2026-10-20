@@ -14,14 +14,30 @@ export function ArchiveEmptyState(props: ArchiveEmptyStateProps) {
   const {children, description, icon, title} = props;
 
   return (
-    <Flex align='center' direction='column' gap='2' py='8'>
-      <Text as='span' color='gray'>
+    <Flex
+      align='center'
+      direction='column'
+      gap='2'
+      py='8'
+    >
+      <Text
+        as='span'
+        color='gray'
+      >
         {icon}
       </Text>
-      <Text align='center' size='3' weight='medium'>
+      <Text
+        align='center'
+        size='3'
+        weight='medium'
+      >
         {title}
       </Text>
-      <Text align='center' color='gray' size='2'>
+      <Text
+        align='center'
+        color='gray'
+        size='2'
+      >
         {description}
       </Text>
       {children}

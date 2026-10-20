@@ -39,11 +39,22 @@ function RecentEventsList(props: RecentEventsListProps) {
 
   return (
     <>
-      <Flex gap='3' mb='3' wrap='wrap'>
+      <Flex
+        gap='3'
+        mb='3'
+        wrap='wrap'
+      >
         {EVENT_CATEGORIES.map(category => (
-          <Flex align='center' gap='1' key={category}>
+          <Flex
+            align='center'
+            gap='1'
+            key={category}
+          >
             <EventCategoryBadge category={category} />
-            <Text size='2' weight='medium'>
+            <Text
+              size='2'
+              weight='medium'
+            >
               {data.categoryCounts[category]}
             </Text>
           </Flex>
@@ -51,7 +62,10 @@ function RecentEventsList(props: RecentEventsListProps) {
       </Flex>
 
       {data.items.length === 0 ? (
-        <Text color='gray' size='2'>
+        <Text
+          color='gray'
+          size='2'
+        >
           За сутки событий не было
         </Text>
       ) : (
@@ -65,17 +79,36 @@ function RecentEventsList(props: RecentEventsListProps) {
               }
               key={event.id}
             >
-              <Flex align='center' gap='2' justify='between'>
-                <Text size='2' weight='medium'>
+              <Flex
+                align='center'
+                gap='2'
+                justify='between'
+              >
+                <Text
+                  size='2'
+                  weight='medium'
+                >
                   <EventTypeLabel type={event.type} />
                 </Text>
-                <Text className={styles.recentEvents__time} color='gray' size='1'>
-                  <time dateTime={event.occurredAt} title={formatEventTime(event.occurredAt)}>
+                <Text
+                  className={styles.recentEvents__time}
+                  color='gray'
+                  size='1'
+                >
+                  <time
+                    dateTime={event.occurredAt}
+                    title={formatEventTime(event.occurredAt)}
+                  >
                     {formatRelativeTime(event.occurredAt)}
                   </time>
                 </Text>
               </Flex>
-              <Text as='p' color='gray' size='1' truncate>
+              <Text
+                as='p'
+                color='gray'
+                size='1'
+                truncate
+              >
                 {`${event.cameraName ?? DEVICE_SOURCE_LABEL} · ${event.message}`}
               </Text>
             </li>
@@ -99,23 +132,47 @@ export function RecentEvents() {
     if (data) return <RecentEventsList data={data} />;
     if (isPending) {
       return (
-        <Flex direction='column' gap='2'>
+        <Flex
+          direction='column'
+          gap='2'
+        >
           {SKELETON_KEYS.map(key => (
-            <Skeleton height='44px' key={key} width='100%' />
+            <Skeleton
+              height='44px'
+              key={key}
+              width='100%'
+            />
           ))}
         </Flex>
       );
     }
-    return <InlineError message='Не удалось загрузить события' onRetry={retry} />;
+    return (
+      <InlineError
+        message='Не удалось загрузить события'
+        onRetry={retry}
+      />
+    );
   }
 
   return (
     <section aria-labelledby={headingId}>
-      <Flex align='center' gap='2' justify='between' mb='3'>
-        <Heading as='h4' id={headingId} size='3'>
+      <Flex
+        align='center'
+        gap='2'
+        justify='between'
+        mb='3'
+      >
+        <Heading
+          as='h4'
+          id={headingId}
+          size='3'
+        >
           События за сутки
         </Heading>
-        <Link asChild size='2'>
+        <Link
+          asChild
+          size='2'
+        >
           <RouterLink to={ROUTES.events}>Весь журнал</RouterLink>
         </Link>
       </Flex>

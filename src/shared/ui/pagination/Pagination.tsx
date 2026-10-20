@@ -19,14 +19,26 @@ function PageButton(props: PageButtonProps) {
 
   if (isCurrent) {
     return (
-      <Button aria-current='page' aria-label={`Страница ${page}`} disabled={disabled} onClick={select} variant='solid'>
+      <Button
+        aria-current='page'
+        aria-label={`Страница ${page}`}
+        disabled={disabled}
+        onClick={select}
+        variant='solid'
+      >
         {page}
       </Button>
     );
   }
 
   return (
-    <Button aria-label={`Страница ${page}`} color='gray' disabled={disabled} onClick={select} variant='soft'>
+    <Button
+      aria-label={`Страница ${page}`}
+      color='gray'
+      disabled={disabled}
+      onClick={select}
+      variant='soft'
+    >
       {page}
     </Button>
   );
@@ -54,7 +66,11 @@ export function Pagination(props: PaginationProps) {
 
   return (
     <nav aria-label='Страницы'>
-      <Flex align='center' gap='1' wrap='wrap'>
+      <Flex
+        align='center'
+        gap='1'
+        wrap='wrap'
+      >
         <IconButton
           aria-label='Предыдущая страница'
           color='gray'
@@ -66,9 +82,20 @@ export function Pagination(props: PaginationProps) {
         </IconButton>
         {items.map(item =>
           typeof item === 'number' ? (
-            <PageButton disabled={disabled} isCurrent={item === page} key={item} onSelect={onPageChange} page={item} />
+            <PageButton
+              disabled={disabled}
+              isCurrent={item === page}
+              key={item}
+              onSelect={onPageChange}
+              page={item}
+            />
           ) : (
-            <Text aria-hidden='true' color='gray' key={item} size='2'>
+            <Text
+              aria-hidden='true'
+              color='gray'
+              key={item}
+              size='2'
+            >
               …
             </Text>
           )

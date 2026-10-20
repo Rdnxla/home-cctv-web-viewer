@@ -22,14 +22,32 @@ export function CameraGrid() {
 
   if (cameras && cameras.length === 0) {
     return (
-      <Flex align='center' direction='column' gap='2' py='8'>
-        <Text as='span' color='gray'>
-          <VideoIcon aria-hidden='true' height={32} width={32} />
+      <Flex
+        align='center'
+        direction='column'
+        gap='2'
+        py='8'
+      >
+        <Text
+          as='span'
+          color='gray'
+        >
+          <VideoIcon
+            aria-hidden='true'
+            height={32}
+            width={32}
+          />
         </Text>
-        <Text size='3' weight='medium'>
+        <Text
+          size='3'
+          weight='medium'
+        >
           Камеры не подключены
         </Text>
-        <Text color='gray' size='2'>
+        <Text
+          color='gray'
+          size='2'
+        >
           Подключите камеру к PoE-порту регистратора — она появится здесь автоматически.
         </Text>
       </Flex>
@@ -38,9 +56,15 @@ export function CameraGrid() {
 
   if (cameras) {
     return (
-      <Grid columns={GRID_COLUMNS} gap='3'>
+      <Grid
+        columns={GRID_COLUMNS}
+        gap='3'
+      >
         {cameras.map(camera => (
-          <CameraGridCard camera={camera} key={camera.id} />
+          <CameraGridCard
+            camera={camera}
+            key={camera.id}
+          />
         ))}
       </Grid>
     );
@@ -48,10 +72,19 @@ export function CameraGrid() {
 
   if (isPending) {
     return (
-      <Grid columns={GRID_COLUMNS} gap='3'>
+      <Grid
+        columns={GRID_COLUMNS}
+        gap='3'
+      >
         {SKELETON_KEYS.map(key => (
-          <AspectRatio key={key} ratio={16 / 9}>
-            <Skeleton height='100%' width='100%' />
+          <AspectRatio
+            key={key}
+            ratio={16 / 9}
+          >
+            <Skeleton
+              height='100%'
+              width='100%'
+            />
           </AspectRatio>
         ))}
       </Grid>

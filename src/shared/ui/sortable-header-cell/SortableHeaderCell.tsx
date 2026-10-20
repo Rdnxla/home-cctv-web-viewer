@@ -27,7 +27,10 @@ export function SortableHeaderCell<T extends string>(props: SortableHeaderCellPr
   }, [onSort, sortKey]);
 
   return (
-    <Table.ColumnHeaderCell aria-sort={direction === null ? 'none' : ARIA_SORT[direction]} className={className}>
+    <Table.ColumnHeaderCell
+      aria-sort={direction === null ? 'none' : ARIA_SORT[direction]}
+      className={className}
+    >
       <button
         className={styles.sortableHeaderCell__button}
         data-active={direction !== null}
@@ -35,7 +38,10 @@ export function SortableHeaderCell<T extends string>(props: SortableHeaderCellPr
         type='button'
       >
         {children}
-        <Icon aria-hidden='true' className={styles.sortableHeaderCell__icon} />
+        <Icon
+          aria-hidden='true'
+          className={styles.sortableHeaderCell__icon}
+        />
       </button>
     </Table.ColumnHeaderCell>
   );

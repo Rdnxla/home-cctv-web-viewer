@@ -43,7 +43,10 @@ function DaySummary(props: DaySummaryProps) {
 
   if (segments.length === 0) {
     return (
-      <Text color='gray' size='2'>
+      <Text
+        color='gray'
+        size='2'
+      >
         {bounds
           ? `За этот день записей нет. В архиве есть записи с ${formatDate(Date.parse(bounds.from))} по ${formatDate(Date.parse(bounds.to))}.`
           : 'За этот день записей нет.'}
@@ -57,7 +60,10 @@ function DaySummary(props: DaySummaryProps) {
   );
 
   return (
-    <Text color='gray' size='2'>
+    <Text
+      color='gray'
+      size='2'
+    >
       {`Записано ${formatDuration(recordedMs)} · ${formatCount(fileCount, FILE_FORMS)}`}
     </Text>
   );
@@ -127,10 +133,20 @@ export function ArchiveViewer(props: ArchiveViewerProps) {
     return (
       <ArchiveEmptyState
         description='Записи появятся, когда камера начнёт передавать видео на регистратор.'
-        icon={<CounterClockwiseClockIcon aria-hidden='true' height={EMPTY_ICON_SIZE} width={EMPTY_ICON_SIZE} />}
+        icon={
+          <CounterClockwiseClockIcon
+            aria-hidden='true'
+            height={EMPTY_ICON_SIZE}
+            width={EMPTY_ICON_SIZE}
+          />
+        }
         title={`В архиве нет записей камеры «${camera.name}»`}
       >
-        <Button asChild mt='2' variant='soft'>
+        <Button
+          asChild
+          mt='2'
+          variant='soft'
+        >
           <RouterLink to={ROUTES.cameraDetail(camera.id)}>Открыть камеру</RouterLink>
         </Button>
       </ArchiveEmptyState>
@@ -138,14 +154,32 @@ export function ArchiveViewer(props: ArchiveViewerProps) {
   }
 
   return (
-    <Grid align='start' columns={CONTENT_WITH_ASIDE_COLUMNS} gap='4'>
-      <Flex direction='column' gap='3' minWidth='0'>
+    <Grid
+      align='start'
+      columns={CONTENT_WITH_ASIDE_COLUMNS}
+      gap='4'
+    >
+      <Flex
+        direction='column'
+        gap='3'
+        minWidth='0'
+      >
         {error && !recordings ? (
-          <LoadError message={`Не удалось загрузить архив: ${error.message}`} onRetry={retryRecordings} />
+          <LoadError
+            message={`Не удалось загрузить архив: ${error.message}`}
+            onRetry={retryRecordings}
+          />
         ) : (
           <>
-            <ArchivePlayer camera={camera} playback={playback} />
-            <PlaybackControls camera={camera} events={dayEvents} playback={playback} />
+            <ArchivePlayer
+              camera={camera}
+              playback={playback}
+            />
+            <PlaybackControls
+              camera={camera}
+              events={dayEvents}
+              playback={playback}
+            />
             <Timeline
               bookmarks={dayBookmarks}
               day={day}

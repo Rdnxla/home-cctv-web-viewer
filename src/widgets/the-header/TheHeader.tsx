@@ -30,7 +30,10 @@ export function TheHeader() {
         value={currentPath}
       >
         {SEGMENTS_CONFIG.map(tab => (
-          <SegmentedControl.Item key={tab.value} value={tab.value}>
+          <SegmentedControl.Item
+            key={tab.value}
+            value={tab.value}
+          >
             {isMobile ? tab.icon : tab.label}
           </SegmentedControl.Item>
         ))}
@@ -39,22 +42,52 @@ export function TheHeader() {
   }
 
   return (
-    <Box className={styles.header} px='4' py='4'>
-      <Flex align='center' justify='between'>
-        <Flex className={styles.headerItem} direction='column'>
-          <Heading as='h1' color='indigo' size='4'>
+    <Box
+      className={styles.header}
+      px='4'
+      py='4'
+    >
+      <Flex
+        align='center'
+        justify='between'
+      >
+        <Flex
+          className={styles.headerItem}
+          direction='column'
+        >
+          <Heading
+            as='h1'
+            color='indigo'
+            size='4'
+          >
             Устройство
           </Heading>
-          <Flex align='center' gap='1'>
-            <CheckIcon color='green' height='15px' width='15px' />
-            <Text color='green' size='1'>
+          <Flex
+            align='center'
+            gap='1'
+          >
+            <CheckIcon
+              color='green'
+              height='15px'
+              width='15px'
+            />
+            <Text
+              color='green'
+              size='1'
+            >
               В сети
             </Text>
           </Flex>
         </Flex>
         {getSegmentComponent()}
-        <Flex className={styles.headerItem} justify='end'>
-          <IconButton color='indigo' variant='outline'>
+        <Flex
+          className={styles.headerItem}
+          justify='end'
+        >
+          <IconButton
+            color='indigo'
+            variant='outline'
+          >
             <GearIcon />
           </IconButton>
         </Flex>

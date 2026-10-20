@@ -50,33 +50,61 @@ export function ArchiveToolbar(props: ArchiveToolbarProps) {
   );
 
   return (
-    <Flex align='center' gap='3' justify='between' wrap='wrap'>
-      <Flex align='baseline' gap='3' wrap='wrap'>
-        <Heading as='h2' size='6'>
+    <Flex
+      align='center'
+      gap='3'
+      justify='between'
+      wrap='wrap'
+    >
+      <Flex
+        align='baseline'
+        gap='3'
+        wrap='wrap'
+      >
+        <Heading
+          as='h2'
+          size='6'
+        >
           Архив
         </Heading>
-        <Text color='gray' size='2'>
+        <Text
+          color='gray'
+          size='2'
+        >
           {formatDayTitle(dayStart)}
         </Text>
       </Flex>
 
-      <Flex align='center' gap='2' wrap='wrap'>
+      <Flex
+        align='center'
+        gap='2'
+        wrap='wrap'
+      >
         <Select.Root
           disabled={cameras === undefined || cameras.length === 0}
           onValueChange={onCameraChange}
           value={cameraId ?? ''}
         >
-          <Select.Trigger aria-label='Камера' placeholder='Камера' />
+          <Select.Trigger
+            aria-label='Камера'
+            placeholder='Камера'
+          />
           <Select.Content position='popper'>
             {cameras?.map(camera => (
-              <Select.Item key={camera.id} value={camera.id}>
+              <Select.Item
+                key={camera.id}
+                value={camera.id}
+              >
                 {camera.name}
               </Select.Item>
             ))}
           </Select.Content>
         </Select.Root>
 
-        <Flex align='center' gap='1'>
+        <Flex
+          align='center'
+          gap='1'
+        >
           <Tooltip content='Предыдущий день'>
             <IconButton
               aria-label='Предыдущий день'
@@ -109,7 +137,12 @@ export function ArchiveToolbar(props: ArchiveToolbarProps) {
           </Tooltip>
         </Flex>
 
-        <Button color='gray' disabled={dayStart === today} onClick={goToToday} variant='soft'>
+        <Button
+          color='gray'
+          disabled={dayStart === today}
+          onClick={goToToday}
+          variant='soft'
+        >
           Сегодня
         </Button>
       </Flex>

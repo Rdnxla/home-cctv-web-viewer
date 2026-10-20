@@ -1,20 +1,7 @@
 import {ArrowLeftIcon, LinkBreak2Icon} from '@radix-ui/react-icons';
-import {
-  AspectRatio,
-  Button,
-  Code,
-  Flex,
-  Grid,
-  Heading,
-  Link,
-  Skeleton,
-  Text,
-} from '@radix-ui/themes';
+import {AspectRatio, Button, Code, Flex, Grid, Heading, Link, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
-import {
-  Link as RouterLink,
-  useParams,
-} from 'react-router';
+import {Link as RouterLink, useParams} from 'react-router';
 import {useCameraQuery} from '@/entities/camera';
 import {isApiError} from '@/shared/api/http';
 import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
@@ -37,12 +24,25 @@ interface CamPageContentProps {
 function CameraViewSkeleton() {
   return (
     <>
-      <Skeleton height='32px' width='280px' />
-      <Grid align='start' columns={CONTENT_WITH_ASIDE_COLUMNS} gap='4'>
+      <Skeleton
+        height='32px'
+        width='280px'
+      />
+      <Grid
+        align='start'
+        columns={CONTENT_WITH_ASIDE_COLUMNS}
+        gap='4'
+      >
         <AspectRatio ratio={16 / 9}>
-          <Skeleton height='100%' width='100%' />
+          <Skeleton
+            height='100%'
+            width='100%'
+          />
         </AspectRatio>
-        <Skeleton height='320px' width='100%' />
+        <Skeleton
+          height='320px'
+          width='100%'
+        />
       </Grid>
     </>
   );
@@ -54,14 +54,33 @@ function CameraNotFound(props: CameraNotFoundProps) {
   return (
     <>
       <title>Камера не найдена — Камеры</title>
-      <Flex align='center' direction='column' gap='3' py='8'>
-        <Text as='span' color='gray'>
-          <LinkBreak2Icon aria-hidden='true' height={40} width={40} />
+      <Flex
+        align='center'
+        direction='column'
+        gap='3'
+        py='8'
+      >
+        <Text
+          as='span'
+          color='gray'
+        >
+          <LinkBreak2Icon
+            aria-hidden='true'
+            height={40}
+            width={40}
+          />
         </Text>
-        <Heading as='h2' size='5'>
+        <Heading
+          as='h2'
+          size='5'
+        >
           Камера не найдена
         </Heading>
-        <Text align='center' color='gray' size='2'>
+        <Text
+          align='center'
+          color='gray'
+          size='2'
+        >
           На устройстве нет камеры с идентификатором <Code>{id}</Code>
         </Text>
         <Button asChild>
@@ -98,9 +117,19 @@ export function Component() {
 
   return (
     <section className={styles.camPage}>
-      <Flex direction='column' gap='4'>
-        <Link asChild color='gray' size='2'>
-          <RouterLink className={styles.camPage__back} to={ROUTES.dashboard}>
+      <Flex
+        direction='column'
+        gap='4'
+      >
+        <Link
+          asChild
+          color='gray'
+          size='2'
+        >
+          <RouterLink
+            className={styles.camPage__back}
+            to={ROUTES.dashboard}
+          >
             <ArrowLeftIcon aria-hidden='true' />
             Все камеры
           </RouterLink>

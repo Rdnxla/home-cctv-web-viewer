@@ -31,7 +31,11 @@ function TypeOption(props: TypeOptionProps) {
   );
 
   return (
-    <DropdownMenu.CheckboxItem checked={checked} onCheckedChange={toggle} onSelect={keepMenuOpen}>
+    <DropdownMenu.CheckboxItem
+      checked={checked}
+      onCheckedChange={toggle}
+      onSelect={keepMenuOpen}
+    >
       <EventTypeLabel type={type} />
     </DropdownMenu.CheckboxItem>
   );
@@ -69,10 +73,17 @@ export function EventTypeFilter(props: EventTypeFilterProps) {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <Button color='gray' variant='surface'>
+        <Button
+          color='gray'
+          variant='surface'
+        >
           Тип события
           {value.length > 0 ? (
-            <Badge radius='full' size='1' variant='solid'>
+            <Badge
+              radius='full'
+              size='1'
+              variant='solid'
+            >
               {value.length}
             </Badge>
           ) : null}
@@ -86,7 +97,12 @@ export function EventTypeFilter(props: EventTypeFilterProps) {
             <DropdownMenu.Group>
               <DropdownMenu.Label>{EVENT_CATEGORY_META[item].pluralLabel}</DropdownMenu.Label>
               {getEventTypesByCategory(item).map(type => (
-                <TypeOption checked={value.includes(type)} key={type} onToggle={toggle} type={type} />
+                <TypeOption
+                  checked={value.includes(type)}
+                  key={type}
+                  onToggle={toggle}
+                  type={type}
+                />
               ))}
             </DropdownMenu.Group>
           </Fragment>

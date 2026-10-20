@@ -48,10 +48,17 @@ function BookmarkItem(props: BookmarkItemProps) {
       }
       onSelect={open}
     >
-      <Text size='2' truncate weight='medium'>
+      <Text
+        size='2'
+        truncate
+        weight='medium'
+      >
         {bookmark.title}
       </Text>
-      <Text color='gray' size='1'>
+      <Text
+        color='gray'
+        size='1'
+      >
         {formatDateTime(time)}
       </Text>
     </ArchiveListItem>
@@ -94,19 +101,34 @@ export function BookmarkList(props: BookmarkListProps) {
   if (!data) {
     if (isPending) {
       return (
-        <Flex direction='column' gap='2'>
+        <Flex
+          direction='column'
+          gap='2'
+        >
           {SKELETON_KEYS.map(key => (
-            <Skeleton height='44px' key={key} width='100%' />
+            <Skeleton
+              height='44px'
+              key={key}
+              width='100%'
+            />
           ))}
         </Flex>
       );
     }
-    return <InlineError message='Не удалось загрузить закладки' onRetry={retry} />;
+    return (
+      <InlineError
+        message='Не удалось загрузить закладки'
+        onRetry={retry}
+      />
+    );
   }
 
   if (data.length === 0) {
     return (
-      <Text color='gray' size='2'>
+      <Text
+        color='gray'
+        size='2'
+      >
         Закладок пока нет. Выберите момент записи и нажмите «В закладки».
       </Text>
     );

@@ -34,10 +34,19 @@ function CopyableValue(props: CopyableValueProps) {
   }
 
   return (
-    <Flex align='center' gap='2'>
+    <Flex
+      align='center'
+      gap='2'
+    >
       <Code variant='ghost'>{value}</Code>
       <Tooltip content={isCopied ? 'Скопировано' : 'Скопировать'}>
-        <IconButton aria-label={`Скопировать ${label}`} color='gray' onClick={copy} size='1' variant='ghost'>
+        <IconButton
+          aria-label={`Скопировать ${label}`}
+          color='gray'
+          onClick={copy}
+          size='1'
+          variant='ghost'
+        >
           {isCopied ? <CheckIcon /> : <CopyIcon />}
         </IconButton>
       </Tooltip>
@@ -62,13 +71,19 @@ export function CameraDetailsList(props: CameraDetailsListProps) {
       <DataList.Item align='center'>
         <DataList.Label minWidth={LABEL_WIDTH}>IP-адрес</DataList.Label>
         <DataList.Value>
-          <CopyableValue label='IP-адрес' value={camera.ip} />
+          <CopyableValue
+            label='IP-адрес'
+            value={camera.ip}
+          />
         </DataList.Value>
       </DataList.Item>
       <DataList.Item align='center'>
         <DataList.Label minWidth={LABEL_WIDTH}>MAC-адрес</DataList.Label>
         <DataList.Value>
-          <CopyableValue label='MAC-адрес' value={camera.mac} />
+          <CopyableValue
+            label='MAC-адрес'
+            value={camera.mac}
+          />
         </DataList.Value>
       </DataList.Item>
       <DataList.Item>
