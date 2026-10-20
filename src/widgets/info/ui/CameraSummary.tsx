@@ -19,25 +19,48 @@ export function CameraSummary() {
   }, [refetch]);
 
   if (!cameras) {
-    if (isPending) return <Skeleton height='96px' width='100%' />;
-    return <InlineError message='Не удалось загрузить камеры' onRetry={retry} />;
+    if (isPending)
+      return (
+        <Skeleton
+          height='96px'
+          width='100%'
+        />
+      );
+    return (
+      <InlineError
+        message='Не удалось загрузить камеры'
+        onRetry={retry}
+      />
+    );
   }
 
   const counts = countByStatus(cameras);
 
   return (
-    <Flex direction='column' gap='3'>
+    <Flex
+      direction='column'
+      gap='3'
+    >
       <Flex direction='column'>
-        <Text color='gray' size='2'>
+        <Text
+          color='gray'
+          size='2'
+        >
           Камеры в сети
         </Text>
-        <Text size='7' weight='bold'>
+        <Text
+          size='7'
+          weight='bold'
+        >
           {`${counts.online} из ${cameras.length}`}
         </Text>
       </Flex>
       <DataList.Root size='1'>
         {CAMERA_STATUSES.map(status => (
-          <DataList.Item align='center' key={status}>
+          <DataList.Item
+            align='center'
+            key={status}
+          >
             <DataList.Label minWidth='140px'>
               <CameraStatusBadge status={status} />
             </DataList.Label>

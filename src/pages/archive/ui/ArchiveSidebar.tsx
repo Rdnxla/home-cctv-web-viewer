@@ -39,13 +39,26 @@ export function ArchiveSidebar(props: ArchiveSidebarProps) {
         </Tabs.List>
         <Box pt='3'>
           <Tabs.Content value='events'>
-            <DayEventList onSeek={onSeek} position={position} query={eventsQuery} />
+            <DayEventList
+              onSeek={onSeek}
+              position={position}
+              query={eventsQuery}
+            />
           </Tabs.Content>
           <Tabs.Content value='bookmarks'>
-            <BookmarkList onOpen={onOpenBookmark} query={bookmarksQuery} />
+            <BookmarkList
+              onOpen={onOpenBookmark}
+              query={bookmarksQuery}
+            />
           </Tabs.Content>
           <Tabs.Content value='files'>
-            <RecordingFileList day={day} now={now} onSeek={onSeek} position={position} query={recordingsQuery} />
+            <RecordingFileList
+              day={day}
+              now={now}
+              onSeek={onSeek}
+              position={position}
+              query={recordingsQuery}
+            />
           </Tabs.Content>
         </Box>
       </Tabs.Root>

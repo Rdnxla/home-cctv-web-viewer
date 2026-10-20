@@ -44,8 +44,15 @@ export function EventTypeLabel(props: EventTypeLabelProps) {
   const Icon = TYPE_ICONS[type];
 
   return (
-    <Flex align='center' as='span' gap='2'>
-      <Text as='span' color={EVENT_CATEGORY_META[meta.category].color}>
+    <Flex
+      align='center'
+      as='span'
+      gap='2'
+    >
+      <Text
+        as='span'
+        color={EVENT_CATEGORY_META[meta.category].color}
+      >
         <Icon aria-hidden='true' />
       </Text>
       <span>{meta.label}</span>

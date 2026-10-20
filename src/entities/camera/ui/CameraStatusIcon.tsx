@@ -19,8 +19,15 @@ export function CameraStatusIcon(props: CameraStatusIconProps) {
   const Icon = STATUS_ICONS[status];
 
   return (
-    <Text as='span' color={CAMERA_STATUS_META[status].color}>
-      <Icon aria-hidden='true' height={size} width={size} />
+    <Text
+      as='span'
+      color={CAMERA_STATUS_META[status].color}
+    >
+      <Icon
+        aria-hidden='true'
+        height={size}
+        width={size}
+      />
     </Text>
   );
 }

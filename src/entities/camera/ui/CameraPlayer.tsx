@@ -110,7 +110,10 @@ function PlayerSurface(props: PlayerSurfaceProps) {
       {state === 'connecting' ? (
         <div className={styles.cameraPlayer__center}>
           <Spinner size='3' />
-          <Text color='gray' size='2'>
+          <Text
+            color='gray'
+            size='2'
+          >
             Подключение к камере…
           </Text>
         </div>
@@ -118,11 +121,22 @@ function PlayerSurface(props: PlayerSurfaceProps) {
 
       {state === 'failed' ? (
         <div className={styles.cameraPlayer__center}>
-          <Text as='span' color='red'>
-            <ExclamationTriangleIcon aria-hidden='true' height={32} width={32} />
+          <Text
+            as='span'
+            color='red'
+          >
+            <ExclamationTriangleIcon
+              aria-hidden='true'
+              height={32}
+              width={32}
+            />
           </Text>
           <Text size='2'>Не удалось подключиться к видеопотоку</Text>
-          <Button onClick={onReconnect} size='2' variant='soft'>
+          <Button
+            onClick={onReconnect}
+            size='2'
+            variant='soft'
+          >
             <ReloadIcon />
             Переподключить
           </Button>
@@ -130,15 +144,29 @@ function PlayerSurface(props: PlayerSurfaceProps) {
       ) : null}
 
       {isPlaying ? (
-        <Flex className={styles.cameraPlayer__badges} gap='2'>
+        <Flex
+          className={styles.cameraPlayer__badges}
+          gap='2'
+        >
           {badge ?? (
-            <Badge color='red' size='1' variant='solid'>
-              <span aria-hidden='true' className={styles.cameraPlayer__liveDot} />
+            <Badge
+              color='red'
+              size='1'
+              variant='solid'
+            >
+              <span
+                aria-hidden='true'
+                className={styles.cameraPlayer__liveDot}
+              />
               LIVE
             </Badge>
           )}
           {summary ? (
-            <Badge color='gray' size='1' variant='surface'>
+            <Badge
+              color='gray'
+              size='1'
+              variant='surface'
+            >
               {summary}
             </Badge>
           ) : null}
@@ -146,9 +174,18 @@ function PlayerSurface(props: PlayerSurfaceProps) {
       ) : null}
 
       {stream ? (
-        <Flex className={styles.cameraPlayer__toolbar} gap='2' justify='end'>
+        <Flex
+          className={styles.cameraPlayer__toolbar}
+          gap='2'
+          justify='end'
+        >
           <Tooltip content='Переподключить'>
-            <IconButton aria-label='Переподключить' color='gray' onClick={onReconnect} variant='soft'>
+            <IconButton
+              aria-label='Переподключить'
+              color='gray'
+              onClick={onReconnect}
+              variant='soft'
+            >
               <ReloadIcon />
             </IconButton>
           </Tooltip>
@@ -207,7 +244,12 @@ export function CameraPlayer(props: CameraPlayerProps) {
   }, []);
 
   return (
-    <Theme appearance='dark' className={`${styles.cameraPlayer} ${className ?? ''}`} hasBackground={false} ref={ref}>
+    <Theme
+      appearance='dark'
+      className={`${styles.cameraPlayer} ${className ?? ''}`}
+      hasBackground={false}
+      ref={ref}
+    >
       <PlayerSurface
         badge={badge}
         fallback={fallback}

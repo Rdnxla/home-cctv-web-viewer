@@ -5,7 +5,11 @@ import styles from './EmptyLayout.module.scss';
 
 export function Component() {
   return (
-    <Theme accentColor='indigo' appearance='light' className={styles.emptyLayout}>
+    <Theme
+      accentColor='indigo'
+      appearance='light'
+      className={styles.emptyLayout}
+    >
       <CalloutMessage>
         <Outlet />
       </CalloutMessage>

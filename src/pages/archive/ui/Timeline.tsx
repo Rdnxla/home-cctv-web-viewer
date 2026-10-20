@@ -48,9 +48,18 @@ function LegendItem(props: LegendItemProps) {
   const {className, label} = props;
 
   return (
-    <Flex align='center' gap='1'>
-      <span aria-hidden='true' className={`${styles.timeline__swatch} ${className ?? ''}`} />
-      <Text color='gray' size='1'>
+    <Flex
+      align='center'
+      gap='1'
+    >
+      <span
+        aria-hidden='true'
+        className={`${styles.timeline__swatch} ${className ?? ''}`}
+      />
+      <Text
+        color='gray'
+        size='1'
+      >
         {label}
       </Text>
     </Flex>
@@ -157,14 +166,34 @@ export function Timeline(props: TimelineProps) {
   }, []);
 
   return (
-    <Flex direction='column' gap='2'>
-      <Flex align='center' gap='3' justify='between' wrap='wrap'>
-        <Text color='gray' id={labelId} size='2'>
+    <Flex
+      direction='column'
+      gap='2'
+    >
+      <Flex
+        align='center'
+        gap='3'
+        justify='between'
+        wrap='wrap'
+      >
+        <Text
+          color='gray'
+          id={labelId}
+          size='2'
+        >
           Шкала времени
         </Text>
-        <SegmentedControl.Root aria-label='Масштаб шкалы времени' onValueChange={changeZoom} size='1' value={zoom}>
+        <SegmentedControl.Root
+          aria-label='Масштаб шкалы времени'
+          onValueChange={changeZoom}
+          size='1'
+          value={zoom}
+        >
           {TIMELINE_ZOOMS.map(item => (
-            <SegmentedControl.Item key={item} value={item}>
+            <SegmentedControl.Item
+              key={item}
+              value={item}
+            >
               {TIMELINE_ZOOM_META[item].label}
             </SegmentedControl.Item>
           ))}
@@ -184,10 +213,23 @@ export function Timeline(props: TimelineProps) {
           value={[value]}
         >
           <Slider.Track className={styles.timeline__track}>
-            <svg aria-hidden='true' className={styles.timeline__layers}>
+            <svg
+              aria-hidden='true'
+              className={styles.timeline__layers}
+            >
               <defs>
-                <pattern height='8' id={hatchId} patternTransform='rotate(45)' patternUnits='userSpaceOnUse' width='8'>
-                  <rect className={styles.timeline__hatch} height='8' width='3' />
+                <pattern
+                  height='8'
+                  id={hatchId}
+                  patternTransform='rotate(45)'
+                  patternUnits='userSpaceOnUse'
+                  width='8'
+                >
+                  <rect
+                    className={styles.timeline__hatch}
+                    height='8'
+                    width='3'
+                  />
                 </pattern>
               </defs>
               {ticks.map(tick => (
@@ -249,7 +291,10 @@ export function Timeline(props: TimelineProps) {
                     x={percentOf(Date.parse(bookmark.at), view)}
                     y='0'
                   >
-                    <path className={styles.timeline__bookmark} d='M0 2 L5 7 L0 12 L-5 7 Z' />
+                    <path
+                      className={styles.timeline__bookmark}
+                      d='M0 2 L5 7 L0 12 L-5 7 Z'
+                    />
                   </svg>
                 ))}
               {hover === null ? null : (
@@ -271,23 +316,40 @@ export function Timeline(props: TimelineProps) {
           />
         </Slider.Root>
 
-        <svg aria-hidden='true' className={styles.timeline__ticks}>
+        <svg
+          aria-hidden='true'
+          className={styles.timeline__ticks}
+        >
           {hover === null
             ? ticks.map(tick => (
-                <text className={styles.timeline__tick} key={tick} textAnchor='middle' x={percentOf(tick, view)} y='13'>
+                <text
+                  className={styles.timeline__tick}
+                  key={tick}
+                  textAnchor='middle'
+                  x={percentOf(tick, view)}
+                  y='13'
+                >
                   {formatShortClock(tick)}
                 </text>
               ))
             : null}
           {hover === null ? null : (
-            <text className={styles.timeline__hoverLabel} textAnchor='middle' x={percentOf(hover, view)} y='13'>
+            <text
+              className={styles.timeline__hoverLabel}
+              textAnchor='middle'
+              x={percentOf(hover, view)}
+              y='13'
+            >
               {formatClock(hover)}
             </text>
           )}
         </svg>
       </div>
 
-      <Flex gap='4' wrap='wrap'>
+      <Flex
+        gap='4'
+        wrap='wrap'
+      >
         {RECORDING_TRIGGERS.map(trigger => (
           <LegendItem
             className={TRIGGER_CLASSES[trigger]}
@@ -295,8 +357,14 @@ export function Timeline(props: TimelineProps) {
             label={RECORDING_TRIGGER_META[trigger].label}
           />
         ))}
-        <LegendItem className={styles.timeline__swatchEvents} label='Событие' />
-        <LegendItem className={styles.timeline__swatchBookmark} label='Закладка' />
+        <LegendItem
+          className={styles.timeline__swatchEvents}
+          label='Событие'
+        />
+        <LegendItem
+          className={styles.timeline__swatchBookmark}
+          label='Закладка'
+        />
       </Flex>
     </Flex>
   );

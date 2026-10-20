@@ -70,8 +70,16 @@ export function PlaybackControls(props: PlaybackControlsProps) {
   );
 
   return (
-    <Flex align='center' gap='3' justify='between' wrap='wrap'>
-      <Flex align='center' gap='2'>
+    <Flex
+      align='center'
+      gap='3'
+      justify='between'
+      wrap='wrap'
+    >
+      <Flex
+        align='center'
+        gap='2'
+      >
         <Tooltip content='Предыдущее событие'>
           <IconButton
             aria-label='Предыдущее событие'
@@ -123,27 +131,56 @@ export function PlaybackControls(props: PlaybackControlsProps) {
       </Flex>
 
       <Flex direction='column'>
-        <Text className={styles.playbackControls__clock} size='5' weight='bold'>
+        <Text
+          className={styles.playbackControls__clock}
+          size='5'
+          weight='bold'
+        >
           {position === null ? '--:--:--' : formatClock(position)}
         </Text>
-        <Text aria-live='polite' color='gray' size='1'>
+        <Text
+          aria-live='polite'
+          color='gray'
+          size='1'
+        >
           {STATUS_LABELS[status]}
         </Text>
       </Flex>
 
-      <Flex align='center' gap='2' wrap='wrap'>
-        <Select.Root onValueChange={changeSpeed} value={String(speed)}>
-          <Select.Trigger aria-label='Скорость воспроизведения' color='gray' variant='soft' />
+      <Flex
+        align='center'
+        gap='2'
+        wrap='wrap'
+      >
+        <Select.Root
+          onValueChange={changeSpeed}
+          value={String(speed)}
+        >
+          <Select.Trigger
+            aria-label='Скорость воспроизведения'
+            color='gray'
+            variant='soft'
+          />
           <Select.Content position='popper'>
             {PLAYBACK_SPEEDS.map(item => (
-              <Select.Item key={item} value={String(item)}>
+              <Select.Item
+                key={item}
+                value={String(item)}
+              >
                 {formatSpeed(item)}
               </Select.Item>
             ))}
           </Select.Content>
         </Select.Root>
-        <AddBookmarkButton cameraId={camera.id} position={position} />
-        <Button asChild color='gray' variant='soft'>
+        <AddBookmarkButton
+          cameraId={camera.id}
+          position={position}
+        />
+        <Button
+          asChild
+          color='gray'
+          variant='soft'
+        >
           <RouterLink to={ROUTES.cameraDetail(camera.id)}>
             <VideoIcon />
             Прямой эфир

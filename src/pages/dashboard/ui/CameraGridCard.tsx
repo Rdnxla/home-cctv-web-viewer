@@ -16,16 +16,38 @@ export function CameraGridCard(props: CameraGridCardProps) {
 
   return (
     <Card size='1'>
-      <Flex direction='column' gap='2'>
-        <Flex align='center' gap='2' justify='between'>
-          <Flex align='center' gap='2' minWidth='0'>
-            <Link asChild size='2' truncate weight='medium'>
+      <Flex
+        direction='column'
+        gap='2'
+      >
+        <Flex
+          align='center'
+          gap='2'
+          justify='between'
+        >
+          <Flex
+            align='center'
+            gap='2'
+            minWidth='0'
+          >
+            <Link
+              asChild
+              size='2'
+              truncate
+              weight='medium'
+            >
               <RouterLink to={detailPath}>{camera.name}</RouterLink>
             </Link>
             <CameraStatusBadge status={camera.status} />
           </Flex>
           <Tooltip content='Открыть камеру'>
-            <IconButton aria-label={`Открыть камеру «${camera.name}»`} asChild color='gray' size='1' variant='ghost'>
+            <IconButton
+              aria-label={`Открыть камеру «${camera.name}»`}
+              asChild
+              color='gray'
+              size='1'
+              variant='ghost'
+            >
               <RouterLink to={detailPath}>
                 <ArrowRightIcon />
               </RouterLink>

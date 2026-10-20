@@ -20,7 +20,7 @@
 | 2 | `src/api/auth/auth.ts` → `shared/api/http` (`layer-upward`) | ложное срабатывание | `?api` rank −1; из любого слоя FSD импорт `shared` разрешён. Симптом FSD-003 |
 | 3 | `src/mocks/handlers/auth.js` → `shared/utils/auth` (`layer-upward`) | ложное по правилу, реальная проблема размещения | см. FSD-004 |
 | 4 | `src/app/layouts/main/MainLayout.tsx:3` → `@/widgets/the-header/TheHeader` (`non-public-api`) | подтверждено | у слайса нет `index`, импорт в файл; не type-only, не `@x` |
-| 5 | `src/pages/client-dashboard/ClientDashboard.tsx:3` → `@/entities/camera-card/CameraCard` (`non-public-api`) | подтверждено | то же |
+| 5 | `src/pages/dashboard/ClientDashboard.tsx:3` → `@/entities/camera-card/CameraCard` (`non-public-api`) | подтверждено | то же |
 | 6 | (пропущено сканером) `src/entities/camera-card/CameraCard.tsx:5-6` → `@/mocks/...` | ложноотрицательное | `to.rank (−1) < from.rank (2)` — проверка `layer-upward` не срабатывает. См. FSD-001 |
 
 ## Находки
@@ -52,7 +52,7 @@
 - Type: fact
 - Location: `src/api/auth/auth.ts`, `src/api/auth/auth.types.ts`, `src/api/user/user.ts`, `src/api/user/types.user.ts`
 - Rule: FSD, API и модели сущности — в сегментах `api`/`model` слайса `entities` (`fsd-rules.md`, «Segments», «Layer Roles»)
-- Evidence: `imports.json` → `pages/auth → ?api` (2, typeOnly 1), `pages/client-dashboard → ?api` (1); эти рёбра сканер не проверяет. `auth.types.ts:5` — доменный тип назван `MockUser` и содержит `password` (`:9`)
+- Evidence: `imports.json` → `pages/auth → ?api` (2, typeOnly 1), `pages/dashboard → ?api` (1); эти рёбра сканер не проверяет. `auth.types.ts:5` — доменный тип назван `MockUser` и содержит `password` (`:9`)
 - Recommendation: `api/auth/*` → `entities/session/{api,model}` (login, 2FA, `AuthSuccess`, `LoginResponse`); `api/user/*` → `entities/user/{api,model}`. Согласовано владельцем 2026-10-17
 - Effort: M
 
@@ -71,7 +71,7 @@
 
 - Severity: medium
 - Type: fact
-- Location: все 9 слайсов `pages/*`, `widgets/*`, `entities/*`; примеры: `src/app/layouts/main/MainLayout.tsx:3`, `src/pages/cam-page/CamPage.tsx:2-3`, `src/pages/client-dashboard/ClientDashboard.tsx:2-3`
+- Location: все 9 слайсов `pages/*`, `widgets/*`, `entities/*`; примеры: `src/app/layouts/main/MainLayout.tsx:3`, `src/pages/cam-page/CamPage.tsx:2-3`, `src/pages/dashboard/ClientDashboard.tsx:2-3`
 - Rule: FSD, внешний доступ к слайсу только через `index` (`fsd-rules.md`, «Import Rules» п. 3)
 - Evidence: `slices.md` → колонка Public API = **NO** для 9 из 9; `non-public-api`: 9
 - Recommendation: добавить `index.ts` в каждый слайс, реэкспортируя только используемое снаружи (без `export *`); для страниц — `Component` (react-router `lazy` принимает модуль с `Component`)
@@ -83,7 +83,7 @@
 - Type: fact
 - Location: `src/shared/components/` (3 файла), `src/shared/utils/` (2), `src/shared/components/callout/types.ts`; корни слайсов `pages/*`, `widgets/*`, `entities/*`
 - Rule: FSD, сегменты `ui/api/model/lib/config`; избегать `components`, `utils`, `types` (`fsd-rules.md`, «Segments»)
-- Evidence: `find src/pages src/widgets src/entities -mindepth 2 -maxdepth 2 -type f | wc -l` = 17 (файлы в корне слайса) против 2 файлов в сегментах (`pages/auth/model/useAuth.ts`, `pages/client-dashboard/model/useClientDashboard.ts`)
+- Evidence: `find src/pages src/widgets src/entities -mindepth 2 -maxdepth 2 -type f | wc -l` = 17 (файлы в корне слайса) против 2 файлов в сегментах (`pages/auth/model/useAuth.ts`, `pages/dashboard/model/useClientDashboard.ts`)
 - Recommendation: `shared/components` → `shared/ui`, `shared/utils` → `shared/lib`; компоненты и стили слайсов → `<slice>/ui/`
 - Effort: S
 
@@ -102,7 +102,7 @@
 
 - Severity: medium
 - Type: fact
-- Location: `src/pages/auth/model/useAuth.ts:2` (`'../../../api/auth/auth'`), `src/pages/client-dashboard/model/useClientDashboard.ts:2` (`'@/api/user/user'`)
+- Location: `src/pages/auth/model/useAuth.ts:2` (`'../../../api/auth/auth'`), `src/pages/dashboard/model/useClientDashboard.ts:2` (`'@/api/user/user'`)
 - Rule: FSD, query-хуки — сегмент `api` слайса-владельца (`fsd-rules.md`, «Segments», `api`); относительные импорты допустимы только внутри слайса (п. 3)
 - Evidence: относительный путь из `pages/auth` выходит за пределы слайса и слоя; в соседнем файле того же слайса (`src/pages/auth/Auth.tsx:8`) используется `@/api/...`
 - Recommendation: хуки → `api` сегмент сущности (`entities/session/api/useLoginMutation.ts` и т. п.) после FSD-003; детальный разбор ключей и мутаций — фаза 4
@@ -121,7 +121,7 @@
 
 - Severity: low
 - Type: fact + UNVERIFIED (планы на переиспользование)
-- Location: `src/widgets/info/InfoBlock.tsx` (потребитель только `pages/client-dashboard`), `src/widgets/camera-control/CameraControls.tsx` (только `pages/cam-page`)
+- Location: `src/widgets/info/InfoBlock.tsx` (потребитель только `pages/dashboard`), `src/widgets/camera-control/CameraControls.tsx` (только `pages/cam-page`)
 - Rule: FSD, блок, нужный одной странице, живёт на этой странице (`fsd-rules.md`, «Layer Roles», `widgets`)
 - Evidence: `imports.json` → fan-in 1 у обоих; `widgets/the-header` (fan-in 1 от `app`) — виджет уровня layout, правило не нарушает
 - Recommendation: ~~перенести в страницы~~ — **закрыто решением владельца 2026-10-17**: виджеты будут переиспользоваться, это отдельная логика; оставить в `widgets`, не трогать
@@ -152,10 +152,10 @@
 - Type: fact
 - Location / Evidence (`rg` по `src`, без закомментированных строк):
   - `src/entities/user-profile-card/UserProfileCard.tsx` — fan-in 0 (`slices.md`)
-  - `src/pages/client-dashboard/model/useClientDashboard.ts` — используется только в комментарии `ClientDashboard.tsx:6,10`
+  - `src/pages/dashboard/model/useClientDashboard.ts` — используется только в комментарии `ClientDashboard.tsx:6,10`
   - `src/api/user/types.user.ts` (`User`) — 0 потребителей
   - `useCalloutMessage` (`src/shared/components/callout/CalloutMessage.tsx:58`) — 0 потребителей вне комментариев
-  - закомментированные блоки: `src/pages/client-dashboard/ClientDashboard.tsx:5-25` (16 строк), `src/pages/event-list/EventList.tsx:2-22` (16 строк, копия из dashboard, включая несуществующий `./model/useClientDashboard`)
+  - закомментированные блоки: `src/pages/dashboard/ClientDashboard.tsx:5-25` (16 строк), `src/pages/event-list/EventList.tsx:2-22` (16 строк, копия из dashboard, включая несуществующий `./model/useClientDashboard`)
   - заглушка `src/widgets/camera-control/CameraControls.tsx:10` (`<Button>asd</Button>`)
 - Recommendation: **закрыто решением владельца 2026-10-17**: ничего не удалять, это заготовки незавершённого проекта. Находка сохранена только как факт для карты (фаза 5)
 - Effort: —
@@ -203,7 +203,7 @@
 src/
 ├── main.tsx                     # тонкая точка входа
 ├── app/        index.tsx, providers/, router/, layouts/{empty,main}/, styles/global.css
-├── pages/      auth/, cam-page/, client-dashboard/, event-list/   → {ui/, index.ts}
+├── pages/      auth/, cam-page/, dashboard/, event-list/   → {ui/, index.ts}
 ├── widgets/    the-header/, info/, camera-control/                → {ui/, index.ts}
 ├── features/   (намеренная заготовка — решение владельца)
 ├── entities/   camera/{ui,model,lib,api}/  session/{api,model}/  user/{ui,api,model}/  + index.ts

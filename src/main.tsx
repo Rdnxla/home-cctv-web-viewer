@@ -5,7 +5,7 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import {RouterProvider} from 'react-router/dom';
-import {router} from '@/router/routes';
+import {router} from '@/app/routes';
 
 const queryClient = new QueryClient();
 

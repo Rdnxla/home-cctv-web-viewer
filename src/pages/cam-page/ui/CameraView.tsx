@@ -20,24 +20,53 @@ export function CameraView(props: CameraViewProps) {
   return (
     <>
       <title>{`${camera.name} — Камеры`}</title>
-      <Flex align='center' gap='3' wrap='wrap'>
-        <Heading as='h2' size='6'>
+      <Flex
+        align='center'
+        gap='3'
+        wrap='wrap'
+      >
+        <Heading
+          as='h2'
+          size='6'
+        >
           {camera.name}
         </Heading>
-        <CameraStatusBadge size='2' status={camera.status} />
-        <Text color='gray' size='2'>
+        <CameraStatusBadge
+          size='2'
+          status={camera.status}
+        />
+        <Text
+          color='gray'
+          size='2'
+        >
           {subtitle}
         </Text>
-        <Button asChild color='gray' ml='auto' variant='soft'>
+        <Button
+          asChild
+          color='gray'
+          ml='auto'
+          variant='soft'
+        >
           <RouterLink to={ROUTES.cameraArchive(camera.id)}>
             <CounterClockwiseClockIcon />
             Архив
           </RouterLink>
         </Button>
       </Flex>
-      <Grid align='start' columns={CONTENT_WITH_ASIDE_COLUMNS} gap='4'>
-        <Flex direction='column' gap='4' minWidth='0'>
-          <CameraLiveView camera={camera} key={camera.id} />
+      <Grid
+        align='start'
+        columns={CONTENT_WITH_ASIDE_COLUMNS}
+        gap='4'
+      >
+        <Flex
+          direction='column'
+          gap='4'
+          minWidth='0'
+        >
+          <CameraLiveView
+            camera={camera}
+            key={camera.id}
+          />
           <OtherCameras currentId={camera.id} />
         </Flex>
         <CameraControls camera={camera} />

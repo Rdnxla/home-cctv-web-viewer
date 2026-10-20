@@ -6,9 +6,18 @@ import {RecentEvents} from './RecentEvents';
 /** «Обзор»: состояние камер и события за сутки. Данные загружает сам, ничего не требует от страницы. */
 export function InfoBlock() {
   return (
-    <aside aria-label='Обзор' className={styles.infoBlock}>
-      <Flex direction='column' gap='3'>
-        <Heading as='h3' size='4'>
+    <aside
+      aria-label='Обзор'
+      className={styles.infoBlock}
+    >
+      <Flex
+        direction='column'
+        gap='3'
+      >
+        <Heading
+          as='h3'
+          size='4'
+        >
           Обзор
         </Heading>
         <CameraSummary />

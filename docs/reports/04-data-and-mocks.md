@@ -30,7 +30,7 @@
 
 | Хук | Файл | queryKey | API-функция (файл) | Endpoint | Потребители |
 |---|---|---|---|---|---|
-| `useClientDashboard` | `src/pages/client-dashboard/model/useClientDashboard.ts:4` | `['sidebar']` | `getDashboard` (`src/api/user/user.ts:3`) | `GET /api/me/context` | нет (только комментарии `ClientDashboard.tsx:6,10`; `EventList.tsx:3,7` ссылается на несуществующий `./model/useClientDashboard`) |
+| `useClientDashboard` | `src/pages/dashboard/model/useClientDashboard.ts:4` | `['sidebar']` | `getDashboard` (`src/api/user/user.ts:3`) | `GET /api/me/context` | нет (только комментарии `ClientDashboard.tsx:6,10`; `EventList.tsx:3,7` ссылается на несуществующий `./model/useClientDashboard`) |
 | `useLoginMutation` | `src/pages/auth/model/useAuth.ts:4` | — | `login` (`src/api/auth/auth.ts:4`) | `POST /api/auth/login` | `pages/auth` (`Auth.tsx:22`) |
 | `useVerifyTwoFactorMutation` | `src/pages/auth/model/useAuth.ts:5` | — | `verifyTwoFactor` (`src/api/auth/auth.ts:11`) | `POST /api/auth/login/2fa` | `pages/auth` (`Auth.tsx:23`) |
 
@@ -252,7 +252,7 @@ API-функции — `src/api/**` (вне слоёв, FSD-003), хуки — �
 
 - Severity: low
 - Type: fact
-- Location: `src/pages/client-dashboard/model/useClientDashboard.ts:7`
+- Location: `src/pages/dashboard/model/useClientDashboard.ts:7`
 - Evidence: литерал `['sidebar']`, не связанный с эндпоинтом/хуком
 - Recommendation: при создании `entities/*/api` — фабрика ключей на сущность (`cameraKeys.all/list/detail(id)`) или `queryOptions` рядом с API-функцией
 - Effort: S

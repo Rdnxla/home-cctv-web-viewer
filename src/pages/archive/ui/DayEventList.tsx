@@ -24,16 +24,34 @@ function DayEventItem(props: DayEventItemProps) {
   }, [event, onSeek]);
 
   return (
-    <ArchiveListItem isCurrent={isCurrent} onSelect={select}>
-      <Flex align='center' as='span' gap='2' justify='between'>
-        <Text size='2' weight='medium'>
+    <ArchiveListItem
+      isCurrent={isCurrent}
+      onSelect={select}
+    >
+      <Flex
+        align='center'
+        as='span'
+        gap='2'
+        justify='between'
+      >
+        <Text
+          size='2'
+          weight='medium'
+        >
           <EventTypeLabel type={event.type} />
         </Text>
-        <Text color='gray' size='1'>
+        <Text
+          color='gray'
+          size='1'
+        >
           <time dateTime={event.occurredAt}>{formatClock(Date.parse(event.occurredAt))}</time>
         </Text>
       </Flex>
-      <Text color='gray' size='1' truncate>
+      <Text
+        color='gray'
+        size='1'
+        truncate
+      >
         {event.message}
       </Text>
     </ArchiveListItem>
@@ -58,19 +76,34 @@ export function DayEventList(props: DayEventListProps) {
   if (!data) {
     if (isPending) {
       return (
-        <Flex direction='column' gap='2'>
+        <Flex
+          direction='column'
+          gap='2'
+        >
           {SKELETON_KEYS.map(key => (
-            <Skeleton height='44px' key={key} width='100%' />
+            <Skeleton
+              height='44px'
+              key={key}
+              width='100%'
+            />
           ))}
         </Flex>
       );
     }
-    return <InlineError message='Не удалось загрузить события' onRetry={retry} />;
+    return (
+      <InlineError
+        message='Не удалось загрузить события'
+        onRetry={retry}
+      />
+    );
   }
 
   if (data.items.length === 0) {
     return (
-      <Text color='gray' size='2'>
+      <Text
+        color='gray'
+        size='2'
+      >
         За этот день у камеры событий нет
       </Text>
     );
@@ -81,14 +114,25 @@ export function DayEventList(props: DayEventListProps) {
     position === null ? null : (data.items.findLast(event => getEventSeekTime(event) <= position)?.id ?? null);
 
   return (
-    <Flex direction='column' gap='2'>
+    <Flex
+      direction='column'
+      gap='2'
+    >
       <ArchiveList label='События за день'>
         {data.items.map(event => (
-          <DayEventItem event={event} isCurrent={event.id === currentId} key={event.id} onSeek={onSeek} />
+          <DayEventItem
+            event={event}
+            isCurrent={event.id === currentId}
+            key={event.id}
+            onSeek={onSeek}
+          />
         ))}
       </ArchiveList>
       {data.total > data.items.length ? (
-        <Text color='gray' size='1'>
+        <Text
+          color='gray'
+          size='1'
+        >
           {`Показаны первые ${data.items.length} из ${data.total}`}
         </Text>
       ) : null}

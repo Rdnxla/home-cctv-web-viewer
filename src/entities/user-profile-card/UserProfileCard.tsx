@@ -12,13 +12,29 @@ export function UserProfileCard(props: UserProfileCardProps) {
   return (
     <Box maxWidth='240px'>
       <Card variant='ghost'>
-        <Flex align='center' gap='4'>
-          <Avatar fallback='AA' radius='small' size='2' src={imgSrc} />
+        <Flex
+          align='center'
+          gap='4'
+        >
+          <Avatar
+            fallback='AA'
+            radius='small'
+            size='2'
+            src={imgSrc}
+          />
           <Box>
-            <Text as='div' size='1' weight='bold'>
+            <Text
+              as='div'
+              size='1'
+              weight='bold'
+            >
               {userName}
             </Text>
-            <Text as='div' color='gray' size='1'>
+            <Text
+              as='div'
+              color='gray'
+              size='1'
+            >
               {userRole}
             </Text>
           </Box>

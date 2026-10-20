@@ -43,11 +43,21 @@ export function CameraCard(props: CameraCardProps) {
       {children ? (
         children
       ) : (
-        <button className={styles.cameraCard__overlay} onClick={openCamPage} type='button'>
+        <button
+          className={styles.cameraCard__overlay}
+          onClick={openCamPage}
+          type='button'
+        >
           <Text color='indigo'>Открыть</Text>
         </button>
       )}
-      <video autoPlay className={styles.cameraCard__video} muted playsInline ref={videoRef} />
+      <video
+        autoPlay
+        className={styles.cameraCard__video}
+        muted
+        playsInline
+        ref={videoRef}
+      />
     </Box>
   );
 }

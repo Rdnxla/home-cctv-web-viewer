@@ -16,15 +16,34 @@ const EMPTY_ICON_SIZE = 32;
 
 function ArchiveSkeleton() {
   return (
-    <Grid align='start' columns={CONTENT_WITH_ASIDE_COLUMNS} gap='4'>
-      <Flex direction='column' gap='3'>
+    <Grid
+      align='start'
+      columns={CONTENT_WITH_ASIDE_COLUMNS}
+      gap='4'
+    >
+      <Flex
+        direction='column'
+        gap='3'
+      >
         <AspectRatio ratio={16 / 9}>
-          <Skeleton height='100%' width='100%' />
+          <Skeleton
+            height='100%'
+            width='100%'
+          />
         </AspectRatio>
-        <Skeleton height='48px' width='100%' />
-        <Skeleton height='110px' width='100%' />
+        <Skeleton
+          height='48px'
+          width='100%'
+        />
+        <Skeleton
+          height='110px'
+          width='100%'
+        />
       </Flex>
-      <Skeleton height='420px' width='100%' />
+      <Skeleton
+        height='420px'
+        width='100%'
+      />
     </Grid>
   );
 }
@@ -66,13 +85,24 @@ export function Component() {
     }
     if (isPending) return <ArchiveSkeleton />;
     if (error) {
-      return <LoadError message={`Не удалось загрузить список камер: ${error.message}`} onRetry={retryCameras} />;
+      return (
+        <LoadError
+          message={`Не удалось загрузить список камер: ${error.message}`}
+          onRetry={retryCameras}
+        />
+      );
     }
     if (cameras.length === 0) {
       return (
         <ArchiveEmptyState
           description='Подключите камеру к PoE-порту регистратора — её записи появятся здесь.'
-          icon={<VideoIcon aria-hidden='true' height={EMPTY_ICON_SIZE} width={EMPTY_ICON_SIZE} />}
+          icon={
+            <VideoIcon
+              aria-hidden='true'
+              height={EMPTY_ICON_SIZE}
+              width={EMPTY_ICON_SIZE}
+            />
+          }
           title='Камеры не подключены'
         />
       );
@@ -80,7 +110,13 @@ export function Component() {
     return (
       <ArchiveEmptyState
         description='На устройстве нет такой камеры. Выберите камеру из списка.'
-        icon={<LinkBreak2Icon aria-hidden='true' height={EMPTY_ICON_SIZE} width={EMPTY_ICON_SIZE} />}
+        icon={
+          <LinkBreak2Icon
+            aria-hidden='true'
+            height={EMPTY_ICON_SIZE}
+            width={EMPTY_ICON_SIZE}
+          />
+        }
         title='Камера не найдена'
       />
     );
@@ -89,7 +125,10 @@ export function Component() {
   return (
     <section className={styles.archivePage}>
       <title>{camera ? `Архив — ${camera.name}` : 'Архив'}</title>
-      <Flex direction='column' gap='4'>
+      <Flex
+        direction='column'
+        gap='4'
+      >
         <ArchiveToolbar
           bounds={recordingsQuery.data?.bounds}
           cameraId={cameraId}

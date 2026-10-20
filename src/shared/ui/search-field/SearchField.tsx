@@ -76,7 +76,13 @@ export function SearchField(props: SearchFieldProps) {
       </TextField.Slot>
       {draft === '' ? null : (
         <TextField.Slot>
-          <IconButton aria-label='Очистить поиск' color='gray' onClick={clear} size='1' variant='ghost'>
+          <IconButton
+            aria-label='Очистить поиск'
+            color='gray'
+            onClick={clear}
+            size='1'
+            variant='ghost'
+          >
             <Cross2Icon />
           </IconButton>
         </TextField.Slot>

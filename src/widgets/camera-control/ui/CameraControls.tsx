@@ -13,7 +13,10 @@ function CameraStatusCallout(props: CameraStatusCalloutProps) {
 
   if (camera.status === 'error') {
     return (
-      <Callout.Root color='red' size='1'>
+      <Callout.Root
+        color='red'
+        size='1'
+      >
         <Callout.Icon>
           <ExclamationTriangleIcon />
         </Callout.Icon>
@@ -22,7 +25,11 @@ function CameraStatusCallout(props: CameraStatusCalloutProps) {
           {camera.error ? (
             <>
               <br />
-              <Code color='red' size='1' variant='ghost'>
+              <Code
+                color='red'
+                size='1'
+                variant='ghost'
+              >
                 {camera.error.code}
               </Code>
             </>
@@ -34,7 +41,10 @@ function CameraStatusCallout(props: CameraStatusCalloutProps) {
 
   if (camera.status === 'no_connection') {
     return (
-      <Callout.Root color='gray' size='1'>
+      <Callout.Root
+        color='gray'
+        size='1'
+      >
         <Callout.Icon>
           <LinkBreak2Icon />
         </Callout.Icon>
@@ -55,14 +65,33 @@ export function CameraControls(props: CameraControlsProps) {
   const {camera} = props;
 
   return (
-    <aside aria-label='Сведения о камере' className={styles.cameraControls}>
-      <Flex direction='column' gap='3'>
-        <Heading as='h3' size='4'>
+    <aside
+      aria-label='Сведения о камере'
+      className={styles.cameraControls}
+    >
+      <Flex
+        direction='column'
+        gap='3'
+      >
+        <Heading
+          as='h3'
+          size='4'
+        >
           Сведения
         </Heading>
-        <Flex align='center' gap='2' wrap='wrap'>
-          <CameraStatusBadge size='2' status={camera.status} />
-          <Text color='gray' size='2'>
+        <Flex
+          align='center'
+          gap='2'
+          wrap='wrap'
+        >
+          <CameraStatusBadge
+            size='2'
+            status={camera.status}
+          />
+          <Text
+            color='gray'
+            size='2'
+          >
             {`Активность: ${formatLastSeen(camera.lastSeen)}`}
           </Text>
         </Flex>

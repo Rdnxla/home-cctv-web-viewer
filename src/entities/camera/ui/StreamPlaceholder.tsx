@@ -19,11 +19,20 @@ export function StreamPlaceholder(props: StreamPlaceholderProps) {
   if (camera.status === 'error') {
     return (
       <>
-        <CameraStatusIcon size={ICON_SIZE} status='error' />
-        <Text size='3' weight='medium'>
+        <CameraStatusIcon
+          size={ICON_SIZE}
+          status='error'
+        />
+        <Text
+          size='3'
+          weight='medium'
+        >
           Камера недоступна
         </Text>
-        <Text color='gray' size='2'>
+        <Text
+          color='gray'
+          size='2'
+        >
           {camera.error?.message ?? 'Камера не отвечает'}
         </Text>
       </>
@@ -33,11 +42,20 @@ export function StreamPlaceholder(props: StreamPlaceholderProps) {
   if (camera.status === 'no_connection') {
     return (
       <>
-        <CameraStatusIcon size={ICON_SIZE} status='no_connection' />
-        <Text size='3' weight='medium'>
+        <CameraStatusIcon
+          size={ICON_SIZE}
+          status='no_connection'
+        />
+        <Text
+          size='3'
+          weight='medium'
+        >
           Камера не подключена
         </Text>
-        <Text color='gray' size='2'>
+        <Text
+          color='gray'
+          size='2'
+        >
           {`К порту ${camera.portId} ничего не подключено`}
         </Text>
       </>
@@ -47,14 +65,27 @@ export function StreamPlaceholder(props: StreamPlaceholderProps) {
   if (error) {
     return (
       <>
-        <CameraStatusIcon size={ICON_SIZE} status='error' />
-        <Text size='3' weight='medium'>
+        <CameraStatusIcon
+          size={ICON_SIZE}
+          status='error'
+        />
+        <Text
+          size='3'
+          weight='medium'
+        >
           Не удалось получить параметры потока
         </Text>
-        <Text color='gray' size='2'>
+        <Text
+          color='gray'
+          size='2'
+        >
           {error.message}
         </Text>
-        <Button onClick={onRetry} size='2' variant='soft'>
+        <Button
+          onClick={onRetry}
+          size='2'
+          variant='soft'
+        >
           <ReloadIcon />
           Повторить
         </Button>
@@ -65,7 +96,10 @@ export function StreamPlaceholder(props: StreamPlaceholderProps) {
   return (
     <>
       <Spinner size='3' />
-      <Text color='gray' size='2'>
+      <Text
+        color='gray'
+        size='2'
+      >
         Получение параметров потока…
       </Text>
     </>

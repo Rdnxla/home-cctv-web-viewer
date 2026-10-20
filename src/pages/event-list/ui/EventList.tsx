@@ -39,20 +39,43 @@ export function Component() {
   return (
     <section className={styles.eventList}>
       <title>Журнал событий</title>
-      <Flex direction='column' gap='4'>
-        <Flex align='center' gap='3' justify='between'>
-          <Flex align='baseline' gap='3' wrap='wrap'>
-            <Heading as='h2' size='6'>
+      <Flex
+        direction='column'
+        gap='4'
+      >
+        <Flex
+          align='center'
+          gap='3'
+          justify='between'
+        >
+          <Flex
+            align='baseline'
+            gap='3'
+            wrap='wrap'
+          >
+            <Heading
+              as='h2'
+              size='6'
+            >
               Журнал событий
             </Heading>
             {data ? (
-              <Text color='gray' size='2'>
+              <Text
+                color='gray'
+                size='2'
+              >
                 {formatCount(data.total, EVENT_FORMS)}
               </Text>
             ) : null}
           </Flex>
           <Tooltip content='Обновить'>
-            <IconButton aria-label='Обновить журнал' color='gray' disabled={isFetching} onClick={retry} variant='soft'>
+            <IconButton
+              aria-label='Обновить журнал'
+              color='gray'
+              disabled={isFetching}
+              onClick={retry}
+              variant='soft'
+            >
               {isFetching ? <Spinner /> : <ReloadIcon />}
             </IconButton>
           </Tooltip>
@@ -67,7 +90,10 @@ export function Component() {
         />
 
         {isError && !data ? (
-          <LoadError message={`Не удалось загрузить журнал событий: ${error.message}`} onRetry={retry} />
+          <LoadError
+            message={`Не удалось загрузить журнал событий: ${error.message}`}
+            onRetry={retry}
+          />
         ) : (
           <>
             <EventTable

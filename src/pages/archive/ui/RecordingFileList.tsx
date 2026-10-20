@@ -33,21 +33,38 @@ function RecordingFileItem(props: RecordingFileItemProps) {
   }, [day.start, onSeek, start]);
 
   return (
-    <ArchiveListItem isCurrent={isCurrent} onSelect={select}>
-      <Flex align='center' as='span' gap='2' justify='between'>
-        <Text size='2' weight='medium'>
+    <ArchiveListItem
+      isCurrent={isCurrent}
+      onSelect={select}
+    >
+      <Flex
+        align='center'
+        as='span'
+        gap='2'
+        justify='between'
+      >
+        <Text
+          size='2'
+          weight='medium'
+        >
           <time dateTime={recording.startedAt}>{formatClock(start)}</time> –{' '}
           {recording.endedAt === null ? 'сейчас' : <time dateTime={recording.endedAt}>{formatClock(end)}</time>}
         </Text>
         {isWriting ? (
-          <Badge color='red' variant='soft'>
+          <Badge
+            color='red'
+            variant='soft'
+          >
             Идёт запись
           </Badge>
         ) : (
           <RecordingTriggerBadge trigger={recording.trigger} />
         )}
       </Flex>
-      <Text color='gray' size='1'>
+      <Text
+        color='gray'
+        size='1'
+      >
         {`${formatDuration(end - start)} · ${formatFileSize(recording.sizeBytes)}`}
       </Text>
     </ArchiveListItem>
@@ -74,19 +91,34 @@ export function RecordingFileList(props: RecordingFileListProps) {
   if (!data) {
     if (isPending) {
       return (
-        <Flex direction='column' gap='2'>
+        <Flex
+          direction='column'
+          gap='2'
+        >
           {SKELETON_KEYS.map(key => (
-            <Skeleton height='44px' key={key} width='100%' />
+            <Skeleton
+              height='44px'
+              key={key}
+              width='100%'
+            />
           ))}
         </Flex>
       );
     }
-    return <InlineError message='Не удалось загрузить файлы записи' onRetry={retry} />;
+    return (
+      <InlineError
+        message='Не удалось загрузить файлы записи'
+        onRetry={retry}
+      />
+    );
   }
 
   if (data.items.length === 0) {
     return (
-      <Text color='gray' size='2'>
+      <Text
+        color='gray'
+        size='2'
+      >
         За этот день файлов записи нет
       </Text>
     );

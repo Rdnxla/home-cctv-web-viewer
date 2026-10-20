@@ -49,6 +49,7 @@
   "javascript": {
     "formatter": {
       "arrowParentheses": "asNeeded",
+      "attributePosition": "multiline",
       "bracketSpacing": false,
       "jsxQuoteStyle": "single",
       "quoteProperties": "asNeeded",

@@ -6,7 +6,11 @@ import styles from './MainLayout.module.scss';
 
 export function Component() {
   return (
-    <Theme accentColor='indigo' appearance='light' className={styles.mainLayout}>
+    <Theme
+      accentColor='indigo'
+      appearance='light'
+      className={styles.mainLayout}
+    >
       <TheHeader />
       <CalloutMessage>
         <Outlet />

@@ -81,13 +81,26 @@ export function EventFilters(props: EventFiltersProps) {
   );
 
   return (
-    <Flex direction='column' gap='3'>
-      <ScrollArea scrollbars='horizontal' type='hover'>
+    <Flex
+      direction='column'
+      gap='3'
+    >
+      <ScrollArea
+        scrollbars='horizontal'
+        type='hover'
+      >
         <Box pb='2'>
-          <SegmentedControl.Root aria-label='Категория событий' onValueChange={changeCategory} value={category ?? ALL}>
+          <SegmentedControl.Root
+            aria-label='Категория событий'
+            onValueChange={changeCategory}
+            value={category ?? ALL}
+          >
             <SegmentedControl.Item value={ALL}>{withCount('Все', totalCount)}</SegmentedControl.Item>
             {EVENT_CATEGORIES.map(item => (
-              <SegmentedControl.Item key={item} value={item}>
+              <SegmentedControl.Item
+                key={item}
+                value={item}
+              >
                 {withCount(EVENT_CATEGORY_META[item].pluralLabel, categoryCounts?.[item])}
               </SegmentedControl.Item>
             ))}
@@ -95,8 +108,15 @@ export function EventFilters(props: EventFiltersProps) {
         </Box>
       </ScrollArea>
 
-      <Flex align='center' gap='2' wrap='wrap'>
-        <Box flexBasis='260px' flexGrow='1'>
+      <Flex
+        align='center'
+        gap='2'
+        wrap='wrap'
+      >
+        <Box
+          flexBasis='260px'
+          flexGrow='1'
+        >
           <SearchField
             label='Поиск по журналу событий'
             onChange={changeQuery}
@@ -105,9 +125,16 @@ export function EventFilters(props: EventFiltersProps) {
           />
         </Box>
 
-        <EventTypeFilter category={category} onChange={changeTypes} value={params.types} />
+        <EventTypeFilter
+          category={category}
+          onChange={changeTypes}
+          value={params.types}
+        />
 
-        <Select.Root onValueChange={changeSource} value={params.source ?? ALL}>
+        <Select.Root
+          onValueChange={changeSource}
+          value={params.source ?? ALL}
+        >
           <Select.Trigger aria-label='Источник' />
           <Select.Content position='popper'>
             <Select.Item value={ALL}>Все источники</Select.Item>
@@ -118,7 +145,10 @@ export function EventFilters(props: EventFiltersProps) {
                 <Select.Group>
                   <Select.Label>Камеры</Select.Label>
                   {cameras.map(camera => (
-                    <Select.Item key={camera.id} value={camera.id}>
+                    <Select.Item
+                      key={camera.id}
+                      value={camera.id}
+                    >
                       {camera.name}
                     </Select.Item>
                   ))}
@@ -128,11 +158,17 @@ export function EventFilters(props: EventFiltersProps) {
           </Select.Content>
         </Select.Root>
 
-        <Select.Root onValueChange={changePeriod} value={params.period}>
+        <Select.Root
+          onValueChange={changePeriod}
+          value={params.period}
+        >
           <Select.Trigger aria-label='Период' />
           <Select.Content position='popper'>
             {EVENT_PERIODS.map(period => (
-              <Select.Item key={period} value={period}>
+              <Select.Item
+                key={period}
+                value={period}
+              >
                 {EVENT_PERIOD_META[period].label}
               </Select.Item>
             ))}
@@ -140,7 +176,11 @@ export function EventFilters(props: EventFiltersProps) {
         </Select.Root>
 
         {hasActiveFilters ? (
-          <Button color='gray' onClick={onReset} variant='ghost'>
+          <Button
+            color='gray'
+            onClick={onReset}
+            variant='ghost'
+          >
             <Cross2Icon />
             Сбросить
           </Button>
