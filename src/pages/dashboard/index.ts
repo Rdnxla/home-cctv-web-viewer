@@ -1,1 +1,1 @@
-export {Component} from './ui/ClientDashboard';
+export {Component} from './ui/Dashboard';

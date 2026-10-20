@@ -1,4 +1,10 @@
-// Legacy (FSD-001, roadmap M-2): доменные типы камеры пока лежат в src/mocks.
-// Это единственная точка, через которую слайс берёт типы из моков; при M-2 определения переедут сюда.
+export const PLAYBACK_SPEEDS = [0.5, 1, 2, 4, 8, 16] as const;
+
+export type PlaybackSpeed = (typeof PLAYBACK_SPEEDS)[number];
+
+export interface CameraPlaybackParams {
+  from: string;
+  speed: PlaybackSpeed;
+}
 export type {Camera, CameraStatus, StreamInfo} from '@/mocks/data/nvrtypes';
 export type {PlayerState} from '@/mocks/handlers/webrtc';

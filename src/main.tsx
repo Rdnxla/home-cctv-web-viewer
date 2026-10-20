@@ -1,4 +1,4 @@
-import './app/global.css';
+import './app/global.scss';
 import '@radix-ui/themes/styles.css';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';

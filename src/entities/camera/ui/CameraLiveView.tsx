@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {useCameraStreamQuery} from '../api/cameraQueries';
+import {useCameraStreamQuery} from '@/api/cameras/cameraQueries';
 import type {Camera} from '../model/types';
 import {CameraPlayer} from './CameraPlayer';
 import {StreamPlaceholder} from './StreamPlaceholder';

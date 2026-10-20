@@ -2,7 +2,7 @@ import {ArrowLeftIcon, LinkBreak2Icon} from '@radix-ui/react-icons';
 import {AspectRatio, Button, Code, Flex, Grid, Heading, Link, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
 import {Link as RouterLink, useParams} from 'react-router';
-import {useCameraQuery} from '@/entities/camera';
+import {useCameraQuery} from '@/api/cameras/cameraQueries';
 import {isApiError} from '@/shared/api/http';
 import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
 import {ROUTES} from '@/shared/config/routes';

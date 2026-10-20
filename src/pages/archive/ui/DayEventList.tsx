@@ -2,7 +2,7 @@ import {Flex, Skeleton, Text} from '@radix-ui/themes';
 import type {UseQueryResult} from '@tanstack/react-query';
 import {useCallback} from 'react';
 import type {EventListResponse, NvrEvent} from '@/entities/event';
-import {EventTypeLabel} from '@/entities/event';
+import {EventSummary} from '@/entities/event';
 import {InlineError} from '@/shared/ui';
 import {getEventSeekTime} from '../lib/eventSeek';
 import {formatClock} from '../lib/time';
@@ -28,32 +28,10 @@ function DayEventItem(props: DayEventItemProps) {
       isCurrent={isCurrent}
       onSelect={select}
     >
-      <Flex
-        align='center'
-        as='span'
-        gap='2'
-        justify='between'
-      >
-        <Text
-          size='2'
-          weight='medium'
-        >
-          <EventTypeLabel type={event.type} />
-        </Text>
-        <Text
-          color='gray'
-          size='1'
-        >
-          <time dateTime={event.occurredAt}>{formatClock(Date.parse(event.occurredAt))}</time>
-        </Text>
-      </Flex>
-      <Text
-        color='gray'
-        size='1'
-        truncate
-      >
-        {event.message}
-      </Text>
+      <EventSummary
+        event={event}
+        timeLabel={formatClock(Date.parse(event.occurredAt))}
+      />
     </ArchiveListItem>
   );
 }

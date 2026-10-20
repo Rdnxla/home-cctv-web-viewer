@@ -12,11 +12,13 @@ export function InfoBlock() {
     >
       <Flex
         direction='column'
+        flexGrow='1'
         gap='3'
+        minHeight='0'
       >
         <Heading
           as='h3'
-          size='4'
+          size='6'
         >
           Обзор
         </Heading>

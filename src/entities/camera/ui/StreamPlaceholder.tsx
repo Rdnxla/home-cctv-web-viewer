@@ -7,12 +7,10 @@ const ICON_SIZE = 32;
 
 interface StreamPlaceholderProps {
   camera: Camera;
-  /** Ошибка запроса параметров потока */
   error: Error | null;
   onRetry: () => void;
 }
 
-/** Что показывает плеер, пока видео нет: камера не в сети, параметры потока загружаются или не получены */
 export function StreamPlaceholder(props: StreamPlaceholderProps) {
   const {camera, error, onRetry} = props;
 

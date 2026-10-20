@@ -5,10 +5,6 @@ const minutesAgo = (m: number) => new Date(now - m * 60_000).toISOString();
 
 export const NVR_IP = '192.168.1.10';
 
-/**
- * Порядок в массиве намеренно перемешан — сортировку делает handler,
- * чтобы проверить, что UI получает данные уже в нужном порядке.
- */
 export const cameras: Camera[] = [
   {
     codec: null,

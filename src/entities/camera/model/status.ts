@@ -1,4 +1,4 @@
-import type {CameraStatus} from './types';
+import type {CameraStatus} from '@/api/cameras/types';
 
 interface CameraStatusMeta {
   color: 'gray' | 'green' | 'red';

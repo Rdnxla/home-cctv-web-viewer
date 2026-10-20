@@ -1,12 +1,10 @@
 import {skipToken, useQuery, useQueryClient} from '@tanstack/react-query';
 import {retryUnlessClientError} from '@/shared/api/retry';
-import type {CameraPlaybackParams} from '../model/playback';
-import type {Camera} from '../model/types';
-import {getCamera, getCameraPlayback, getCameraStream, getCameras} from './cameraApi';
+import type {Camera, CameraPlaybackParams} from './types';
+import {getCamera, getCameraPlayback, getCameraStream, getCameras} from '@/api/cameras/cameraApi';
 
 const CAMERAS_KEY = 'cameras';
 
-/** Ключи начинаются с имени сущности: `invalidateQueries({queryKey: cameraKeys.all})` сбрасывает всё по камерам */
 export const cameraKeys = {
   all: [CAMERAS_KEY] as const,
   detail: (id: string) => [CAMERAS_KEY, 'detail', id] as const,
@@ -27,7 +25,6 @@ export function useCameraQuery(id: string) {
   const queryClient = useQueryClient();
 
   return useQuery({
-    // Камера из уже загруженного списка показывается сразу, пока догружается детальная карточка
     placeholderData: () => queryClient.getQueryData<Camera[]>(cameraKeys.list())?.find(camera => camera.id === id),
     queryFn: () => getCamera(id),
     queryKey: cameraKeys.detail(id),
@@ -40,13 +37,11 @@ export function useCameraStreamQuery(id: string, enabled: boolean) {
     enabled,
     queryFn: () => getCameraStream(id),
     queryKey: cameraKeys.stream(id),
-    // Плеер переподключается только при смене whepUrl, частые перезапросы параметров не нужны
     refetchOnWindowFocus: false,
     retry: retryUnlessClientError,
   });
 }
 
-/** Параметры воспроизведения архива; `null` — воспроизводить нечего */
 export function useCameraPlaybackQuery(id: string, params: CameraPlaybackParams | null) {
   return useQuery({
     queryFn: params === null ? skipToken : () => getCameraPlayback(id, params),

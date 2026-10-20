@@ -1,10 +1,29 @@
+// Занимает остаток панели «Обзор»; прокручивается только список
+.recentEvents {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
+}
+
 .recentEvents__list {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 6px;
+  min-height: 0;
+  // В одну колонку (уже брейкпоинта md у Radix) панель идёт под камерами и не ограничена по высоте —
+  // список ограничен сам, чтобы не растягивать страницу
+  max-height: 60dvh;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
   list-style: none;
+
+  // Рядом с камерами высоту задаёт панель «Обзор» (см. InfoBlock.module.scss)
+  @media (min-width: 1024px) {
+    max-height: none;
+  }
 }
 
 .recentEvents__item {
@@ -14,11 +33,6 @@
   background-color: var(--gray-a2);
 }
 
-// Тревоги выделены полосой слева, как в журнале событий
 .recentEvents__alarm {
   box-shadow: inset 3px 0 0 var(--red-9);
-}
-
-.recentEvents__time {
-  white-space: nowrap;
 }

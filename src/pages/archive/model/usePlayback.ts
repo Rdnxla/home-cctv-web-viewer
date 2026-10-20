@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import type {PlaybackSpeed, PlayerState} from '@/entities/camera';
-import {useCameraPlaybackQuery} from '@/entities/camera';
+import {useCameraPlaybackQuery} from '@/api/cameras/cameraQueries';
 import {findRangeAt, snapToRecording} from '../lib/coverage';
 import type {TimeRange} from '../lib/time';
 import {floorToSecond, SECOND_MS} from '../lib/time';

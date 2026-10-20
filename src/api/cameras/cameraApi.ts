@@ -1,6 +1,6 @@
 import {apiFetch} from '@/shared/api/http';
-import type {CameraPlaybackParams} from '../model/playback';
-import type {Camera, StreamInfo} from '../model/types';
+import type {CameraPlaybackParams} from './types';
+import type {Camera, StreamInfo} from './types';
 
 const CAMERAS_URL = '/api/cameras';
 

@@ -1,24 +1,35 @@
 import {VideoIcon} from '@radix-ui/react-icons';
 import {AspectRatio, Flex, Grid, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
-import {useCamerasQuery} from '@/entities/camera';
+import {useCalloutMessage} from '@/shared/components/callout/CalloutMessage';
 import {LoadError} from '@/shared/ui';
 import {CameraGridCard} from './CameraGridCard';
+import type {UseQueryResult} from '@tanstack/react-query';
+import type {Camera} from '@/api/cameras/types';
 
-/** Две колонки от брейкпоинта `sm`, на телефоне — одна */
 const GRID_COLUMNS = {initial: '1', sm: '2'};
 const SKELETON_KEYS = ['camera-skeleton-1', 'camera-skeleton-2', 'camera-skeleton-3', 'camera-skeleton-4'];
 
-/**
- * Живой просмотр всех камер. Каждая камера в сети открывает собственную WHEP-сессию,
- * камеры с ошибкой или без подключения показывают причину вместо видео.
- */
-export function CameraGrid() {
-  const {data: cameras, error, isPending, refetch} = useCamerasQuery();
+interface CameraGridProps {
+  cameras: Camera[] | undefined;
+  error: Error | null;
+  isPending: boolean;
+  refetch: UseQueryResult<Camera[]>['refetch'];
+}
+
+export function CameraGrid(props: CameraGridProps) {
+  const {
+    cameras,
+    error,
+    isPending,
+    refetch,
+  } = props;
+  const showMessage = useCalloutMessage();
 
   const retry = useCallback(() => {
-    refetch().catch(() => ({}));
-  }, [refetch]);
+    refetch()
+      .catch((e) => (showMessage(e, 'error')));
+  }, [refetch, showMessage]);
 
   if (cameras && cameras.length === 0) {
     return (

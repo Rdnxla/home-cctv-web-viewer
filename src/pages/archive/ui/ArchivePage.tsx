@@ -1,7 +1,7 @@
 import {LinkBreak2Icon, VideoIcon} from '@radix-ui/react-icons';
 import {AspectRatio, Flex, Grid, Skeleton} from '@radix-ui/themes';
 import {useCallback, useMemo} from 'react';
-import {useCamerasQuery} from '@/entities/camera';
+import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {useRecordingsQuery} from '@/entities/recording';
 import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
 import {LoadError} from '@/shared/ui';
