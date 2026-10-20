@@ -1,0 +1,6 @@
+// Страница занимает всё место под шапкой, чтобы колонки сетки тянулись на высоту окна
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}

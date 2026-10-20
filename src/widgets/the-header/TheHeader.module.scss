@@ -1,4 +1,6 @@
 .header {
+  min-height: $header-h;
+  max-height: $header-h;
   border-radius: $base-radius;
   background-color: var(--gray-2);
   box-shadow: $base-shadow;

@@ -1,7 +1,8 @@
 import {DataList, Flex, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
 import type {Camera, CameraStatus} from '@/entities/camera';
-import {CAMERA_STATUSES, CameraStatusBadge, useCamerasQuery} from '@/entities/camera';
+import {CAMERA_STATUSES, CameraStatusBadge} from '@/entities/camera';
+import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {InlineError} from '@/shared/ui';
 
 function countByStatus(cameras: Camera[]) {
@@ -39,22 +40,11 @@ export function CameraSummary() {
   return (
     <Flex
       direction='column'
-      gap='3'
+      gap='4'
     >
-      <Flex direction='column'>
-        <Text
-          color='gray'
-          size='2'
-        >
-          Камеры в сети
-        </Text>
-        <Text
-          size='7'
-          weight='bold'
-        >
-          {`${counts.online} из ${cameras.length}`}
-        </Text>
-      </Flex>
+      <Text size='4'>
+        {`${counts.online} из ${cameras.length} в сети`}
+      </Text>
       <DataList.Root size='1'>
         {CAMERA_STATUSES.map(status => (
           <DataList.Item

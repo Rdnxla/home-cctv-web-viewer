@@ -2,14 +2,8 @@ import {Flex, Heading, Link, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback, useId} from 'react';
 import {Link as RouterLink} from 'react-router';
 import type {EventListParams, EventListResponse} from '@/entities/event';
-import {
-  DEVICE_SOURCE_LABEL,
-  EVENT_CATEGORIES,
-  EventCategoryBadge,
-  EventTypeLabel,
-  formatEventTime,
-  useEventsQuery,
-} from '@/entities/event';
+// TODO: убрать запросы из entities
+import {EVENT_CATEGORIES, EventCategoryBadge, EventSummary, useEventsQuery} from '@/entities/event';
 import {ROUTES} from '@/shared/config/routes';
 import {formatRelativeTime} from '@/shared/lib/formatRelativeTime';
 import {InlineError} from '@/shared/ui';
@@ -79,38 +73,11 @@ function RecentEventsList(props: RecentEventsListProps) {
               }
               key={event.id}
             >
-              <Flex
-                align='center'
-                gap='2'
-                justify='between'
-              >
-                <Text
-                  size='2'
-                  weight='medium'
-                >
-                  <EventTypeLabel type={event.type} />
-                </Text>
-                <Text
-                  className={styles.recentEvents__time}
-                  color='gray'
-                  size='1'
-                >
-                  <time
-                    dateTime={event.occurredAt}
-                    title={formatEventTime(event.occurredAt)}
-                  >
-                    {formatRelativeTime(event.occurredAt)}
-                  </time>
-                </Text>
-              </Flex>
-              <Text
-                as='p'
-                color='gray'
-                size='1'
-                truncate
-              >
-                {`${event.cameraName ?? DEVICE_SOURCE_LABEL} · ${event.message}`}
-              </Text>
+              <EventSummary
+                event={event}
+                timeLabel={formatRelativeTime(event.occurredAt)}
+                withSource={true}
+              />
             </li>
           ))}
         </ul>
@@ -119,9 +86,9 @@ function RecentEventsList(props: RecentEventsListProps) {
   );
 }
 
-/** Лента последних событий со ссылкой на полный журнал */
 export function RecentEvents() {
   const headingId = useId();
+
   const {data, isPending, refetch} = useEventsQuery(RECENT_EVENTS_PARAMS);
 
   const retry = useCallback(() => {
@@ -155,7 +122,10 @@ export function RecentEvents() {
   }
 
   return (
-    <section aria-labelledby={headingId}>
+    <section
+      aria-labelledby={headingId}
+      className={styles.recentEvents}
+    >
       <Flex
         align='center'
         gap='2'

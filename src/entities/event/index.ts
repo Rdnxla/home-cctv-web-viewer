@@ -11,4 +11,5 @@ export {
 } from './model/meta';
 export type {EventListParams, EventListResponse, EventRangeParams, NvrEvent} from './model/types';
 export {EventCategoryBadge} from './ui/EventCategoryBadge';
+export {EventSummary} from './ui/EventSummary';
 export {EventTypeLabel} from './ui/EventTypeLabel';

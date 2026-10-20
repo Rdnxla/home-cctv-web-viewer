@@ -1,7 +1,7 @@
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {Box, Button, Flex, ScrollArea, SegmentedControl, Select} from '@radix-ui/themes';
 import {useCallback} from 'react';
-import {useCamerasQuery} from '@/entities/camera';
+import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import type {EventCategory, EventListParams, EventType} from '@/entities/event';
 import {
   DEVICE_SOURCE,

@@ -8,7 +8,7 @@
 
 ## Сводка
 
-- TanStack Query: 1 query (`useClientDashboard`, не используется) + 2 mutations (`useLoginMutation`, `useVerifyTwoFactorMutation`), 3 API-функции. `QueryClient` без `defaultOptions`. Продвинутые возможности (`queryOptions`, `select`, `enabled`, `placeholderData`, suspense, prefetch, `setQueryData`/`invalidateQueries`, `onMutate`) — 0 использований (`rg` → 0 совпадений).
+- TanStack Query: 1 query (`useDashboard`, не используется) + 2 mutations (`useLoginMutation`, `useVerifyTwoFactorMutation`), 3 API-функции. `QueryClient` без `defaultOptions`. Продвинутые возможности (`queryOptions`, `select`, `enabled`, `placeholderData`, suspense, prefetch, `setQueryData`/`invalidateQueries`, `onMutate`) — 0 использований (`rg` → 0 совпадений).
 - MSW: 13 хендлеров в 2 массивах (`authHandlers` 6, `nvrHandlers` 7). Из них к API-функциям приложения привязаны 2, к прямым `fetch` WebRTC-плеера — 2, без потребителя — 8, недостижим — 1. 1 эндпоинт приложения без мока (`GET /api/me/context`).
 - Ключевое: два несовместимых формата тела ошибки (`{error}` у auth и `{code}` у nvr) при клиенте, который читает только `error` (DATA-001); дублирующий хендлер `POST /api/auth/login` недостижим (DATA-002); токены сохраняются, но ни один запрос их не отправляет (DATA-005).
 - 15 находок: medium 6, low 9.
@@ -30,7 +30,7 @@
 
 | Хук | Файл | queryKey | API-функция (файл) | Endpoint | Потребители |
 |---|---|---|---|---|---|
-| `useClientDashboard` | `src/pages/dashboard/model/useClientDashboard.ts:4` | `['sidebar']` | `getDashboard` (`src/api/user/user.ts:3`) | `GET /api/me/context` | нет (только комментарии `ClientDashboard.tsx:6,10`; `EventList.tsx:3,7` ссылается на несуществующий `./model/useClientDashboard`) |
+| `useDashboard` | `src/pages/dashboard/model/useDashboard.ts:4` | `['sidebar']` | `getDashboard` (`src/api/user/user.ts:3`) | `GET /api/me/context` | нет (только комментарии `Dashboard.tsx:6,10`; `EventList.tsx:3,7` ссылается на несуществующий `./model/useDashboard`) |
 | `useLoginMutation` | `src/pages/auth/model/useAuth.ts:4` | — | `login` (`src/api/auth/auth.ts:4`) | `POST /api/auth/login` | `pages/auth` (`Auth.tsx:22`) |
 | `useVerifyTwoFactorMutation` | `src/pages/auth/model/useAuth.ts:5` | — | `verifyTwoFactor` (`src/api/auth/auth.ts:11`) | `POST /api/auth/login/2fa` | `pages/auth` (`Auth.tsx:23`) |
 
@@ -38,7 +38,7 @@
 
 ### 3. Стратегия ключей
 
-- Фабрики ключей нет; единственный ключ — литерал `['sidebar']` (`useClientDashboard.ts:7`). Он не соответствует ни эндпоинту (`/api/me/context`), ни имени хука.
+- Фабрики ключей нет; единственный ключ — литерал `['sidebar']` (`useDashboard.ts:7`). Он не соответствует ни эндпоинту (`/api/me/context`), ни имени хука.
 - Коллизий нет (1 ключ). Иерархии для инвалидации нет.
 
 ### 4. Продвинутые возможности
@@ -115,7 +115,7 @@ API-функции — `src/api/**` (вне слоёв, FSD-003), хуки — �
 | `GET /api/cameras/:id/stream` | `nvr.ts:60` | `cameras`, `whepUrl()` (`data/nvr.ts:118`) | нет (`StreamInfo` захардкожен в `CameraCard.tsx:22-31`) | нет |
 | `POST /api/webrtc/:id/whep` | `nvr.ts:80` | `createMockWhepSession` (`mockWhep.ts:58`) | прямой `fetch` (`webrtc.ts:113`), URL захардкожен в `CameraCard.tsx:30` | `useWebRtcPlayer` (не TanStack) |
 | `DELETE /api/webrtc/:id/whep/:session` | `nvr.ts:106` | `closeMockWhepSession` (`mockWhep.ts:84`) | прямой `fetch` (`webrtc.ts:132`) | `useWebRtcPlayer` |
-| `GET /api/me/context` | **нет** | — | `getDashboard` (`api/user/user.ts:3`) | `useClientDashboard` |
+| `GET /api/me/context` | **нет** | — | `getDashboard` (`api/user/user.ts:3`) | `useDashboard` |
 
 Итого: вызывается, но без мока — 1; хендлеры без потребителя — 8; несоответствия формы данных — DATA-001, DATA-014.
 
@@ -186,7 +186,7 @@ API-функции — `src/api/**` (вне слоёв, FSD-003), хуки — �
 - Type: fact
 - Location: `src/api/user/user.ts:4`; в `src/mocks/handlers/*` маршрута нет
 - Rule: каждый вызываемый эндпоинт имеет мок (`prompts/04`, MSW 3)
-- Evidence: таблица покрытия выше; хук `useClientDashboard` сейчас не вызывается (заготовка, не удалять — решение владельца)
+- Evidence: таблица покрытия выше; хук `useDashboard` сейчас не вызывается (заготовка, не удалять — решение владельца)
 - Recommendation: добавить хендлер и фикстуру до включения хука; форма ответа неизвестна — тип `User` (`api/user/types.user.ts`) ни к чему не привязан (`UNVERIFIED`)
 - Effort: S
 
@@ -252,7 +252,7 @@ API-функции — `src/api/**` (вне слоёв, FSD-003), хуки — �
 
 - Severity: low
 - Type: fact
-- Location: `src/pages/dashboard/model/useClientDashboard.ts:7`
+- Location: `src/pages/dashboard/model/useDashboard.ts:7`
 - Evidence: литерал `['sidebar']`, не связанный с эндпоинтом/хуком
 - Recommendation: при создании `entities/*/api` — фабрика ключей на сущность (`cameraKeys.all/list/detail(id)`) или `queryOptions` рядом с API-функцией
 - Effort: S

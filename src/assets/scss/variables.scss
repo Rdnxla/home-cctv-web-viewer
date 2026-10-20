@@ -1,4 +1,5 @@
 $header-h: 72px;
+$page-min-h: calc(100% - $header-h);;
 
 $base-radius: 8px;
 $base-bg: var(--gray-3);

@@ -143,6 +143,15 @@ q::after {
 
 /* end reset.css */
 
-@theme {
-  --font-sans: Inter, sans-serif;
+.page {
+  min-height: $page-min-h;
+  background: var(--gray-1);
+  border-radius: $base-radius;
+  box-shadow: $base-shadow;
+  overflow: hidden;
+  padding: 16px;
+
+  @media (max-width: 1024px) {
+    overflow: auto;
+  }
 }

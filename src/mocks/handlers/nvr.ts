@@ -41,9 +41,8 @@ export const nvrHandlers = [
     return HttpResponse.json(poePorts);
   }),
 
-  // 2 online -> error -> no_connection
   http.get(`${API}/cameras`, async () => {
-    await delay(400);
+    await delay(5000);
     return HttpResponse.json(sortCameras(cameras));
   }),
 
@@ -62,7 +61,7 @@ export const nvrHandlers = [
     const failure = await guardCamera(camera);
     if (failure || !camera) return failure;
 
-    await delay(300);
+    await delay(5000);
     const stream: StreamInfo = {
       cameraId: camera.id,
       codec: camera.codec,

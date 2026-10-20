@@ -1,18 +1,23 @@
 import {Flex, Grid, Heading, Text} from '@radix-ui/themes';
 import {InfoBlock} from '@/widgets/info';
-import {useCamerasQuery} from '@/entities/camera';
 import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
 import {formatCount} from '@/shared/lib/pluralize';
+import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {CameraGrid} from './CameraGrid';
-import styles from './ClientDashboard.module.scss';
+import styles from './Dashboard.module.scss';
 
 const PLURAL_FORMS = {few: 'камеры', many: 'камер', one: 'камера'};
 
 export function Component() {
-  const {data: cameras} = useCamerasQuery();
+  const {
+    data: cameras,
+    error,
+    isPending,
+    refetch
+  } = useCamerasQuery();
 
   return (
-    <section className={styles.clientDashboard}>
+    <section className={`page ${styles.dashboard}`}>
       <title>Камеры</title>
       <Flex
         align='baseline'
@@ -36,8 +41,8 @@ export function Component() {
         ) : null}
       </Flex>
       <Grid
-        align='start'
         columns={CONTENT_WITH_ASIDE_COLUMNS}
+        flexGrow='1'
         gap='4'
       >
         <Flex
@@ -45,7 +50,12 @@ export function Component() {
           gap='3'
           minWidth='0'
         >
-          <CameraGrid />
+          <CameraGrid
+            cameras={cameras}
+            error={error}
+            isPending={isPending}
+            refetch={refetch}
+          />
         </Flex>
         <InfoBlock />
       </Grid>

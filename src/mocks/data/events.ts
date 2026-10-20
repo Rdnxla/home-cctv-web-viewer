@@ -4,15 +4,15 @@ import {cameras} from './nvr';
 import type {Camera} from './nvrtypes';
 
 /**
- * Журнал событий для моков: ~640 записей за 30 дней.
+ * Журнал событий для моков: ~640 записей за 10 дней.
  * Генератор детерминированный (фиксированное зерно), поэтому набор событий одинаков
  * при каждом запуске, а время отсчитывается от момента загрузки модуля.
  */
 
 const MINUTE_MS = 60_000;
 const DAY_MS = 24 * 60 * MINUTE_MS;
-const EVENT_COUNT = 640;
-const HISTORY_DAYS = 30;
+const EVENT_COUNT = 940;
+const HISTORY_DAYS = 10;
 const SEED = 20_261_017;
 const PARK_MILLER_MODULUS = 2_147_483_647;
 const PARK_MILLER_MULTIPLIER = 16_807;
