@@ -1,10 +1,9 @@
 import {LinkBreak2Icon, VideoIcon} from '@radix-ui/react-icons';
-import {AspectRatio, Flex, Grid, Skeleton} from '@radix-ui/themes';
+import {AspectRatio, Flex, Skeleton} from '@radix-ui/themes';
 import {useCallback, useMemo} from 'react';
 import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {useRecordingsQuery} from '@/entities/recording';
-import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
-import {LoadError} from '@/shared/ui';
+import {LoadError, MediaWithAside} from '@/shared/ui';
 import {getDayRange} from '../lib/time';
 import {useArchiveParams} from '../model/useArchiveParams';
 import {ArchiveEmptyState} from './ArchiveEmptyState';
@@ -16,35 +15,31 @@ const EMPTY_ICON_SIZE = 32;
 
 function ArchiveSkeleton() {
   return (
-    <Grid
-      align='start'
-      columns={CONTENT_WITH_ASIDE_COLUMNS}
-      gap='4'
-    >
-      <Flex
-        direction='column'
-        gap='3'
-      >
+    <MediaWithAside
+      aside={
+        <Skeleton
+          height='420px'
+          width='100%'
+        />
+      }
+      media={
         <AspectRatio ratio={16 / 9}>
           <Skeleton
             height='100%'
             width='100%'
           />
         </AspectRatio>
-        <Skeleton
-          height='48px'
-          width='100%'
-        />
-        <Skeleton
-          height='110px'
-          width='100%'
-        />
-      </Flex>
+      }
+    >
       <Skeleton
-        height='420px'
+        height='48px'
         width='100%'
       />
-    </Grid>
+      <Skeleton
+        height='110px'
+        width='100%'
+      />
+    </MediaWithAside>
   );
 }
 
@@ -123,10 +118,11 @@ export function Component() {
   }
 
   return (
-    <section className={styles.archivePage}>
+    <section className={`page ${styles.archivePage}`}>
       <title>{camera ? `Архив — ${camera.name}` : 'Архив'}</title>
       <Flex
         direction='column'
+        flexGrow='1'
         gap='4'
       >
         <ArchiveToolbar

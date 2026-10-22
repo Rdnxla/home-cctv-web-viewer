@@ -1,5 +1,5 @@
 import {CounterClockwiseClockIcon} from '@radix-ui/react-icons';
-import {Button, Flex, Grid, Text} from '@radix-ui/themes';
+import {Button, Text} from '@radix-ui/themes';
 import type {UseQueryResult} from '@tanstack/react-query';
 import {useCallback, useMemo} from 'react';
 import {Link as RouterLink} from 'react-router';
@@ -8,12 +8,11 @@ import type {Camera} from '@/entities/camera';
 import type {NvrEvent} from '@/entities/event';
 import {useEventsInRangeQuery} from '@/entities/event';
 import type {ArchiveBounds, RecordingListResponse} from '@/entities/recording';
-import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
 import {ROUTES} from '@/shared/config/routes';
 import {formatDuration} from '@/shared/lib/formatDuration';
 import {formatCount} from '@/shared/lib/pluralize';
 import {useNow} from '@/shared/lib/useNow';
-import {LoadError} from '@/shared/ui';
+import {LoadError, MediaWithAside} from '@/shared/ui';
 import type {RecordingSegment} from '../lib/coverage';
 import {getCoverage, getRecordingSegments} from '../lib/coverage';
 import {formatDate} from '../lib/format';
@@ -153,63 +152,62 @@ export function ArchiveViewer(props: ArchiveViewerProps) {
     );
   }
 
+  const sidebar = (
+    <ArchiveSidebar
+      bookmarksQuery={bookmarksQuery}
+      day={day}
+      eventsQuery={eventsQuery}
+      now={now}
+      onOpenBookmark={openBookmark}
+      onSeek={seek}
+      position={position}
+      recordingsQuery={recordingsQuery}
+    />
+  );
+
+  if (error && !recordings) {
+    return (
+      <MediaWithAside aside={sidebar}>
+        <LoadError
+          message={`Не удалось загрузить архив: ${error.message}`}
+          onRetry={retryRecordings}
+        />
+      </MediaWithAside>
+    );
+  }
+
   return (
-    <Grid
-      align='start'
-      columns={CONTENT_WITH_ASIDE_COLUMNS}
-      gap='4'
+    <MediaWithAside
+      aside={sidebar}
+      media={
+        <ArchivePlayer
+          camera={camera}
+          playback={playback}
+        />
+      }
     >
-      <Flex
-        direction='column'
-        gap='3'
-        minWidth='0'
-      >
-        {error && !recordings ? (
-          <LoadError
-            message={`Не удалось загрузить архив: ${error.message}`}
-            onRetry={retryRecordings}
-          />
-        ) : (
-          <>
-            <ArchivePlayer
-              camera={camera}
-              playback={playback}
-            />
-            <PlaybackControls
-              camera={camera}
-              events={dayEvents}
-              playback={playback}
-            />
-            <Timeline
-              bookmarks={dayBookmarks}
-              day={day}
-              events={dayEvents}
-              now={now}
-              onSeek={seek}
-              position={position}
-              segments={segments}
-            />
-            {recordings && segments ? (
-              <DaySummary
-                bounds={recordings.bounds}
-                fileCount={recordings.items.length}
-                now={now}
-                segments={segments}
-              />
-            ) : null}
-          </>
-        )}
-      </Flex>
-      <ArchiveSidebar
-        bookmarksQuery={bookmarksQuery}
+      <PlaybackControls
+        camera={camera}
+        events={dayEvents}
+        playback={playback}
+      />
+      <Timeline
+        bookmarks={dayBookmarks}
         day={day}
-        eventsQuery={eventsQuery}
+        events={dayEvents}
         now={now}
-        onOpenBookmark={openBookmark}
         onSeek={seek}
         position={position}
-        recordingsQuery={recordingsQuery}
+        segments={segments}
       />
-    </Grid>
+      {recordings && segments ? (
+        <DaySummary
+          bounds={recordings.bounds}
+          fileCount={recordings.items.length}
+          now={now}
+          segments={segments}
+        />
+      ) : null}
+    </MediaWithAside>
   );
 }

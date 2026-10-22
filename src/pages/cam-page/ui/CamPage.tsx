@@ -1,12 +1,11 @@
 import {ArrowLeftIcon, LinkBreak2Icon} from '@radix-ui/react-icons';
-import {AspectRatio, Button, Code, Flex, Grid, Heading, Link, Skeleton, Text} from '@radix-ui/themes';
+import {AspectRatio, Button, Code, Flex, Heading, Link, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
 import {Link as RouterLink, useParams} from 'react-router';
 import {useCameraQuery} from '@/api/cameras/cameraQueries';
 import {isApiError} from '@/shared/api/http';
-import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
 import {ROUTES} from '@/shared/config/routes';
-import {LoadError} from '@/shared/ui';
+import {LoadError, MediaWithAside} from '@/shared/ui';
 import {CameraView} from './CameraView';
 import styles from './CamPage.module.scss';
 import {OtherCameras} from './OtherCameras';
@@ -28,22 +27,22 @@ function CameraViewSkeleton() {
         height='32px'
         width='280px'
       />
-      <Grid
-        align='start'
-        columns={CONTENT_WITH_ASIDE_COLUMNS}
-        gap='4'
-      >
-        <AspectRatio ratio={16 / 9}>
+      <MediaWithAside
+        aside={
           <Skeleton
-            height='100%'
+            height='320px'
             width='100%'
           />
-        </AspectRatio>
-        <Skeleton
-          height='320px'
-          width='100%'
-        />
-      </Grid>
+        }
+        media={
+          <AspectRatio ratio={16 / 9}>
+            <Skeleton
+              height='100%'
+              width='100%'
+            />
+          </AspectRatio>
+        }
+      />
     </>
   );
 }
@@ -116,9 +115,10 @@ export function Component() {
   const {id = ''} = useParams();
 
   return (
-    <section className={styles.camPage}>
+    <section className={`page ${styles.camPage}`}>
       <Flex
         direction='column'
+        flexGrow='1'
         gap='4'
       >
         <Link

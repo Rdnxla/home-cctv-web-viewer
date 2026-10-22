@@ -1,10 +1,7 @@
 .camPage {
-  min-height: calc(100% - $header-h);
-  padding: 16px;
-  border-radius: $base-radius;
-  box-shadow: $base-shadow;
-  background: var(--gray-1);
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .camPage__back {

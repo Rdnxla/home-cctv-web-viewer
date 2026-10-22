@@ -1,12 +1,12 @@
 import {CounterClockwiseClockIcon} from '@radix-ui/react-icons';
-import {Button, Flex, Grid, Heading, Text} from '@radix-ui/themes';
+import {Button, Flex, Heading, Text} from '@radix-ui/themes';
 import {Link as RouterLink} from 'react-router';
 import {CameraControls} from '@/widgets/camera-control';
 import type {Camera} from '@/entities/camera';
 import {CameraLiveView} from '@/entities/camera';
 import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
-import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
 import {ROUTES} from '@/shared/config/routes';
+import {MediaWithAside} from '@/shared/ui';
 import {OtherCameras} from './OtherCameras';
 
 interface CameraViewProps {
@@ -54,24 +54,18 @@ export function CameraView(props: CameraViewProps) {
           </RouterLink>
         </Button>
       </Flex>
-      <Grid
-        align='start'
-        columns={CONTENT_WITH_ASIDE_COLUMNS}
-        gap='4'
-      >
-        <Flex
-          direction='column'
-          gap='4'
-          minWidth='0'
-        >
+      <MediaWithAside
+        aside={<CameraControls camera={camera} />}
+        mainGap='4'
+        media={
           <CameraLiveView
             camera={camera}
             key={camera.id}
           />
-          <OtherCameras currentId={camera.id} />
-        </Flex>
-        <CameraControls camera={camera} />
-      </Grid>
+        }
+      >
+        <OtherCameras currentId={camera.id} />
+      </MediaWithAside>
     </>
   );
 }
