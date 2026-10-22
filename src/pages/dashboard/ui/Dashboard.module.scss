@@ -1,6 +1,35 @@
-// Страница занимает всё место под шапкой, чтобы колонки сетки тянулись на высоту окна
 .dashboard {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+$columns: minmax(0, 1fr);
+$columns-md: minmax(0, auto) minmax(400px, 1fr);
+
+.dashboard__content {
+  display: grid;
+  grid-template-columns: $columns;
+
+  @media (min-width: 1024px) {
+    container-type: size;
+    grid-template-columns: $columns-md;
+  }
+}
+
+.dashboard__cameras {
+  --rows: 1;
+
+  @for $rows from 2 through 8 {
+    &:has(> * > :nth-child(#{$rows * 2 - 1})) {
+      --rows: #{$rows};
+    }
+  }
+
+  @media (min-width: 1024px) {
+    --card-height: calc((100cqh - var(--space-3) * (var(--rows) - 1)) / var(--rows));
+    --video-width: calc((var(--card-height) - var(--space-3) * 2 - var(--line-height-2) - var(--space-2)) * 16 / 9);
+    width: calc((var(--video-width) + var(--space-3) * 2) * 2 + var(--space-3));
+    max-width: 100%;
+  }
 }
