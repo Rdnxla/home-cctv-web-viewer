@@ -1,6 +1,6 @@
 import {Badge} from '@radix-ui/themes';
-import {CAMERA_STATUS_META} from '../model/status';
-import type {CameraStatus} from '../model/types';
+import {CAMERA_STATUS_META} from '../../model/status';
+import type {CameraStatus} from '@/api/cameras/types';
 import styles from './CameraStatusBadge.module.scss';
 
 interface CameraStatusBadgeProps {

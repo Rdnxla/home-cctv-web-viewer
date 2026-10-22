@@ -1,7 +1,7 @@
 import {VideoIcon} from '@radix-ui/react-icons';
 import {AspectRatio, Flex, Grid, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
-import {useCalloutMessage} from '@/shared/components/callout/CalloutMessage';
+import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import {LoadError} from '@/shared/ui';
 import {CameraGridCard} from './CameraGridCard';
 import type {UseQueryResult} from '@tanstack/react-query';

@@ -1,7 +1,7 @@
 import {Theme} from '@radix-ui/themes';
 import {Outlet} from 'react-router';
 import {TheHeader} from '@/widgets/the-header/TheHeader';
-import {CalloutMessage} from '@/shared/components/callout/CalloutMessage';
+import {CalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import styles from './MainLayout.module.scss';
 
 export function Component() {

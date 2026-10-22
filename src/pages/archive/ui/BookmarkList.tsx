@@ -4,7 +4,7 @@ import type {UseQueryResult} from '@tanstack/react-query';
 import {useCallback} from 'react';
 import type {Bookmark} from '@/entities/bookmark';
 import {useDeleteBookmarkMutation} from '@/entities/bookmark';
-import {useCalloutMessage} from '@/shared/components/callout/CalloutMessage';
+import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import {InlineError} from '@/shared/ui';
 import {formatDateTime} from '../lib/format';
 import {ArchiveList, ArchiveListItem} from './ArchiveList';

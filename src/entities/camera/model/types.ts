@@ -6,5 +6,7 @@ export interface CameraPlaybackParams {
   from: string;
   speed: PlaybackSpeed;
 }
+
+// TODO: Типы тянутся как из data, так и из api. Не консистентно, нужен один источник истины, либо два, для апи и для модели
 export type {Camera, CameraStatus, StreamInfo} from '@/mocks/data/nvrtypes';
 export type {PlayerState} from '@/mocks/handlers/webrtc';

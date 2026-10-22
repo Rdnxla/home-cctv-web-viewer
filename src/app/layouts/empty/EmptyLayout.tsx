@@ -1,6 +1,6 @@
 import {Theme} from '@radix-ui/themes';
 import {Outlet} from 'react-router';
-import {CalloutMessage} from '@/shared/components/callout/CalloutMessage';
+import {CalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import styles from './EmptyLayout.module.scss';
 
 export function Component() {

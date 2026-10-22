@@ -1,7 +1,7 @@
 import {ExclamationTriangleIcon, LinkBreak2Icon, VideoIcon} from '@radix-ui/react-icons';
 import {Text} from '@radix-ui/themes';
-import {CAMERA_STATUS_META} from '../model/status';
-import type {CameraStatus} from '../model/types';
+import {CAMERA_STATUS_META} from '@/shared/model/status';
+import type {CameraStatus} from '@/api/cameras/types';
 
 const STATUS_ICONS: Record<CameraStatus, typeof VideoIcon> = {
   error: ExclamationTriangleIcon,

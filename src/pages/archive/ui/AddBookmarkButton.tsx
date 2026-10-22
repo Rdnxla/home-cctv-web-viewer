@@ -3,7 +3,7 @@ import {Button, Flex, Popover, Text, TextField} from '@radix-ui/themes';
 import type {ChangeEvent, FormEvent} from 'react';
 import {useCallback, useId, useState} from 'react';
 import {BOOKMARK_TITLE_MAX_LENGTH, useCreateBookmarkMutation} from '@/entities/bookmark';
-import {useCalloutMessage} from '@/shared/components/callout/CalloutMessage';
+import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import {formatDateTime} from '../lib/format';
 import {floorToSecond, formatClock} from '../lib/time';
 

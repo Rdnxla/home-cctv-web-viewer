@@ -1,8 +1,8 @@
 import {CheckIcon, CopyIcon} from '@radix-ui/react-icons';
 import {Code, DataList, Flex, IconButton, Text, Tooltip} from '@radix-ui/themes';
 import {useCallback, useState} from 'react';
-import {formatFps, formatResolution, formatValue} from '../lib/format';
-import type {Camera} from '../model/types';
+import {formatFps, formatResolution, formatValue} from '@/shared/lib/format';
+import type {Camera} from '@/api/cameras/types';
 
 const COPIED_RESET_MS = 1500;
 const LABEL_WIDTH = '120px';

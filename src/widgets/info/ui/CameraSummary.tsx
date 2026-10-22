@@ -1,7 +1,8 @@
 import {DataList, Flex, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
 import type {Camera, CameraStatus} from '@/entities/camera';
-import {CAMERA_STATUSES, CameraStatusBadge} from '@/entities/camera';
+import {CAMERA_STATUSES} from '@/shared/model/status';
+import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
 import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {InlineError} from '@/shared/ui';
 
@@ -11,7 +12,6 @@ function countByStatus(cameras: Camera[]) {
   return counts;
 }
 
-/** Сводка по камерам: сколько в сети и разбивка по статусам */
 export function CameraSummary() {
   const {data: cameras, isPending, refetch} = useCamerasQuery();
 

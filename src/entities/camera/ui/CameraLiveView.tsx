@@ -1,5 +1,6 @@
 import {useCallback} from 'react';
 import {useCameraStreamQuery} from '@/api/cameras/cameraQueries';
+import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import type {Camera} from '../model/types';
 import {CameraPlayer} from './CameraPlayer';
 import {StreamPlaceholder} from './StreamPlaceholder';
@@ -9,19 +10,15 @@ interface CameraLiveViewProps {
   className?: string | undefined;
 }
 
-/**
- * Живое видео конкретной камеры: запрашивает параметры потока и подключает плеер.
- * Для камер не в сети поток не запрашивается (`/stream` для них отвечает ошибкой) — вместо видео причина.
- * Потребитель ставит `key={camera.id}`, чтобы при смене камеры WHEP-сессия пересоздавалась.
- */
 export function CameraLiveView(props: CameraLiveViewProps) {
+  const showMessage = useCalloutMessage();
   const {camera, className} = props;
   const isOnline = camera.status === 'online';
   const {data: stream, error, refetch} = useCameraStreamQuery(camera.id, isOnline);
 
   const retryStream = useCallback(() => {
-    refetch().catch(() => ({}));
-  }, [refetch]);
+    refetch().catch((e) => (showMessage(e, 'error')));
+  }, [refetch, showMessage]);
 
   return (
     <CameraPlayer
