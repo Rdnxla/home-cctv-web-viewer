@@ -1,8 +1,8 @@
 import {Card, Flex, Inset, Text} from '@radix-ui/themes';
 import {Link} from 'react-router';
-import type {Camera} from '../model/types';
-import {CameraStatusBadge} from './CameraStatusBadge';
-import {CameraStatusIcon} from './CameraStatusIcon';
+import type {Camera} from '@/api/cameras/types';
+import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
+import {CameraStatusIcon} from '@/shared/ui/cam-status-icon/CameraStatusIcon';
 import styles from './CameraTile.module.scss';
 
 interface CameraTileProps {

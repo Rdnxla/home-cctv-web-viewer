@@ -2,7 +2,7 @@ import './callout.scss';
 import {CheckCircledIcon, CrossCircledIcon, ExclamationTriangleIcon, InfoCircledIcon} from '@radix-ui/react-icons';
 import {Callout} from '@radix-ui/themes';
 import {createContext, useCallback, useContext, useState} from 'react';
-import type {Message, MessageType, ProviderProps, ShowToast} from './types';
+import type {Message, MessageType, ProviderProps, ShowToast} from './model/types';
 
 const CalloutContext = createContext<ShowToast | null>(null);
 

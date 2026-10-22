@@ -1,7 +1,7 @@
 import {Badge, Flex, Heading, ScrollArea, Skeleton} from '@radix-ui/themes';
 import {useCallback, useId} from 'react';
 import type {Camera} from '@/entities/camera';
-import {CameraTile} from '@/entities/camera';
+import {CameraTile} from '@/entities/camera-tile/CameraTile';
 import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {ROUTES} from '@/shared/config/routes';
 import {InlineError} from '@/shared/ui';

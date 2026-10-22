@@ -5,15 +5,23 @@ import {
   ExitFullScreenIcon,
   ReloadIcon,
 } from '@radix-ui/react-icons';
-import {Badge, Button, Flex, IconButton, Spinner, Text, Theme, Tooltip} from '@radix-ui/themes';
+import {
+  Badge,
+  Button,
+  Flex,
+  IconButton,
+  Spinner,
+  Text,
+  Theme,
+  Tooltip
+} from '@radix-ui/themes';
 import type {ReactNode} from 'react';
 import {useCallback, useEffect, useState} from 'react';
 import {captureVideoFrame} from '@/shared/lib/captureVideoFrame';
 import {downloadBlob} from '@/shared/lib/downloadBlob';
 import {useFullscreen} from '@/shared/lib/useFullscreen';
-// Legacy (FSD-001, roadmap M-2): плеер пока лежит в src/mocks
 import {useWebRtcPlayer} from '@/mocks/handlers/webrtc';
-import {formatFps, formatResolution, formatSnapshotFileName} from '../lib/format';
+import {formatFps, formatResolution, formatSnapshotFileName} from '@/shared/lib/format';
 import type {PlayerState, StreamInfo} from '../model/types';
 import styles from './CameraPlayer.module.scss';
 
@@ -52,6 +60,31 @@ interface PlayerSurfaceProps {
   paused: boolean;
   stream: StreamInfo | undefined;
   title: string;
+}
+
+interface ToolbarButtonProps {
+  disabled?: boolean;
+  icon: ReactNode;
+  /** Подсказка и доступное имя кнопки */
+  label: string;
+  onClick: () => void;
+}
+
+function ToolbarButton(props: ToolbarButtonProps) {
+  const {disabled = false, icon, label, onClick} = props;
+  return (
+    <Tooltip content={label}>
+      <IconButton
+        aria-label={label}
+        color='gray'
+        disabled={disabled}
+        onClick={onClick}
+        variant='soft'
+      >
+        {icon}
+      </IconButton>
+    </Tooltip>
+  );
 }
 
 function getStreamSummary(stream: StreamInfo) {
@@ -179,38 +212,23 @@ function PlayerSurface(props: PlayerSurfaceProps) {
           gap='2'
           justify='end'
         >
-          <Tooltip content='Переподключить'>
-            <IconButton
-              aria-label='Переподключить'
-              color='gray'
-              onClick={onReconnect}
-              variant='soft'
-            >
-              <ReloadIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip content='Сделать снимок'>
-            <IconButton
-              aria-label='Сделать снимок'
-              color='gray'
-              disabled={!isPlaying}
-              onClick={takeSnapshot}
-              variant='soft'
-            >
-              <CameraIcon />
-            </IconButton>
-          </Tooltip>
+          <ToolbarButton
+            icon={<ReloadIcon />}
+            label='Переподключить'
+            onClick={onReconnect}
+          />
+          <ToolbarButton
+            disabled={!isPlaying}
+            icon={<CameraIcon />}
+            label='Сделать снимок'
+            onClick={takeSnapshot}
+          />
           {fullscreen.isSupported ? (
-            <Tooltip content={fullscreen.isActive ? 'Выйти из полноэкранного режима' : 'Во весь экран'}>
-              <IconButton
-                aria-label={fullscreen.isActive ? 'Выйти из полноэкранного режима' : 'Во весь экран'}
-                color='gray'
-                onClick={fullscreen.toggle}
-                variant='soft'
-              >
-                {fullscreen.isActive ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-              </IconButton>
-            </Tooltip>
+            <ToolbarButton
+              icon={fullscreen.isActive ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
+              label={fullscreen.isActive ? 'Выйти из полноэкранного режима' : 'Во весь экран'}
+              onClick={fullscreen.toggle}
+            />
           ) : null}
         </Flex>
       ) : null}

@@ -1,7 +1,9 @@
 import {ExclamationTriangleIcon, LinkBreak2Icon} from '@radix-ui/react-icons';
 import {Callout, Code, Flex, Heading, Separator, Text} from '@radix-ui/themes';
 import type {Camera} from '@/entities/camera';
-import {CameraDetailsList, CameraStatusBadge, formatLastSeen} from '@/entities/camera';
+import { CameraDetailsList } from '@/entities/cam-details/CameraDetailsList';
+import {formatLastSeen} from '@/shared/lib/format';
+import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
 import styles from './CameraControls.module.scss';
 
 interface CameraStatusCalloutProps {

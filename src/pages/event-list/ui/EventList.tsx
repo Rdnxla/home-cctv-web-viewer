@@ -2,7 +2,7 @@ import {ReloadIcon} from '@radix-ui/react-icons';
 import {Flex, Heading, IconButton, Spinner, Text, Tooltip} from '@radix-ui/themes';
 import {useCallback, useEffect} from 'react';
 import {useEventsQuery} from '@/entities/event';
-import {useCalloutMessage} from '@/shared/components/callout/CalloutMessage';
+import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import {formatCount} from '@/shared/lib/pluralize';
 import {LoadError} from '@/shared/ui';
 import {hasActiveFilters} from '../model/eventListParams';
