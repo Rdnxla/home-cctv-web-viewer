@@ -1,6 +1,5 @@
 import {Flex, Grid, Heading, Text} from '@radix-ui/themes';
 import {InfoBlock} from '@/widgets/info';
-import {CONTENT_WITH_ASIDE_COLUMNS} from '@/shared/config/layout';
 import {formatCount} from '@/shared/lib/pluralize';
 import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {CameraGrid} from './CameraGrid';
@@ -41,11 +40,12 @@ export function Component() {
         ) : null}
       </Flex>
       <Grid
-        columns={CONTENT_WITH_ASIDE_COLUMNS}
+        className={styles.dashboard__content}
         flexGrow='1'
         gap='4'
       >
         <Flex
+          className={styles.dashboard__cameras}
           direction='column'
           gap='3'
           minWidth='0'
