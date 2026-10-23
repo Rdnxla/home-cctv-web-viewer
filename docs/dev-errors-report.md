@@ -26,3 +26,20 @@
 - **Where:** `src/pages/event-list/ui/EventTable.tsx`.
 - **Issue:** the rows now scroll inside the table. If you scroll to the bottom and then switch to another page, sort order or filter, the new rows also open at the bottom.
 - **Impact:** minor UX issue. Possible fix: scroll the table's viewport (`[data-radix-scroll-area-viewport]`) back to the top when the page changes.
+
+## 2026-10-23 — header (`widgets/the-header`)
+
+### Open: `NvrInfo` is declared twice
+- **Where:** `src/entities/nvr/model/types.ts` (new, used by the header) and `src/mocks/data/nvrtypes.ts` (used by the `GET /api/nvr` mock).
+- **Issue:** the header needed the NVR name, and there was no client for `GET /api/nvr`. The domain type was added to `entities/nvr` because production code must not import `@/mocks/**`. The mock still uses its own copy.
+- **Impact:** the two types can drift apart. Per the mocks boundary rule, `mocks/data/nvr.ts` should import `NvrInfo` from `@/entities/nvr` and the copy in `nvrtypes.ts` should be removed.
+
+### Open: `the-header` slice has no `ui/` segment
+- **Where:** `src/widgets/the-header/` (`TheHeader.tsx`, `DeviceInfo.tsx` and their styles sit at the slice root).
+- **Issue:** the other widgets keep components in `ui/`. The files were left in place because the shell was unavailable for a move during this change. The slice now has an `index.ts`, so only that file needs updating after the move.
+- **Impact:** inconsistent slice structure; nothing breaks.
+
+### Open: CLAUDE.md lists camera queries in the wrong place
+- **Where:** `CLAUDE.md`, rule 6, and the "Data flow" section.
+- **Issue:** these say `cameraKeys`, `useCamerasQuery`, `useCameraQuery`, etc. are exported from `@/entities/camera`. They actually live in `src/api/cameras/cameraQueries.ts`, and `entities/camera/index.ts` doesn't export them.
+- **Impact:** following the rule literally fails to compile. Either the migration to `entities/camera/api` still needs doing, or the docs are ahead of the code.
