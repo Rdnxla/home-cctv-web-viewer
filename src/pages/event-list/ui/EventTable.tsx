@@ -192,7 +192,7 @@ export function EventTable(props: EventTableProps) {
       className={isStale ? `${styles.eventTable} ${styles.eventTable__stale}` : styles.eventTable}
       variant='surface'
     >
-      <Table.Header>
+      <Table.Header className={styles.eventTable__header}>
         <Table.Row>
           <ColumnHeader
             field='occurredAt'

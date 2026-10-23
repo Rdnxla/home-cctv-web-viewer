@@ -1,5 +1,5 @@
 import {Cross2Icon} from '@radix-ui/react-icons';
-import {Box, Button, Flex, ScrollArea, SegmentedControl, Select} from '@radix-ui/themes';
+import {Box, Button, Flex, Select} from '@radix-ui/themes';
 import {useCallback} from 'react';
 import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import type {EventCategory, EventListParams, EventType} from '@/entities/event';
@@ -16,7 +16,6 @@ import {SearchField} from '@/shared/ui';
 import type {EventListFilters} from '../model/eventListParams';
 import {EventTypeFilter} from './EventTypeFilter';
 
-/** Значение «без фильтра» для SegmentedControl и Select (Radix не допускает пустую строку) */
 const ALL = 'all';
 
 const countFormat = new Intl.NumberFormat('ru');
@@ -82,110 +81,100 @@ export function EventFilters(props: EventFiltersProps) {
 
   return (
     <Flex
-      direction='column'
-      gap='3'
+      align='center'
+      gap='2'
+      wrap='wrap'
     >
-      <ScrollArea
-        scrollbars='horizontal'
-        type='hover'
+      <Box
+        flexBasis='260px'
+        flexGrow='1'
       >
-        <Box pb='2'>
-          <SegmentedControl.Root
-            aria-label='Категория событий'
-            onValueChange={changeCategory}
-            value={category ?? ALL}
-          >
-            <SegmentedControl.Item value={ALL}>{withCount('Все', totalCount)}</SegmentedControl.Item>
-            {EVENT_CATEGORIES.map(item => (
-              <SegmentedControl.Item
-                key={item}
-                value={item}
-              >
-                {withCount(EVENT_CATEGORY_META[item].pluralLabel, categoryCounts?.[item])}
-              </SegmentedControl.Item>
-            ))}
-          </SegmentedControl.Root>
-        </Box>
-      </ScrollArea>
-
-      <Flex
-        align='center'
-        gap='2'
-        wrap='wrap'
-      >
-        <Box
-          flexBasis='260px'
-          flexGrow='1'
-        >
-          <SearchField
-            label='Поиск по журналу событий'
-            onChange={changeQuery}
-            placeholder='Поиск по описанию, типу или источнику'
-            value={params.query}
-          />
-        </Box>
-
-        <EventTypeFilter
-          category={category}
-          onChange={changeTypes}
-          value={params.types}
+        <SearchField
+          label='Поиск по журналу событий'
+          onChange={changeQuery}
+          placeholder='Поиск по описанию, типу или источнику'
+          value={params.query}
         />
+      </Box>
 
-        <Select.Root
-          onValueChange={changeSource}
-          value={params.source ?? ALL}
+      <Select.Root
+        onValueChange={changeCategory}
+        value={category ?? ALL}
+      >
+        <Select.Trigger aria-label='Категория событий' />
+        <Select.Content position='popper'>
+          <Select.Item value={ALL}>{withCount('Все категории', totalCount)}</Select.Item>
+          {EVENT_CATEGORIES.map(item => (
+            <Select.Item
+              key={item}
+              value={item}
+            >
+              {withCount(EVENT_CATEGORY_META[item].pluralLabel, categoryCounts?.[item])}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
+
+      <EventTypeFilter
+        category={category}
+        onChange={changeTypes}
+        value={params.types}
+      />
+
+      <Select.Root
+        onValueChange={changeSource}
+        value={params.source ?? ALL}
+      >
+        <Select.Trigger aria-label='Источник' />
+        <Select.Content position='popper'>
+          <Select.Item value={ALL}>Все источники</Select.Item>
+          <Select.Item value={DEVICE_SOURCE}>Устройство (NVR)</Select.Item>
+          {cameras && cameras.length > 0 ? (
+            <>
+              <Select.Separator />
+              <Select.Group>
+                <Select.Label>Камеры</Select.Label>
+                {cameras.map(camera => (
+                  <Select.Item
+                    key={camera.id}
+                    value={camera.id}
+                  >
+                    {camera.name}
+                  </Select.Item>
+                ))}
+              </Select.Group>
+            </>
+          ) : null}
+        </Select.Content>
+      </Select.Root>
+
+      <Select.Root
+        onValueChange={changePeriod}
+        value={params.period}
+      >
+        <Select.Trigger aria-label='Период' />
+        <Select.Content position='popper'>
+          {EVENT_PERIODS.map(period => (
+            <Select.Item
+              key={period}
+              value={period}
+            >
+              {EVENT_PERIOD_META[period].label}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
+
+      {hasActiveFilters ? (
+        <Button
+          color='gray'
+          onClick={onReset}
+          variant='ghost'
         >
-          <Select.Trigger aria-label='Источник' />
-          <Select.Content position='popper'>
-            <Select.Item value={ALL}>Все источники</Select.Item>
-            <Select.Item value={DEVICE_SOURCE}>Устройство (NVR)</Select.Item>
-            {cameras && cameras.length > 0 ? (
-              <>
-                <Select.Separator />
-                <Select.Group>
-                  <Select.Label>Камеры</Select.Label>
-                  {cameras.map(camera => (
-                    <Select.Item
-                      key={camera.id}
-                      value={camera.id}
-                    >
-                      {camera.name}
-                    </Select.Item>
-                  ))}
-                </Select.Group>
-              </>
-            ) : null}
-          </Select.Content>
-        </Select.Root>
-
-        <Select.Root
-          onValueChange={changePeriod}
-          value={params.period}
-        >
-          <Select.Trigger aria-label='Период' />
-          <Select.Content position='popper'>
-            {EVENT_PERIODS.map(period => (
-              <Select.Item
-                key={period}
-                value={period}
-              >
-                {EVENT_PERIOD_META[period].label}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-
-        {hasActiveFilters ? (
-          <Button
-            color='gray'
-            onClick={onReset}
-            variant='ghost'
-          >
-            <Cross2Icon />
-            Сбросить
-          </Button>
-        ) : null}
-      </Flex>
+          <Cross2Icon />
+          Сбросить
+        </Button>
+      ) : null}
     </Flex>
   );
 }
