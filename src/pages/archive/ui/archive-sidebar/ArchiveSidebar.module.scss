@@ -1,4 +1,4 @@
-.archiveList {
+.archiveSidebar__list {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -9,13 +9,13 @@
   list-style: none;
 }
 
-.archiveList__item {
+.archiveSidebar__item {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.archiveList__button {
+.archiveSidebar__button {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -50,7 +50,7 @@
   }
 }
 
-.archiveList__current {
+.archiveSidebar__current {
   background-color: var(--accent-a3);
   box-shadow: inset 3px 0 0 var(--accent-9);
 

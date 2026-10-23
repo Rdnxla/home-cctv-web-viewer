@@ -1,9 +1,8 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import type {PlaybackSpeed, PlayerState} from '@/entities/camera';
 import {useCameraPlaybackQuery} from '@/api/cameras/cameraQueries';
-import {findRangeAt, snapToRecording} from '../lib/coverage';
-import type {TimeRange} from '../lib/time';
-import {floorToSecond, SECOND_MS} from '../lib/time';
+import type {TimeRange} from '../../lib/time';
+import {floorToSecond, SECOND_MS} from '../../lib/time';
 
 const TICK_MS = 250;
 /** Ближе к «сейчас» не перематываем: запись отстаёт от прямого эфира */
@@ -52,6 +51,20 @@ interface PositionInput {
   target: number | null;
 }
 
+/** Отрезок записи, в который попадает момент */
+function findRangeAt(ranges: TimeRange[], time: number) {
+  return ranges.find(range => range.start <= time && time < range.end);
+}
+
+/** С чего начать воспроизведение: сам `time`, если в этот момент есть запись, иначе начало следующей; `null` — дальше записей нет */
+function snapToRecording(ranges: TimeRange[], time: number) {
+  for (const range of ranges) {
+    if (time < range.start) return range.start;
+    if (time < range.end) return time;
+  }
+  return null;
+}
+
 function resolveStatus(input: StatusInput): PlaybackStatus {
   if (input.target === null) return 'idle';
   if (!input.isCoverageLoaded) return 'loading';
@@ -77,9 +90,6 @@ export type PlaybackStatus =
   | 'no-recording'
   | 'paused'
   | 'playing';
-
-/** Почему воспроизведение остановилось само: записи кончились или запись догнала текущее время */
-export type PlaybackEndReason = Exclude<StopReason, 'paused'>;
 
 /**
  * Воспроизведение архива камеры. Момент из URL — цель перехода: если записи в этот момент нет, сеанс начинается
