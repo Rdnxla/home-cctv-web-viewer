@@ -1,5 +1,15 @@
+// Растягивается на свободное место страницы; строки прокручивает встроенный в Table.Root ScrollArea
 .eventTable {
+  flex: 1;
+  min-height: 200px;
   transition: opacity .15s ease-in-out;
+}
+
+.eventTable__header {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  background: linear-gradient(var(--gray-a2), var(--gray-a2)), var(--color-panel-solid);
 }
 
 .eventTable__stale {

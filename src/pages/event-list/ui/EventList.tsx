@@ -1,5 +1,4 @@
-import {ReloadIcon} from '@radix-ui/react-icons';
-import {Flex, Heading, IconButton, Spinner, Text, Tooltip} from '@radix-ui/themes';
+import {Flex, Heading, Text} from '@radix-ui/themes';
 import {useCallback, useEffect} from 'react';
 import {useEventsQuery} from '@/entities/event';
 import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
@@ -14,10 +13,9 @@ import {EventTable} from './EventTable';
 
 const EVENT_FORMS = {few: 'события', many: 'событий', one: 'событие'};
 
-/** Журнал событий регистратора: тревоги, предупреждения и детекции с фильтрами, сортировкой и пагинацией */
 export function Component() {
   const {params, replacePage, resetFilters, setFilters, setPage, setPageSize, toggleSort} = useEventListParams();
-  const {data, error, isError, isFetching, isPlaceholderData, isRefetchError, refetch} = useEventsQuery(params);
+  const {data, error, isError, isPlaceholderData, isRefetchError, refetch} = useEventsQuery(params);
   const showMessage = useCalloutMessage();
   const isFiltered = hasActiveFilters(params);
 
@@ -41,7 +39,9 @@ export function Component() {
       <title>Журнал событий</title>
       <Flex
         direction='column'
+        flexGrow='1'
         gap='4'
+        minHeight='0'
       >
         <Flex
           align='center'
@@ -68,17 +68,6 @@ export function Component() {
               </Text>
             ) : null}
           </Flex>
-          <Tooltip content='Обновить'>
-            <IconButton
-              aria-label='Обновить журнал'
-              color='gray'
-              disabled={isFetching}
-              onClick={retry}
-              variant='soft'
-            >
-              {isFetching ? <Spinner /> : <ReloadIcon />}
-            </IconButton>
-          </Tooltip>
         </Flex>
 
         <EventFilters
