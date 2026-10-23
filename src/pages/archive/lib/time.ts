@@ -1,6 +1,19 @@
+import type {NvrEvent} from '@/entities/event';
+
 const DAY_KEY_PATTERN = /^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})$/u;
 const DATE_TIME_PATTERN =
   /^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})T(?<hours>\d{2}):(?<minutes>\d{2}):(?<seconds>\d{2})$/u;
+/** Событие показываем с запасом, чтобы было видно, что ему предшествовало */
+const EVENT_PREROLL_MS = 5000;
+
+const dateTimeFormat = new Intl.DateTimeFormat('ru', {
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  month: '2-digit',
+  second: '2-digit',
+  year: 'numeric',
+});
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -75,6 +88,11 @@ export function formatClock(time: number) {
   return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
+/** `17.10.2026, 14:05:09` */
+export function formatDateTime(time: number) {
+  return dateTimeFormat.format(time);
+}
+
 /** `2026-10-17T14:05:09` — момент в URL: местное время без часового пояса, читается человеком */
 export function formatLocalDateTime(time: number) {
   return `${toDayKey(time)}T${formatClock(time)}`;
@@ -82,4 +100,9 @@ export function formatLocalDateTime(time: number) {
 
 export function parseLocalDateTime(value: string | null) {
   return parseLocal(DATE_TIME_PATTERN, value);
+}
+
+/** С какого момента воспроизводить событие */
+export function getEventSeekTime(event: NvrEvent) {
+  return Date.parse(event.occurredAt) - EVENT_PREROLL_MS;
 }
