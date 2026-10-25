@@ -4,15 +4,17 @@ import {getNvrInfo} from './nvrApi';
 
 const NVR_KEY = 'nvr';
 
-export const nvrKeys = {
+const nvrKeys = {
   all: [NVR_KEY] as const,
   info: () => [NVR_KEY, 'info'] as const,
 };
 
-export function useNvrInfoQuery() {
+function useNvrInfoQuery() {
   return useQuery({
     queryFn: getNvrInfo,
     queryKey: nvrKeys.info(),
     retry: retryUnlessClientError,
   });
 }
+
+export {nvrKeys, useNvrInfoQuery};

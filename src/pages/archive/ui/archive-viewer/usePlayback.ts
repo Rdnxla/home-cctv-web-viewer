@@ -77,15 +77,7 @@ function resolvePosition(input: PositionInput) {
   return input.from;
 }
 
-export type PlaybackStatus =
-  | 'connecting'
-  | 'ended'
-  | 'failed'
-  | 'idle'
-  | 'loading'
-  | 'no-recording'
-  | 'paused'
-  | 'playing';
+type PlaybackStatus = 'connecting' | 'ended' | 'failed' | 'idle' | 'loading' | 'no-recording' | 'paused' | 'playing';
 
 /**
  * Воспроизведение архива камеры. Момент из URL — цель перехода: если записи в этот момент нет, сеанс начинается
@@ -94,7 +86,7 @@ export type PlaybackStatus =
  * с места паузы. В конце записи воспроизведение перескакивает разрыв, после полуночи — переходит на следующий день,
  * а когда записей дальше нет или запись догнала текущее время — останавливается.
  */
-export function usePlayback(options: UsePlaybackOptions) {
+function usePlayback(options: UsePlaybackOptions) {
   const {cameraId, coverage, day, onSeek, target} = options;
   const [speed, setSpeedValue] = useState<PlaybackSpeed>(1);
   // Новый сеанс с того же места (повторный переход, переподключение) — та же цель, другой номер
@@ -259,4 +251,7 @@ export function usePlayback(options: UsePlaybackOptions) {
   };
 }
 
-export type Playback = ReturnType<typeof usePlayback>;
+type Playback = ReturnType<typeof usePlayback>;
+
+export type {Playback, PlaybackStatus};
+export {usePlayback};

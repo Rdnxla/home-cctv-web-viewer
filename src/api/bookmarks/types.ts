@@ -1,6 +1,6 @@
-export const BOOKMARK_TITLE_MAX_LENGTH = 80;
+const BOOKMARK_TITLE_MAX_LENGTH = 80;
 
-export interface Bookmark {
+interface Bookmark {
   at: string;
   cameraId: string;
   createdAt: string;
@@ -8,8 +8,11 @@ export interface Bookmark {
   title: string;
 }
 
-export interface CreateBookmarkPayload {
+interface CreateBookmarkPayload {
   at: string;
   cameraId: string;
   title: string;
 }
+
+export type {Bookmark, CreateBookmarkPayload};
+export {BOOKMARK_TITLE_MAX_LENGTH};

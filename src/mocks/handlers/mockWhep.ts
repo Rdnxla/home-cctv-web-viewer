@@ -75,7 +75,7 @@ function waitForIce(pc: RTCPeerConnection) {
   });
 }
 
-export async function createMockWhepSession(offerSdp: string, label: string, playback?: PlaybackClock) {
+async function createMockWhepSession(offerSdp: string, label: string, playback?: PlaybackClock) {
   // STUN не нужен: обе стороны в одной вкладке
   const pc = new RTCPeerConnection({iceServers: []});
   const media = createCanvasStream(label, playback);
@@ -102,7 +102,9 @@ export async function createMockWhepSession(offerSdp: string, label: string, pla
   return {answerSdp: pc.localDescription!.sdp, sessionId};
 }
 
-export function closeMockWhepSession(sessionId: string) {
+function closeMockWhepSession(sessionId: string) {
   sessions.get(sessionId)?.stop();
   sessions.delete(sessionId);
 }
+
+export {closeMockWhepSession, createMockWhepSession};

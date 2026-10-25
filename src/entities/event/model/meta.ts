@@ -18,15 +18,15 @@ interface EventPeriodMeta {
   label: string;
 }
 
-export const DEVICE_SOURCE_LABEL = 'Устройство';
+const DEVICE_SOURCE_LABEL = 'Устройство';
 
-export const EVENT_CATEGORY_META: Record<EventCategory, EventCategoryMeta> = {
+const EVENT_CATEGORY_META: Record<EventCategory, EventCategoryMeta> = {
   alarm: {color: 'red', label: 'Тревога', pluralLabel: 'Тревоги', rank: 3},
   detection: {color: 'blue', label: 'Детекция', pluralLabel: 'Детекции', rank: 1},
   warning: {color: 'amber', label: 'Предупреждение', pluralLabel: 'Предупреждения', rank: 2},
 };
 
-export const EVENT_TYPE_META: Record<EventType, EventTypeMeta> = {
+const EVENT_TYPE_META: Record<EventType, EventTypeMeta> = {
   disk_error: {category: 'alarm', label: 'Ошибка диска'},
   disk_full: {category: 'warning', label: 'Диск заполняется'},
   intrusion: {category: 'alarm', label: 'Вторжение в зону'},
@@ -42,7 +42,7 @@ export const EVENT_TYPE_META: Record<EventType, EventTypeMeta> = {
   video_loss: {category: 'alarm', label: 'Потеря видеосигнала'},
 };
 
-export const EVENT_PERIOD_META: Record<EventPeriod, EventPeriodMeta> = {
+const EVENT_PERIOD_META: Record<EventPeriod, EventPeriodMeta> = {
   '1h': {label: 'Последний час'},
   '7d': {label: 'Последние 7 дней'},
   '24h': {label: 'Последние 24 часа'},
@@ -50,6 +50,8 @@ export const EVENT_PERIOD_META: Record<EventPeriod, EventPeriodMeta> = {
   all: {label: 'Всё время'},
 };
 
-export function getEventTypesByCategory(category: EventCategory) {
+function getEventTypesByCategory(category: EventCategory) {
   return EVENT_TYPES.filter(type => EVENT_TYPE_META[type].category === category);
 }
+
+export {DEVICE_SOURCE_LABEL, EVENT_CATEGORY_META, EVENT_PERIOD_META, EVENT_TYPE_META, getEventTypesByCategory};

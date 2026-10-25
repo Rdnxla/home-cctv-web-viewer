@@ -1,13 +1,13 @@
 import type {ApiErrorCodeType} from './authErrorCodes';
 import {ApiErrorCode} from './authErrorCodes';
 
-export interface ApiError extends Error {
+interface ApiError extends Error {
   status: number;
   code: ApiErrorCodeType;
   data: Record<string, unknown>;
 }
 
-export function createApiError(
+function createApiError(
   status: number,
   code: ApiErrorCodeType,
   message: string,
@@ -21,9 +21,9 @@ export function createApiError(
   return error;
 }
 
-export const isApiError = (error: unknown): error is ApiError => error instanceof Error && error.name === 'ApiError';
+const isApiError = (error: unknown): error is ApiError => error instanceof Error && error.name === 'ApiError';
 
-export async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
+async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
     ...options,
   });
@@ -41,3 +41,6 @@ export async function apiFetch<T>(url: string, options?: RequestInit): Promise<T
 
   return body as T;
 }
+
+export type {ApiError};
+export {apiFetch, createApiError, isApiError};

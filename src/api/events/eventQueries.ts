@@ -5,13 +5,13 @@ import type {EventListParams, EventRangeParams} from './types';
 
 const EVENTS_KEY = 'events';
 
-export const eventKeys = {
+const eventKeys = {
   all: [EVENTS_KEY] as const,
   list: (params: EventListParams) => [EVENTS_KEY, 'list', params] as const,
   range: (params: EventRangeParams | null) => [EVENTS_KEY, 'range', params] as const,
 };
 
-export function useEventsQuery(params: EventListParams) {
+function useEventsQuery(params: EventListParams) {
   return useQuery({
     placeholderData: keepPreviousData,
     queryFn: () => getEvents(params),
@@ -20,10 +20,12 @@ export function useEventsQuery(params: EventListParams) {
   });
 }
 
-export function useEventsInRangeQuery(params: EventRangeParams | null) {
+function useEventsInRangeQuery(params: EventRangeParams | null) {
   return useQuery({
     queryFn: params === null ? skipToken : () => getEventsInRange(params),
     queryKey: eventKeys.range(params),
     retry: retryUnlessClientError,
   });
 }
+
+export {eventKeys, useEventsInRangeQuery, useEventsQuery};

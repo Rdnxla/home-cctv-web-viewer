@@ -10,13 +10,15 @@ interface PluralForms {
 const pluralRules = new Intl.PluralRules('ru');
 const numberFormat = new Intl.NumberFormat('ru');
 
-export function pluralize(count: number, forms: PluralForms) {
+function pluralize(count: number, forms: PluralForms) {
   const rule = pluralRules.select(count);
   if (rule === 'one') return forms.one;
   if (rule === 'few') return forms.few;
   return forms.many;
 }
 
-export function formatCount(count: number, forms: PluralForms) {
+function formatCount(count: number, forms: PluralForms) {
   return `${numberFormat.format(count)} ${pluralize(count, forms)}`;
 }
+
+export {formatCount, pluralize};

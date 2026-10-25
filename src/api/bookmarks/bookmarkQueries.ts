@@ -4,12 +4,12 @@ import {createBookmark, deleteBookmark, getBookmarks} from './bookmarkApi';
 
 const BOOKMARKS_KEY = 'bookmarks';
 
-export const bookmarkKeys = {
+const bookmarkKeys = {
   all: [BOOKMARKS_KEY] as const,
   list: (cameraId: string) => [BOOKMARKS_KEY, 'list', cameraId] as const,
 };
 
-export function useBookmarksQuery(cameraId: string) {
+function useBookmarksQuery(cameraId: string) {
   return useQuery({
     queryFn: () => getBookmarks(cameraId),
     queryKey: bookmarkKeys.list(cameraId),
@@ -17,7 +17,7 @@ export function useBookmarksQuery(cameraId: string) {
   });
 }
 
-export function useCreateBookmarkMutation() {
+function useCreateBookmarkMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -26,7 +26,7 @@ export function useCreateBookmarkMutation() {
   });
 }
 
-export function useDeleteBookmarkMutation() {
+function useDeleteBookmarkMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -34,3 +34,5 @@ export function useDeleteBookmarkMutation() {
     onSuccess: () => queryClient.invalidateQueries({queryKey: bookmarkKeys.all}),
   });
 }
+
+export {bookmarkKeys, useBookmarksQuery, useCreateBookmarkMutation, useDeleteBookmarkMutation};

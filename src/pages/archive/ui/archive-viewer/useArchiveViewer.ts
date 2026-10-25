@@ -100,7 +100,7 @@ function getDaySummary(recordings: RecordingListResponse, segments: RecordingSeg
   return `Записано ${formatDuration(recordedMs)} · ${formatCount(items.length, FILE_FORMS)}`;
 }
 
-export interface ArchiveViewerProps {
+interface ArchiveViewerProps {
   camera: Camera;
   day: TimeRange;
   moment: number | null;
@@ -109,7 +109,7 @@ export interface ArchiveViewerProps {
   recordingsQuery: UseQueryResult<RecordingListResponse>;
 }
 
-export function useArchiveViewer(props: ArchiveViewerProps) {
+function useArchiveViewer(props: ArchiveViewerProps) {
   const {camera, day, moment, onOpenMoment, onSeek, recordingsQuery} = props;
   const {data: recordings, error: recordingsError, refetch: refetchRecordings} = recordingsQuery;
   const now = useNow(NOW_REFRESH_MS);
@@ -218,3 +218,6 @@ export function useArchiveViewer(props: ArchiveViewerProps) {
     timeline,
   };
 }
+
+export type {ArchiveViewerProps};
+export {useArchiveViewer};

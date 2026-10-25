@@ -16,7 +16,7 @@ const PERIOD_DURATION_MS: Record<EventPeriod, number | null> = {
 };
 
 /** Период превращается в границу `from` в момент запроса, поэтому повторный запрос с тем же периодом получает актуальное окно */
-export function getEvents(params: EventListParams, now = Date.now()) {
+function getEvents(params: EventListParams, now = Date.now()) {
   const search = new URLSearchParams({
     order: params.order,
     page: String(params.page),
@@ -37,7 +37,7 @@ export function getEvents(params: EventListParams, now = Date.now()) {
   return apiFetch<EventListResponse>(`${EVENTS_URL}?${search.toString()}`);
 }
 
-export function getEventsInRange(params: EventRangeParams) {
+function getEventsInRange(params: EventRangeParams) {
   const search = new URLSearchParams({
     from: params.from,
     order: 'asc',
@@ -50,3 +50,5 @@ export function getEventsInRange(params: EventRangeParams) {
 
   return apiFetch<EventListResponse>(`${EVENTS_URL}?${search.toString()}`);
 }
+
+export {getEvents, getEventsInRange};

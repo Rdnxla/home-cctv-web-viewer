@@ -1,4 +1,4 @@
-export const ApiErrorCode = {
+const ApiErrorCode = {
   accountLocked: 'ACCOUNT_LOCKED',
   bookmarkNotFound: 'BOOKMARK_NOT_FOUND',
   cameraNotFound: 'CAMERA_NOT_FOUND',
@@ -18,4 +18,7 @@ export const ApiErrorCode = {
   validationError: 'VALIDATION_ERROR',
 } as const;
 
-export type ApiErrorCodeType = (typeof ApiErrorCode)[keyof typeof ApiErrorCode];
+type ApiErrorCodeType = (typeof ApiErrorCode)[keyof typeof ApiErrorCode];
+
+export type {ApiErrorCodeType};
+export {ApiErrorCode};

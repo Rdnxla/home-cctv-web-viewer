@@ -74,23 +74,25 @@ function storeBookmarks(list: Bookmark[]) {
 
 let bookmarks: Bookmark[] = readStoredBookmarks() ?? createSeedBookmarks(Date.now());
 
-export function listBookmarks(cameraId: string | null) {
+function listBookmarks(cameraId: string | null) {
   return bookmarks
     .filter(bookmark => cameraId === null || bookmark.cameraId === cameraId)
     .sort((a, b) => b.at.localeCompare(a.at));
 }
 
-export function addBookmark(payload: CreateBookmarkPayload, now: number) {
+function addBookmark(payload: CreateBookmarkPayload, now: number) {
   const bookmark: Bookmark = {...payload, createdAt: new Date(now).toISOString(), id: `bm-${crypto.randomUUID()}`};
   bookmarks = [...bookmarks, bookmark];
   storeBookmarks(bookmarks);
   return bookmark;
 }
 
-export function removeBookmark(id: string) {
+function removeBookmark(id: string) {
   const next = bookmarks.filter(bookmark => bookmark.id !== id);
   if (next.length === bookmarks.length) return false;
   bookmarks = next;
   storeBookmarks(bookmarks);
   return true;
 }
+
+export {addBookmark, listBookmarks, removeBookmark};

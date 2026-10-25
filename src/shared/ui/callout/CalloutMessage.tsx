@@ -6,7 +6,7 @@ import type {Message, MessageType, ProviderProps, ShowToast} from './model/types
 
 const CalloutContext = createContext<ShowToast | null>(null);
 
-export function CalloutMessage({children}: ProviderProps) {
+function CalloutMessage({children}: ProviderProps) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const colors = {
@@ -58,10 +58,12 @@ export function CalloutMessage({children}: ProviderProps) {
   );
 }
 
-export function useCalloutMessage() {
+function useCalloutMessage() {
   const context = useContext(CalloutContext);
   if (!context) {
     throw new Error('useCalloutMessage должен использоваться внутри CalloutMessage');
   }
   return context;
 }
+
+export {CalloutMessage, useCalloutMessage};
