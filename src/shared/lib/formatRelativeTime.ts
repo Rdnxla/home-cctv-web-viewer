@@ -5,7 +5,6 @@ const DAY_MS = 24 * HOUR_MS;
 const relativeTimeFormat = new Intl.RelativeTimeFormat('ru', {numeric: 'auto'});
 const dateTimeFormat = new Intl.DateTimeFormat('ru', {dateStyle: 'short', timeStyle: 'short'});
 
-/** «только что», «47 минут назад», «5 часов назад», дальше — дата и время. Некорректная дата — `—`. */
 export function formatRelativeTime(isoDate: string, now = Date.now()) {
   const time = Date.parse(isoDate);
   if (Number.isNaN(time)) return '—';

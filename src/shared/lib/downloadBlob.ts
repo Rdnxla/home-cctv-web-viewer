@@ -1,4 +1,3 @@
-/** Сохраняет Blob как файл через временную ссылку */
 export function downloadBlob(blob: Blob, fileName: string) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');

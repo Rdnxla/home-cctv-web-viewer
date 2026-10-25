@@ -25,7 +25,6 @@
   white-space: nowrap;
 }
 
-// Тревоги выделены полосой слева, чтобы их было видно при беглом просмотре
 .eventTable__alarmRow > :first-child {
   box-shadow: inset 3px 0 0 var(--red-9);
 }

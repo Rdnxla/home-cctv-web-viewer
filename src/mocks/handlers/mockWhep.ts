@@ -10,7 +10,6 @@ interface Session {
   stop: () => void;
 }
 
-/** Воспроизведение архива: с какого момента и с какой скоростью идёт время в кадре */
 interface PlaybackClock {
   from: number;
   speed: number;
@@ -76,7 +75,6 @@ function waitForIce(pc: RTCPeerConnection) {
   });
 }
 
-/** `playback` — сеанс воспроизведения архива: в кадре идёт время записи, а не текущее */
 export async function createMockWhepSession(offerSdp: string, label: string, playback?: PlaybackClock) {
   // STUN не нужен: обе стороны в одной вкладке
   const pc = new RTCPeerConnection({iceServers: []});

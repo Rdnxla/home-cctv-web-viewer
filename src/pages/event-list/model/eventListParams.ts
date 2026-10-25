@@ -1,12 +1,8 @@
-import type {EventListParams, EventSortField} from '@/entities/event';
-import {EVENT_CATEGORIES, EVENT_PERIODS, EVENT_SORT_FIELDS, EVENT_TYPE_META, EVENT_TYPES} from '@/entities/event';
+import {EVENT_TYPE_META} from '@/entities/event';
 import type {SortOrder} from '@/shared/api/pagination';
 import {isOneOf} from '@/shared/lib/isOneOf';
-
-/**
- * Состояние журнала живёт в URL (`/events?category=alarm&page=2`): ссылкой можно поделиться,
- * «Назад» возвращает предыдущую выборку. Значения по умолчанию в URL не пишутся.
- */
+import type {EventListParams, EventSortField} from '@/api/events/types';
+import {EVENT_CATEGORIES, EVENT_PERIODS, EVENT_SORT_FIELDS, EVENT_TYPES} from '@/api/events/types';
 
 const SORT_ORDERS: readonly SortOrder[] = ['asc', 'desc'];
 
@@ -49,7 +45,6 @@ export const DEFAULT_EVENT_LIST_PARAMS: EventListParams = {
   types: [],
 };
 
-/** Фильтры журнала: всё, что сужает выборку (без страницы и сортировки) */
 export type EventListFilters = Pick<EventListParams, 'categories' | 'period' | 'query' | 'source' | 'types'>;
 
 export function parseEventListParams(search: URLSearchParams): EventListParams {
@@ -100,7 +95,6 @@ export function serializeEventListParams(params: EventListParams) {
   return search;
 }
 
-/** Повторный клик по активной колонке меняет направление, клик по другой — сортирует по ней */
 export function getNextSort(
   current: Pick<EventListParams, 'order' | 'sort'>,
   field: EventSortField

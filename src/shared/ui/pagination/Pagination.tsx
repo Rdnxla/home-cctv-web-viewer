@@ -47,7 +47,6 @@ function PageButton(props: PageButtonProps) {
 interface PaginationProps {
   disabled?: boolean | undefined;
   onPageChange: (page: number) => void;
-  /** Текущая страница, с 1 */
   page: number;
   totalPages: number;
 }

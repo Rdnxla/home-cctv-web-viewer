@@ -1,4 +1,5 @@
-import type {Camera, CameraStatus, NvrInfo, PoePort} from './nvrtypes';
+import type {Camera, CameraStatus} from '@/api/cameras/types';
+import type {NvrInfo, PoePort} from '@/api/nvr/types';
 
 const now = Date.now();
 const minutesAgo = (m: number) => new Date(now - m * 60_000).toISOString();
@@ -67,7 +68,6 @@ export const cameras: Camera[] = [
   },
 ];
 
-/** online → error → no_connection */
 export const STATUS_ORDER: Record<CameraStatus, number> = {
   error: 1,
   no_connection: 2,
@@ -75,9 +75,7 @@ export const STATUS_ORDER: Record<CameraStatus, number> = {
 };
 
 export function sortCameras(list: Camera[]): Camera[] {
-  return [...list].sort(
-    (a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.portId - b.portId // внутри группы — по номеру порта
-  );
+  return [...list].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.portId - b.portId);
 }
 
 export const poePorts: PoePort[] = [
@@ -85,7 +83,6 @@ export const poePorts: PoePort[] = [
   {cameraId: 'cam-2', id: 2, linkUp: true, maxPowerW: 30, number: 2, poeEnabled: true, powerW: 5.2},
   // Питание подаётся, линк есть, но камера не отвечает по RTSP
   {cameraId: 'cam-3', id: 3, linkUp: true, maxPowerW: 30, number: 3, poeEnabled: true, powerW: 1.1},
-  // Ничего не подключено
   {cameraId: null, id: 4, linkUp: false, maxPowerW: 30, number: 4, poeEnabled: true, powerW: 0},
 ];
 
@@ -115,7 +112,6 @@ export function whepUrl(camera: Camera): string {
   return `/api/webrtc/${camera.id}/whep`;
 }
 
-/** Статичный SDP answer для моков (реальное медиа через MSW не передать) */
 export const MOCK_SDP_ANSWER = [
   'v=0',
   'o=- 1 1 IN IP4 127.0.0.1',

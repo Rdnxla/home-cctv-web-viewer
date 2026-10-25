@@ -1,17 +1,10 @@
 import {delay, HttpResponse, http} from 'msw';
-import type {EventCategory, EventListResponse, EventSortField, NvrEvent} from '@/entities/event';
-import {
-  DEVICE_SOURCE,
-  DEVICE_SOURCE_LABEL,
-  EVENT_CATEGORIES,
-  EVENT_CATEGORY_META,
-  EVENT_SORT_FIELDS,
-  EVENT_TYPE_META,
-  EVENT_TYPES,
-} from '@/entities/event';
+import {DEVICE_SOURCE_LABEL, EVENT_CATEGORY_META, EVENT_TYPE_META} from '@/entities/event';
 import {ApiErrorCode} from '@/shared/api/authErrorCodes';
 import type {SortOrder} from '@/shared/api/pagination';
 import {isOneOf} from '@/shared/lib/isOneOf';
+import type {EventCategory, EventListResponse, EventSortField, NvrEvent} from '@/api/events/types';
+import {DEVICE_SOURCE, EVENT_CATEGORIES, EVENT_SORT_FIELDS, EVENT_TYPES} from '@/api/events/types';
 import {events} from '../data/events';
 
 const API = '/api/events';
@@ -48,7 +41,6 @@ function validationError(message: string) {
   return HttpResponse.json({error: ApiErrorCode.validationError, message}, {status: 400});
 }
 
-/** Разбор и проверка query-параметров; строка — текст ошибки валидации */
 function parseQuery(search: URLSearchParams): EventQuery | string {
   const page = Number(search.get('page') ?? '1');
   const pageSize = Number(search.get('pageSize') ?? String(DEFAULT_PAGE_SIZE));
@@ -108,11 +100,6 @@ function sortEvents(list: NvrEvent[], sort: EventSortField, order: SortOrder) {
 }
 
 export const eventHandlers = [
-  /**
-   * Журнал событий с серверной фильтрацией, сортировкой и пагинацией.
-   * Параметры: page, pageSize (10|25|50|100), sort (occurredAt|category|type|source), order (asc|desc),
-   * category и type (можно повторять), source (id камеры или `device`), from и to (ISO, `[from, to)`), q (поиск).
-   */
   http.get(API, async ({request}) => {
     await delay(RESPONSE_DELAY_MS);
 

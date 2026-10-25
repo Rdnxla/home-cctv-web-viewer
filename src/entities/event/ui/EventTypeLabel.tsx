@@ -14,7 +14,7 @@ import {
   TimerIcon,
 } from '@radix-ui/react-icons';
 import {Flex, Text} from '@radix-ui/themes';
-import type {EventType} from '../model/catalog';
+import type {EventType} from '@/api/events/types';
 import {EVENT_CATEGORY_META, EVENT_TYPE_META} from '../model/meta';
 
 const TYPE_ICONS: Record<EventType, typeof MoveIcon> = {
@@ -37,7 +37,6 @@ interface EventTypeLabelProps {
   type: EventType;
 }
 
-/** Иконка в цвете категории + название типа события */
 export function EventTypeLabel(props: EventTypeLabelProps) {
   const {type} = props;
   const meta = EVENT_TYPE_META[type];

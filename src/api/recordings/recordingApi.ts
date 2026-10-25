@@ -1,7 +1,6 @@
 import {apiFetch} from '@/shared/api/http';
-import type {RecordingListParams, RecordingListResponse} from '../model/types';
+import type {RecordingListParams, RecordingListResponse} from './types';
 
-/** Файлы архива камеры, пересекающие период, и границы всего архива */
 export function getRecordings(params: RecordingListParams) {
   const search = new URLSearchParams({from: params.from, to: params.to});
   return apiFetch<RecordingListResponse>(

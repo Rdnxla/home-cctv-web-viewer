@@ -1,15 +1,9 @@
 import {Badge, Button, DropdownMenu} from '@radix-ui/themes';
 import {Fragment, useCallback} from 'react';
-import type {EventCategory, EventType} from '@/entities/event';
-import {
-  EVENT_CATEGORIES,
-  EVENT_CATEGORY_META,
-  EVENT_TYPES,
-  EventTypeLabel,
-  getEventTypesByCategory,
-} from '@/entities/event';
+import {EVENT_CATEGORY_META, EventTypeLabel, getEventTypesByCategory} from '@/entities/event';
+import type {EventCategory, EventType} from '@/api/events/types';
+import {EVENT_CATEGORIES, EVENT_TYPES} from '@/api/events/types';
 
-/** Меню с флажками не закрывается после каждого выбора */
 function keepMenuOpen(event: Event) {
   event.preventDefault();
 }
@@ -42,13 +36,11 @@ function TypeOption(props: TypeOptionProps) {
 }
 
 interface EventTypeFilterProps {
-  /** Выбранная категория сужает список типов; `null` — все категории */
   category: EventCategory | null;
   onChange: (types: EventType[]) => void;
   value: EventType[];
 }
 
-/** Мультивыбор типов событий, сгруппированных по категориям */
 export function EventTypeFilter(props: EventTypeFilterProps) {
   const {category, onChange, value} = props;
   const categories = category === null ? EVENT_CATEGORIES : [category];

@@ -2,18 +2,17 @@ import {CounterClockwiseClockIcon} from '@radix-ui/react-icons';
 import {Button, Flex, Heading, Text} from '@radix-ui/themes';
 import {Link as RouterLink} from 'react-router';
 import {CameraControls} from '@/widgets/camera-control';
-import type {Camera} from '@/entities/camera';
 import {CameraLiveView} from '@/entities/camera';
-import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
 import {ROUTES} from '@/shared/config/routes';
 import {MediaWithAside} from '@/shared/ui';
+import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
+import type {Camera} from '@/api/cameras/types';
 import {OtherCameras} from './OtherCameras';
 
 interface CameraViewProps {
   camera: Camera;
 }
 
-/** Загруженная камера: заголовок, плеер, другие камеры и панель сведений */
 export function CameraView(props: CameraViewProps) {
   const {camera} = props;
   const subtitle = camera.model ? `${camera.model} · порт ${camera.portId}` : `Порт ${camera.portId}`;

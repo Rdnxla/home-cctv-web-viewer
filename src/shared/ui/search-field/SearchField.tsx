@@ -7,15 +7,12 @@ const DEFAULT_DEBOUNCE_MS = 300;
 
 interface SearchFieldProps {
   debounceMs?: number | undefined;
-  /** Доступное имя поля (видимой подписи нет) */
   label: string;
-  /** Вызывается после паузы в наборе и сразу при очистке */
   onChange: (value: string) => void;
   placeholder: string;
   value: string;
 }
 
-/** Поле поиска с задержкой: родитель получает значение, когда пользователь перестал печатать */
 export function SearchField(props: SearchFieldProps) {
   const {debounceMs = DEFAULT_DEBOUNCE_MS, label, onChange, placeholder, value} = props;
   const [draft, setDraft] = useState(value);

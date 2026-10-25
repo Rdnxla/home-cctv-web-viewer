@@ -1,10 +1,10 @@
 import {MagnifyingGlassIcon} from '@radix-ui/react-icons';
 import {Button, Flex, Link, Skeleton, Table, Text} from '@radix-ui/themes';
 import {Link as RouterLink} from 'react-router';
-import type {EventListParams, EventSortField, NvrEvent} from '@/entities/event';
 import {DEVICE_SOURCE_LABEL, EventCategoryBadge, EventTypeLabel, formatEventTime} from '@/entities/event';
 import {ROUTES} from '@/shared/config/routes';
 import {SortableHeaderCell} from '@/shared/ui';
+import type {EventListParams, EventSortField, NvrEvent} from '@/api/events/types';
 import styles from './EventTable.module.scss';
 
 const COLUMN_COUNT = 5;
@@ -113,7 +113,6 @@ function SkeletonRows(props: SkeletonRowsProps) {
 interface EventTableProps {
   events: NvrEvent[] | undefined;
   hasActiveFilters: boolean;
-  /** Показаны данные прошлой выборки, пока грузится новая */
   isStale: boolean;
   onResetFilters: () => void;
   onSort: (field: EventSortField) => void;

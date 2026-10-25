@@ -11,13 +11,11 @@ const SORT_ICONS = {asc: ArrowUpIcon, desc: ArrowDownIcon} as const;
 interface SortableHeaderCellProps<T extends string> {
   children: ReactNode;
   className?: string | undefined;
-  /** Направление, если таблица отсортирована по этой колонке; `null` — не отсортирована */
   direction: SortOrder | null;
   onSort: (key: T) => void;
   sortKey: T;
 }
 
-/** Заголовок колонки Radix `Table` с кнопкой сортировки и `aria-sort` */
 export function SortableHeaderCell<T extends string>(props: SortableHeaderCellProps<T>) {
   const {children, className, direction, onSort, sortKey} = props;
   const Icon = direction === null ? CaretSortIcon : SORT_ICONS[direction];

@@ -1,5 +1,5 @@
 import {Badge} from '@radix-ui/themes';
-import type {RecordingTrigger} from '../model/catalog';
+import type {RecordingTrigger} from '@/api/recordings/types';
 import {RECORDING_TRIGGER_META} from '../model/meta';
 
 interface RecordingTriggerBadgeProps {

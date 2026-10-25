@@ -1,5 +1,5 @@
 import {apiFetch} from '@/shared/api/http';
-import type {NvrInfo} from '../model/types';
+import type {NvrInfo} from './types';
 
 const NVR_URL = '/api/nvr';
 

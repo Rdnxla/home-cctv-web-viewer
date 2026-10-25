@@ -63,5 +63,5 @@ export function useCalloutMessage() {
   if (!context) {
     throw new Error('useCalloutMessage должен использоваться внутри CalloutMessage');
   }
-  return context; // тип сужен до ShowToast, без null
+  return context;
 }

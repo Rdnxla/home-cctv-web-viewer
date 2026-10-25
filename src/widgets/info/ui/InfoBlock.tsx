@@ -3,7 +3,6 @@ import {CameraSummary} from './CameraSummary';
 import styles from './InfoBlock.module.scss';
 import {RecentEvents} from './RecentEvents';
 
-/** «Обзор»: состояние камер и события за сутки. Данные загружает сам, ничего не требует от страницы. */
 export function InfoBlock() {
   return (
     <aside

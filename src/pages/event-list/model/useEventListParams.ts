@@ -1,6 +1,6 @@
 import {useCallback, useMemo} from 'react';
 import {useSearchParams} from 'react-router';
-import type {EventListParams, EventSortField} from '@/entities/event';
+import type {EventListParams, EventSortField} from '@/api/events/types';
 import type {EventListFilters} from './eventListParams';
 import {
   DEFAULT_EVENT_LIST_PARAMS,
@@ -9,7 +9,6 @@ import {
   serializeEventListParams,
 } from './eventListParams';
 
-/** Параметры журнала из URL и действия над ними. Любое изменение фильтра или сортировки ведёт на первую страницу. */
 export function useEventListParams() {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useMemo(() => parseEventListParams(searchParams), [searchParams]);

@@ -5,8 +5,8 @@ import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {ApiErrorCode} from '@/shared/api/authErrorCodes';
 import {isApiError} from '@/shared/api/http';
-import type {AuthSuccess} from '@/api/auth/auth.types';
-import {useLoginMutation, useVerifyTwoFactorMutation} from './model/useAuth';
+import {useLoginMutation, useVerifyTwoFactorMutation} from '@/api/auth/authQueries';
+import type {AuthSuccess} from '@/api/auth/types';
 
 type Step = {name: 'credentials'} | {name: '2fa'; tempToken: string};
 

@@ -1,10 +1,8 @@
-/** biome-ignore-all lint/suspicious/noTsIgnore: <> */
 import {useEffect, useRef, useState} from 'react';
-import type {StreamInfo} from '../data/nvrtypes';
+import type {StreamInfo} from './types';
 
 type PlayerState = 'idle' | 'connecting' | 'playing' | 'failed';
 
-/** Тестовая картинка вместо реального видео (MSW не умеет отдавать медиа) */
 function createMockMediaStream(label: string) {
   const canvas = document.createElement('canvas');
   canvas.width = 640;
@@ -52,11 +50,6 @@ function waitForIceGathering(pc: RTCPeerConnection) {
   });
 }
 
-/**
- * Подключает WebRTC-поток (WHEP) к <video>.
- *   const { videoRef, state } = useWebRtcPlayer(stream, 'Входная дверь');
- *   <video ref={videoRef} autoPlay muted playsInline />
- */
 function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
   const videoRef = useRef<HTMLVideoElement>(null);
   const labelRef = useRef(label);
@@ -77,10 +70,7 @@ function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
 
     setState('connecting');
 
-    // --- Мок-режим: включается, когда запущен MSW ---
-    // @ts-ignore
-    // biome-ignore lint/nursery/useGlobalThis: <>
-    if (window.__MSW_ACTIVE__) {
+    if ((globalThis as {__MSW_ACTIVE__?: boolean}).__MSW_ACTIVE__) {
       const mock = createMockMediaStream(labelRef.current);
       video.srcObject = mock.stream;
       video.play().catch(() => ({}));
@@ -91,15 +81,13 @@ function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
       };
     }
 
-    // --- Реальный WHEP ---
     const pc = new RTCPeerConnection({iceServers: JSON.parse(iceKey || '[]')});
     const abort = new AbortController();
     let sessionUrl: string | null = null;
 
     pc.addTransceiver('video', {direction: 'recvonly'});
     pc.ontrack = e => {
-      // @ts-ignore
-      video.srcObject = e.streams[0];
+      video.srcObject = e.streams[0] ?? null;
       setState('playing');
     };
     pc.onconnectionstatechange = () => {
@@ -111,8 +99,7 @@ function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
         await pc.setLocalDescription(await pc.createOffer());
         await waitForIceGathering(pc);
         const res = await fetch(whepUrl, {
-          // @ts-ignore
-          body: pc.localDescription.sdp,
+          body: pc.localDescription?.sdp ?? null,
           headers: {'Content-Type': 'application/sdp'},
           method: 'POST',
           signal: abort.signal,

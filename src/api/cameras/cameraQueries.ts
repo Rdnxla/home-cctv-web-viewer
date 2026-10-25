@@ -1,7 +1,7 @@
 import {skipToken, useQuery, useQueryClient} from '@tanstack/react-query';
 import {retryUnlessClientError} from '@/shared/api/retry';
+import {getCamera, getCameraPlayback, getCameraStream, getCameras} from './cameraApi';
 import type {Camera, CameraPlaybackParams} from './types';
-import {getCamera, getCameraPlayback, getCameraStream, getCameras} from '@/api/cameras/cameraApi';
 
 const CAMERAS_KEY = 'cameras';
 

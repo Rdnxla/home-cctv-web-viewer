@@ -1,18 +1,12 @@
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {Box, Button, Flex, Select} from '@radix-ui/themes';
 import {useCallback} from 'react';
-import {useCamerasQuery} from '@/api/cameras/cameraQueries';
-import type {EventCategory, EventListParams, EventType} from '@/entities/event';
-import {
-  DEVICE_SOURCE,
-  EVENT_CATEGORIES,
-  EVENT_CATEGORY_META,
-  EVENT_PERIOD_META,
-  EVENT_PERIODS,
-  EVENT_TYPE_META,
-} from '@/entities/event';
+import {EVENT_CATEGORY_META, EVENT_PERIOD_META, EVENT_TYPE_META} from '@/entities/event';
 import {isOneOf} from '@/shared/lib/isOneOf';
 import {SearchField} from '@/shared/ui';
+import {useCamerasQuery} from '@/api/cameras/cameraQueries';
+import type {EventCategory, EventListParams, EventType} from '@/api/events/types';
+import {DEVICE_SOURCE, EVENT_CATEGORIES, EVENT_PERIODS} from '@/api/events/types';
 import type {EventListFilters} from '../model/eventListParams';
 import {EventTypeFilter} from './EventTypeFilter';
 
@@ -25,7 +19,6 @@ function withCount(label: string, count: number | undefined) {
 }
 
 interface EventFiltersProps {
-  /** Счётчики из последнего ответа; `undefined`, пока ответа нет */
   categoryCounts: Record<EventCategory, number> | undefined;
   hasActiveFilters: boolean;
   onChange: (patch: Partial<EventListFilters>) => void;

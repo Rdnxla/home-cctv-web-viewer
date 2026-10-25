@@ -14,7 +14,6 @@ interface EventListFooterProps {
   total: number;
 }
 
-/** «Показаны 26–50 из 142», размер страницы и номера страниц */
 export function EventListFooter(props: EventListFooterProps) {
   const {disabled, onPageChange, onPageSizeChange, page, pageSize, total} = props;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));

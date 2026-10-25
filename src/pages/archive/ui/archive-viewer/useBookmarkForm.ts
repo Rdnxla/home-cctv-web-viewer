@@ -1,13 +1,10 @@
 import type {ChangeEvent, FormEvent} from 'react';
 import {useCallback, useState} from 'react';
-import {useCreateBookmarkMutation} from '@/entities/bookmark';
 import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
+import {useCreateBookmarkMutation} from '@/api/bookmarks/bookmarkQueries';
 import {floorToSecond, formatClock, formatDateTime} from '../../lib/time';
 
-/**
- * Форма «В закладки»: сохраняет текущий момент записи под своим названием, а без названия — под временем момента.
- * Момент фиксируется при открытии формы: воспроизведение за это время уходит вперёд.
- */
+/** Момент фиксируется при открытии формы: воспроизведение за это время уходит вперёд */
 export function useBookmarkForm(cameraId: string, position: number | null) {
   const [moment, setMoment] = useState<number | null>(null);
   const [title, setTitle] = useState('');

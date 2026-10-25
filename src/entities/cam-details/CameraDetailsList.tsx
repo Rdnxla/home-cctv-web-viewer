@@ -58,7 +58,6 @@ interface CameraDetailsListProps {
   camera: Camera;
 }
 
-/** Технические параметры камеры */
 export function CameraDetailsList(props: CameraDetailsListProps) {
   const {camera} = props;
 

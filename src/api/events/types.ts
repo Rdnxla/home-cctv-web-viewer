@@ -1,37 +1,56 @@
 import type {PaginatedResponse, SortOrder} from '@/shared/api/pagination';
-import type {EventCategory, EventPeriod, EventSortField, EventType} from './catalog';
 
-/** Запись журнала событий регистратора */
+export const EVENT_CATEGORIES = ['alarm', 'warning', 'detection'] as const;
+
+export const EVENT_TYPES = [
+  'intrusion',
+  'tampering',
+  'video_loss',
+  'power_failure',
+  'disk_error',
+  'disk_full',
+  'poe_overload',
+  'network_unstable',
+  'login_failed',
+  'motion',
+  'person',
+  'vehicle',
+  'line_crossing',
+] as const;
+
+export const EVENT_PERIODS = ['1h', '24h', '7d', '30d', 'all'] as const;
+
+export const EVENT_SORT_FIELDS = ['occurredAt', 'category', 'type', 'source'] as const;
+
+export const DEVICE_SOURCE = 'device';
+
+export type EventCategory = (typeof EVENT_CATEGORIES)[number];
+export type EventType = (typeof EVENT_TYPES)[number];
+export type EventPeriod = (typeof EVENT_PERIODS)[number];
+export type EventSortField = (typeof EVENT_SORT_FIELDS)[number];
+
 export interface NvrEvent {
-  /** `null` — событие самого регистратора (диск, питание, вход в систему) */
   cameraId: string | null;
   cameraName: string | null;
   category: EventCategory;
   id: string;
   message: string;
-  /** ISO 8601 */
   occurredAt: string;
   type: EventType;
 }
 
-/** Параметры журнала (`GET /api/events`) */
 export interface EventListParams {
-  /** Пусто — все категории */
   categories: EventCategory[];
   order: SortOrder;
   page: number;
   pageSize: number;
   period: EventPeriod;
-  /** Поиск по описанию, типу и источнику */
   query: string;
   sort: EventSortField;
-  /** id камеры, `DEVICE_SOURCE` или `null` — все источники */
   source: string | null;
-  /** Пусто — все типы */
   types: EventType[];
 }
 
-/** События камеры за период `[from, to)` (ISO 8601) по возрастанию времени — для шкалы архива */
 export interface EventRangeParams {
   cameraId: string;
   from: string;

@@ -2,12 +2,10 @@ import {ExclamationTriangleIcon, ReloadIcon} from '@radix-ui/react-icons';
 import {Button, Callout, Flex} from '@radix-ui/themes';
 
 interface LoadErrorProps {
-  /** Готовый текст: что не загрузилось и почему */
   message: string;
   onRetry: () => void;
 }
 
-/** Ошибка загрузки основного содержимого: красный Callout и кнопка «Повторить» */
 export function LoadError(props: LoadErrorProps) {
   const {message, onRetry} = props;
 

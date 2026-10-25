@@ -1,5 +1,5 @@
 import {Badge} from '@radix-ui/themes';
-import type {EventCategory} from '../model/catalog';
+import type {EventCategory} from '@/api/events/types';
 import {EVENT_CATEGORY_META} from '../model/meta';
 
 interface EventCategoryBadgeProps {

@@ -1,20 +1,15 @@
 import {Card, Flex, Inset, Text} from '@radix-ui/themes';
 import {Link} from 'react-router';
-import type {Camera} from '@/api/cameras/types';
 import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
 import {CameraStatusIcon} from '@/shared/ui/cam-status-icon/CameraStatusIcon';
+import type {Camera} from '@/api/cameras/types';
 import styles from './CameraTile.module.scss';
 
 interface CameraTileProps {
   camera: Camera;
-  /** Куда ведёт плитка — маршрут задаёт потребитель */
   to: string;
 }
 
-/**
- * Плитка камеры для списков-переключателей.
- * Без живого видео: каждая плитка с плеером открывала бы отдельную WHEP-сессию.
- */
 export function CameraTile(props: CameraTileProps) {
   const {camera, to} = props;
 

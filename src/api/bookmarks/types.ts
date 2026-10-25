@@ -1,9 +1,8 @@
-/** Закладка архива: подписанный момент записи камеры */
+export const BOOKMARK_TITLE_MAX_LENGTH = 80;
+
 export interface Bookmark {
-  /** Момент записи, ISO 8601 */
   at: string;
   cameraId: string;
-  /** ISO 8601 */
   createdAt: string;
   id: string;
   title: string;

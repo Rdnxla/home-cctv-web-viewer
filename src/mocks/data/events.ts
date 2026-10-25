@@ -1,10 +1,9 @@
-import type {EventType, NvrEvent} from '@/entities/event';
 import {EVENT_TYPE_META} from '@/entities/event';
+import type {Camera} from '@/api/cameras/types';
+import type {EventType, NvrEvent} from '@/api/events/types';
 import {cameras} from './nvr';
-import type {Camera} from './nvrtypes';
 
 /**
- * Журнал событий для моков: ~640 записей за 10 дней.
  * Генератор детерминированный (фиксированное зерно), поэтому набор событий одинаков
  * при каждом запуске, а время отсчитывается от момента загрузки модуля.
  */
@@ -37,7 +36,6 @@ function pick<T>(items: readonly T[]): T {
   return items[Math.floor(random() * items.length)] as T;
 }
 
-/** Относительная частота типов: детекции — основная масса, тревоги — редкость */
 const TYPE_WEIGHTS: {type: EventType; weight: number}[] = [
   {type: 'motion', weight: 30},
   {type: 'person', weight: 18},
@@ -55,7 +53,6 @@ const TYPE_WEIGHTS: {type: EventType; weight: number}[] = [
 ];
 const TOTAL_WEIGHT = TYPE_WEIGHTS.reduce((sum, {weight}) => sum + weight, 0);
 
-/** События самого регистратора — без камеры */
 const DEVICE_EVENT_TYPES = new Set<EventType>(['disk_error', 'disk_full', 'login_failed', 'power_failure']);
 
 const CAMERA_ZONES: Record<string, string[]> = {

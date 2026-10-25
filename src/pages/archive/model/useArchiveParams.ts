@@ -5,8 +5,8 @@ import type {ArchiveParams} from './archiveParams';
 import {parseArchiveParams, serializeArchiveParams} from './archiveParams';
 
 /**
- * Камера, день и момент архива из URL. Смена камеры, дня и переход к закладке добавляют запись в историю,
- * перемотка внутри просмотра — заменяет текущую, чтобы «Назад» не листал каждый щелчок по шкале.
+ * Смена камеры, дня и переход к закладке добавляют запись в историю, перемотка внутри просмотра —
+ * заменяет текущую, чтобы «Назад» не листал каждый щелчок по шкале.
  */
 export function useArchiveParams() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,7 +32,6 @@ export function useArchiveParams() {
     [update]
   );
 
-  /** Другой день — выбранный момент сбрасывается */
   const selectDay = useCallback(
     (dayStart: number) => {
       update({dayStart, moment: null}, false);

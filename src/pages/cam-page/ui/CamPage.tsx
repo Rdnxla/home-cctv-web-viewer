@@ -2,10 +2,10 @@ import {ArrowLeftIcon, LinkBreak2Icon} from '@radix-ui/react-icons';
 import {AspectRatio, Button, Code, Flex, Heading, Link, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback} from 'react';
 import {Link as RouterLink, useParams} from 'react-router';
-import {useCameraQuery} from '@/api/cameras/cameraQueries';
 import {isApiError} from '@/shared/api/http';
 import {ROUTES} from '@/shared/config/routes';
 import {LoadError, MediaWithAside} from '@/shared/ui';
+import {useCameraQuery} from '@/api/cameras/cameraQueries';
 import {CameraView} from './CameraView';
 import styles from './CamPage.module.scss';
 import {OtherCameras} from './OtherCameras';
@@ -101,7 +101,7 @@ function CamPageContent(props: CamPageContentProps) {
 
   if (camera) return <CameraView camera={camera} />;
   if (isPending) return <CameraViewSkeleton />;
-  // Не опираться на error.code: nvr-моки отдают {code}, а apiFetch читает {error} (DATA-001)
+  // Не опираться на error.code: nvr-моки отдают {code}, а apiFetch читает {error}
   if (isApiError(error) && error.status === HTTP_NOT_FOUND) return <CameraNotFound id={id} />;
   return (
     <LoadError
