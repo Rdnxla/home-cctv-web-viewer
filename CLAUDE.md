@@ -12,7 +12,7 @@ A React SPA for an NVR (network video recorder): a camera dashboard with live We
 - Core: React / React DOM 19.2.4, React Router 7.13.2 (`createBrowserRouter`, data router), Vite 8.0.3, `@vitejs/plugin-react` 6.0.1, TypeScript 6.0.2. The `@/*` → `src/*` alias is configured in `tsconfig.app.json` and `vite.config.ts`.
 - Data and validation: TanStack React Query 5.95.2 (v5 API, `gcTime`, devtools), Valibot 1.3.1.
 - Mocks: MSW 2.12.14 (v2 API: `http` / `HttpResponse`); configured with `msw.workerDirectory: ["public"]`. Files are in `src/mocks/{browser.js,server.js,db.js,handlers/,data/}`; worker is `public/mockServiceWorker.js` (git-ignored).
-- UI and styling: `@radix-ui/themes` ^3.3.0, `radix-ui` ^1.6.7, `@radix-ui/react-icons` ^1.3.2, Tailwind CSS 4.2.2 (`@tailwindcss/vite`), Sass ^1.104.1, SCSS Modules.
+- UI and styling: `@radix-ui/themes` ^3.3.0, `radix-ui` ^1.6.7, `@radix-ui/react-icons` ^1.3.2, Sass ^1.104.1, SCSS Modules.
 - Error handling: `react-error-boundary` 6.1.1.
 - Linting and formatting: Biome 2.4.9 (`biome.json`); ESLint and Prettier are not installed.
 - Testing: Vitest 4.1.2, `@vitest/coverage-v8` 4.1.2, happy-dom 20.8.9, Testing Library (`dom` 10.4.1, `react` 16.3.2, `jest-dom` 6.9.1, `user-event` 14.6.1). Configuration/utilities: `src/testSetup.ts`, `src/TestUtils.tsx`.
