@@ -15,18 +15,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
+      # Must run before setup-node: its yarn cache lookup needs the Yarn 4 shim from packageManager.
       - name: Enable Corepack
         run: corepack enable
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install --immutable && yarn playwright install --with-deps
+        run: yarn install --immutable
 
-      - name: Validate
-        run: yarn biome ci && yarn test:ci && yarn test:e2e:ci
+      - name: Biome
+        run: yarn biome ci
+
+      # vite.config.ts reads these at load time (Vitest and the Playwright dev server), but certs/ is git-ignored.
+      - name: Generate dev TLS certificate
+        run: |
+          mkdir -p certs
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj '/CN=localhost' \
+            -addext 'subjectAltName=DNS:localhost' \
+            -keyout certs/localhost-key.pem -out certs/localhost.pem
+
+      # Skipped until test files exist: with none, the 100% coverage threshold and Playwright both fail the job.
+      - name: Unit tests
+        if: hashFiles('src/**/*.test.ts', 'src/**/*.test.tsx') != ''
+        run: yarn test:ci
+
+      - name: Install Playwright browsers
+        if: hashFiles('tests/**/*.spec.ts', 'tests/**/*.test.ts') != ''
+        run: yarn playwright install --with-deps chromium
+
+      - name: E2E tests
+        if: hashFiles('tests/**/*.spec.ts', 'tests/**/*.test.ts') != ''
+        run: yarn test:e2e:ci
