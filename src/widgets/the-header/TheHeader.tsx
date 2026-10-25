@@ -1,6 +1,7 @@
 import {BellIcon, CounterClockwiseClockIcon, DashboardIcon, GearIcon} from '@radix-ui/react-icons';
 import {IconButton, Tooltip} from '@radix-ui/themes';
 import {Link, matchPath, useLocation} from 'react-router';
+import {ThemeToggle} from '@/features/toggle-theme';
 import {ROUTES} from '@/shared/config/routes';
 import {DeviceInfo} from './DeviceInfo';
 import styles from './TheHeader.module.scss';
@@ -43,6 +44,7 @@ export function TheHeader() {
         ))}
       </nav>
       <div className={styles.header__actions}>
+        <ThemeToggle />
         <Tooltip content='Настройки'>
           <IconButton
             aria-label='Настройки'

@@ -19,6 +19,14 @@
 		<meta name="description" content="React app" />
 		<meta name="theme-color" content="#BD34FE" />
 		<title>React app</title>
+		<script>
+			'use strict';
+			{
+				const stored = localStorage.getItem('theme');
+				const isDark = stored === 'dark' || (stored !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+				document.documentElement.classList.add(isDark ? 'dark' : 'light');
+			}
+		</script>
 		<style>
 			@font-face {
 				font-family: Inter;
@@ -26,6 +34,13 @@
 				font-weight: 100 900;
 				font-display: swap;
 				src: url('/Inter.woff2') format('woff2');
+			}
+
+			/* В DEV Vite подключает стили только из JS-бандла, и до его загрузки тёмная тема мигает белым.
+			   Цвет — тёмный --gray-1 Radix (slate при accentColor='indigo'), фон $base-bg в .dark */
+			html.dark {
+				color-scheme: dark;
+				background-color: rgb(17 17 19);
 			}
 		</style>
 	</head>

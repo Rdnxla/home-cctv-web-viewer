@@ -2,9 +2,10 @@ $header-h: 72px;
 $page-min-h: calc(100% - $header-h);;
 
 $base-radius: 8px;
-$base-bg: var(--gray-3);
+$base-bg: var(--app-bg);
+$surface-bg: var(--app-surface);
 $gray: var(--gray-8);
-$base-shadow: 
-  0 1px 2px var(--gray-a3),
-  0 2px 4px var(--gray-a3),
-  0 4px 8px var(--gray-a2);
+$base-shadow:
+  0 1px 2px var(--app-shadow-near),
+  0 2px 4px var(--app-shadow-near),
+  0 4px 8px var(--app-shadow-far);
