@@ -8,7 +8,6 @@ export function Component() {
   return (
     <Theme
       accentColor='indigo'
-      appearance='light'
       className={styles.mainLayout}
     >
       <TheHeader />

@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+:root,
+.radix-themes {
+  color-scheme: light;
+  --app-bg: var(--gray-3);
+  --app-surface: var(--gray-1);
+  --app-shadow-near: var(--gray-a3);
+  --app-shadow-far: var(--gray-a2);
+}
+
+.dark,
+.dark .radix-themes {
+  color-scheme: dark;
+  --app-bg: var(--gray-1);
+  --app-surface: var(--gray-2);
+  --app-shadow-near: var(--black-a5);
+  --app-shadow-far: var(--black-a4);
+}
+
 /* start reset */
 
 *,
@@ -140,14 +158,14 @@ q::after {
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: var(--gray-3);
+  background-color: $base-bg;
 }
 
 /* end reset */
 
 .page {
   min-height: $page-min-h;
-  background: var(--gray-1);
+  background: $surface-bg;
   border-radius: $base-radius;
   box-shadow: $base-shadow;
   overflow: hidden;
