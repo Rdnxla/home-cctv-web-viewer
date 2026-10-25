@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* start reset */
+
 *,
 *::before,
 *::after {
@@ -141,7 +143,7 @@ q::after {
   background-color: var(--gray-3);
 }
 
-/* end reset.css */
+/* end reset */
 
 .page {
   min-height: $page-min-h;

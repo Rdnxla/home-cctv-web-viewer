@@ -1,15 +1,21 @@
 import {apiFetch} from '@/shared/api/http';
-import {EVENT_PERIOD_META} from '../model/meta';
-import type {EventListParams, EventListResponse, EventRangeParams} from '../model/types';
+import type {EventListParams, EventListResponse, EventPeriod, EventRangeParams} from './types';
 
 const EVENTS_URL = '/api/events';
-/** Сколько событий за период приходит одним ответом — максимальный размер страницы журнала */
+const HOUR_MS = 3_600_000;
+const DAY_MS = 24 * HOUR_MS;
+/** Максимальный размер страницы, который принимает API */
 const RANGE_LIMIT = 100;
 
-/**
- * Страница журнала. Период превращается в границу `from` в момент запроса,
- * поэтому повторный запрос с тем же периодом получает актуальное окно.
- */
+const PERIOD_DURATION_MS: Record<EventPeriod, number | null> = {
+  '1h': HOUR_MS,
+  '7d': 7 * DAY_MS,
+  '24h': DAY_MS,
+  '30d': 30 * DAY_MS,
+  all: null,
+};
+
+/** Период превращается в границу `from` в момент запроса, поэтому повторный запрос с тем же периодом получает актуальное окно */
 export function getEvents(params: EventListParams, now = Date.now()) {
   const search = new URLSearchParams({
     order: params.order,
@@ -22,7 +28,7 @@ export function getEvents(params: EventListParams, now = Date.now()) {
   for (const type of params.types) search.append('type', type);
   if (params.source !== null) search.set('source', params.source);
 
-  const {durationMs} = EVENT_PERIOD_META[params.period];
+  const durationMs = PERIOD_DURATION_MS[params.period];
   if (durationMs !== null) search.set('from', new Date(now - durationMs).toISOString());
 
   const query = params.query.trim();
@@ -31,7 +37,6 @@ export function getEvents(params: EventListParams, now = Date.now()) {
   return apiFetch<EventListResponse>(`${EVENTS_URL}?${search.toString()}`);
 }
 
-/** Первые `RANGE_LIMIT` событий камеры за период; полное число — в `total` */
 export function getEventsInRange(params: EventRangeParams) {
   const search = new URLSearchParams({
     from: params.from,

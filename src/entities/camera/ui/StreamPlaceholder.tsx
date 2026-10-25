@@ -1,7 +1,7 @@
 import {ReloadIcon} from '@radix-ui/react-icons';
 import {Button, Spinner, Text} from '@radix-ui/themes';
-import type {Camera} from '../model/types';
 import {CameraStatusIcon} from '@/shared/ui/cam-status-icon/CameraStatusIcon';
+import type {Camera} from '@/api/cameras/types';
 
 const ICON_SIZE = 32;
 

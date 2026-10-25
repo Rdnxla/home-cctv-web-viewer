@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 
-/** Текущее время, обновляемое раз в `intervalMs`, — для отображения, которое зависит от «сейчас» */
 export function useNow(intervalMs: number) {
   const [now, setNow] = useState(() => Date.now());
 

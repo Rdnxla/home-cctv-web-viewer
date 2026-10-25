@@ -7,7 +7,7 @@ export const router = createBrowserRouter([
     Component: Root,
     children: [
       {
-        lazy: () => import('@/pages/auth/Auth'),
+        lazy: () => import('@/pages/auth'),
         path: '/',
       },
     ],

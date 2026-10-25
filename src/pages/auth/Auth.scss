@@ -57,12 +57,10 @@
     margin-bottom: 20px;
   }
 
-  // Radix TextField.Root
   > .rt-TextFieldRoot {
     width: 100%;
   }
 
-  // Ошибка от serverInvalid
   &[data-invalid='true'] {
     .rt-TextFieldRoot {
       --text-field-focus-color: var(--red-8);
@@ -130,7 +128,6 @@
   }
 }
 
-// Form.Submit asChild + Radix Button
 .auth-form button[type='submit'] {
   width: 100%;
   margin-top: 24px;

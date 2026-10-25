@@ -1,8 +1,8 @@
-import type {NvrEvent} from '@/entities/event';
-import type {Recording, RecordingTrigger} from '@/entities/recording';
+import type {Camera} from '@/api/cameras/types';
+import type {NvrEvent} from '@/api/events/types';
+import type {Recording, RecordingTrigger} from '@/api/recordings/types';
 import {events} from './events';
 import {cameras} from './nvr';
-import type {Camera} from './nvrtypes';
 
 /**
  * Архив записей для моков, согласованный с журналом событий (`data/events.ts`) и фикстурой камер:
@@ -16,16 +16,13 @@ const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
 const DAY_MS = 24 * HOUR_MS;
-/** Глубина архива: более старые записи перезаписаны (журнал событий хранится дольше — 30 дней) */
 const ARCHIVE_DAYS = 14;
-/** Запись по событию захватывает столько до события и после него */
 const PRE_EVENT_MS = 10 * SECOND_MS;
 const POST_EVENT_MS = 50 * SECOND_MS;
 /** Нестабильная связь: столько камера не писала перед событием */
 const NETWORK_GAP_MS = 4 * MINUTE_MS;
 /** Ошибка диска: столько не писали все камеры после события */
 const DISK_ERROR_GAP_MS = 2 * MINUTE_MS;
-/** Килобит в секунду → байт в секунду */
 const BYTES_PER_KILOBIT = 125;
 
 interface Interval {
@@ -130,14 +127,12 @@ function splitIntoFiles(cameraId: string, plan: ArchivePlan, interval: Interval,
   return files;
 }
 
-/** Все файлы архива камеры по возрастанию времени; `now` — момент запроса */
 export function getCameraRecordings(cameraId: string, now: number): Recording[] {
   const archive = archives.get(cameraId);
   if (!archive) return [];
   return archive.coverage.flatMap(interval => splitIntoFiles(cameraId, archive.plan, interval, now));
 }
 
-/** Есть ли у камеры запись в момент `time` */
 export function hasRecordingAt(cameraId: string, time: number, now: number) {
   const archive = archives.get(cameraId);
   return (

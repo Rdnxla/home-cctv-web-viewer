@@ -35,7 +35,6 @@ $timeline-height: 56px;
   stroke-width: 1;
 }
 
-// Будущее время текущего дня: записей там быть не может
 .archiveViewer__hatch {
   fill: var(--gray-a4);
 }
@@ -51,7 +50,6 @@ $timeline-height: 56px;
   fill: var(--orange-9);
 }
 
-// Верхняя дорожка — события по категориям и закладки
 .archiveViewer__categoryAlarm {
   fill: var(--red-9);
 }
@@ -90,7 +88,6 @@ $timeline-height: 56px;
   }
 }
 
-// Момент не выбран: ползунок виден только при фокусе с клавиатуры
 .archiveViewer__thumbEmpty:not(:focus-visible) {
   opacity: 0;
 }

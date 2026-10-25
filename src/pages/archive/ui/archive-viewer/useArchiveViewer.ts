@@ -1,26 +1,24 @@
 import type {UseQueryResult} from '@tanstack/react-query';
 import {useCallback, useMemo} from 'react';
-import {useBookmarksQuery} from '@/entities/bookmark';
-import type {Camera} from '@/entities/camera';
-import {PLAYBACK_SPEEDS} from '@/entities/camera';
-import type {NvrEvent} from '@/entities/event';
-import {useEventsInRangeQuery} from '@/entities/event';
-import type {Recording, RecordingListResponse} from '@/entities/recording';
 import {formatDuration} from '@/shared/lib/formatDuration';
 import {formatCount} from '@/shared/lib/pluralize';
 import {useNow} from '@/shared/lib/useNow';
+import {useBookmarksQuery} from '@/api/bookmarks/bookmarkQueries';
+import type {Camera} from '@/api/cameras/types';
+import {PLAYBACK_SPEEDS} from '@/api/cameras/types';
+import {useEventsInRangeQuery} from '@/api/events/eventQueries';
+import type {NvrEvent} from '@/api/events/types';
+import type {RecordingListResponse} from '@/api/recordings/types';
 import type {TimeRange} from '../../lib/time';
 import {formatClock, getEventSeekTime, SECOND_MS} from '../../lib/time';
+import type {RecordingSegment} from '../../model/recordingSegments';
+import {getCoverage, getRecordingSegments} from '../../model/recordingSegments';
 import {useBookmarkForm} from './useBookmarkForm';
 import type {Playback, PlaybackStatus} from './usePlayback';
 import {usePlayback} from './usePlayback';
-import type {RecordingSegment} from './useTimeline';
 import {useTimeline} from './useTimeline';
 
-/** Как часто сдвигается «сейчас» на шкале и в итоге дня */
 const NOW_REFRESH_MS = 30_000;
-/** Соседние файлы с разрывом не больше секунды — одна непрерывная запись */
-const MERGE_TOLERANCE_MS = SECOND_MS;
 const STEP_MS = 10 * SECOND_MS;
 /** Событие, на котором уже стоим, не считается ни предыдущим, ни следующим */
 const EVENT_TOLERANCE_MS = SECOND_MS;
@@ -43,48 +41,11 @@ const speedFormat = new Intl.NumberFormat('ru');
 
 const SPEED_OPTIONS = PLAYBACK_SPEEDS.map(speed => ({label: `×${speedFormat.format(speed)}`, value: String(speed)}));
 
-/** Что показывает плеер, пока видео нет */
 interface Placeholder {
   action: 'live' | 'retry' | null;
   description: string | null;
   icon: 'error' | 'history' | 'spinner' | 'video';
   title: string | null;
-}
-
-function mergeRanges<T extends TimeRange>(ranges: T[], canMerge: (last: T, next: T) => boolean) {
-  const merged: T[] = [];
-  for (const range of [...ranges].sort((a, b) => a.start - b.start)) {
-    const last = merged.at(-1);
-    if (last && range.start - last.end <= MERGE_TOLERANCE_MS && canMerge(last, range)) {
-      last.end = Math.max(last.end, range.end);
-    } else {
-      merged.push({...range});
-    }
-  }
-  return merged;
-}
-
-/**
- * Файлы → отрезки записи в пределах дня. Файл, который ещё пишется, тянется до конца дня:
- * где кончается запись на самом деле, знает только «сейчас», его учитывают при показе и воспроизведении.
- */
-function getRecordingSegments(recordings: Recording[], day: TimeRange): RecordingSegment[] {
-  const clipped = recordings
-    .map(recording => ({
-      end: Math.min(recording.endedAt === null ? day.end : Date.parse(recording.endedAt), day.end),
-      start: Math.max(Date.parse(recording.startedAt), day.start),
-      trigger: recording.trigger,
-    }))
-    .filter(segment => segment.end > segment.start);
-  return mergeRanges(clipped, (last, next) => last.trigger === next.trigger);
-}
-
-/** Где запись есть, без учёта режима: по этим отрезкам идёт воспроизведение */
-function getCoverage(segments: RecordingSegment[]): TimeRange[] {
-  return mergeRanges(
-    segments.map(({end, start}) => ({end, start})),
-    () => true
-  );
 }
 
 function getPlaceholder(playback: Playback): Placeholder {
@@ -124,7 +85,6 @@ function getPlaceholder(playback: Playback): Placeholder {
   return {action: null, description: 'Открытие записи…', icon: 'spinner', title: null};
 }
 
-/** Итог дня под шкалой: сколько записано и в скольких файлах, а если записей нет — за какие дни они есть */
 function getDaySummary(recordings: RecordingListResponse, segments: RecordingSegment[], now: number) {
   const {bounds, items} = recordings;
   if (segments.length === 0) {
@@ -143,19 +103,12 @@ function getDaySummary(recordings: RecordingListResponse, segments: RecordingSeg
 export interface ArchiveViewerProps {
   camera: Camera;
   day: TimeRange;
-  /** Момент из URL */
   moment: number | null;
-  /** Переход к моменту с записью в историю (закладка на другой день) */
   onOpenMoment: (time: number) => void;
-  /** Перемотка: момент заменяет текущий в URL */
   onSeek: (time: number) => void;
   recordingsQuery: UseQueryResult<RecordingListResponse>;
 }
 
-/**
- * Просмотр архива камеры за день: события и закладки дня, воспроизведение и управление им,
- * новая закладка, шкала времени и итог дня
- */
 export function useArchiveViewer(props: ArchiveViewerProps) {
   const {camera, day, moment, onOpenMoment, onSeek, recordingsQuery} = props;
   const {data: recordings, error: recordingsError, refetch: refetchRecordings} = recordingsQuery;
@@ -203,7 +156,6 @@ export function useArchiveViewer(props: ArchiveViewerProps) {
 
   const getSnapshotDate = useCallback(() => new Date(position ?? Date.now()), [position]);
 
-  // Управление воспроизведением: переходы по событиям дня, шаг ±10 с и скорость
   const previousEvent =
     position === null ? null : dayEvents.findLast(event => getEventSeekTime(event) < position - EVENT_TOLERANCE_MS);
   const nextEvent =

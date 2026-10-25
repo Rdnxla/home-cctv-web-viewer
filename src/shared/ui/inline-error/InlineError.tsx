@@ -5,7 +5,6 @@ interface InlineErrorProps {
   onRetry: () => void;
 }
 
-/** Компактная ошибка второстепенного блока: строка текста и маленькая кнопка «Повторить» */
 export function InlineError(props: InlineErrorProps) {
   const {message, onRetry} = props;
 

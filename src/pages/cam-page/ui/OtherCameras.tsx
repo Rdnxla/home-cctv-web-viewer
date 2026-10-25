@@ -1,10 +1,10 @@
 import {Badge, Flex, Heading, ScrollArea, Skeleton} from '@radix-ui/themes';
 import {useCallback, useId} from 'react';
-import type {Camera} from '@/entities/camera';
 import {CameraTile} from '@/entities/camera-tile/CameraTile';
-import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import {ROUTES} from '@/shared/config/routes';
 import {InlineError} from '@/shared/ui';
+import {useCamerasQuery} from '@/api/cameras/cameraQueries';
+import type {Camera} from '@/api/cameras/types';
 
 const SKELETON_KEYS = ['skeleton-1', 'skeleton-2', 'skeleton-3'];
 
@@ -68,7 +68,6 @@ interface OtherCamerasProps {
   currentId: string;
 }
 
-/** Быстрое переключение на другие камеры устройства */
 export function OtherCameras(props: OtherCamerasProps) {
   const {currentId} = props;
   const headingId = useId();

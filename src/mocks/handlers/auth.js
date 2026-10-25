@@ -1,18 +1,21 @@
 import {delay, HttpResponse, http} from 'msw';
-import {db} from '../../mocks/db';
-import {makeToken} from '../../shared/utils/auth';
+import {db} from '../db';
 
 const BASE_URL = '/api/auth';
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 const OTP_CODE = '123456';
-const failedAttempts = new Map(); // email -> count
-const rateLimitWindow = new Map(); // email -> unix ms of window start
-const pendingTwoFactor = new Map(); // tempToken -> email
-const activeSessions = new Set(); // bearer tokens
+const failedAttempts = new Map();
+const rateLimitWindow = new Map();
+const pendingTwoFactor = new Map();
+const activeSessions = new Set();
 
 const MAX_ATTEMPTS_BEFORE_LOCK = 3;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 3;
+
+function makeToken(prefix) {
+  return `${prefix}_${Math.random().toString(36).slice(2)}${Date.now()}`;
+}
 
 function sanitize(user) {
   const {password, ...safe} = user;
@@ -26,7 +29,6 @@ function resetMockState() {
   activeSessions.clear();
 }
 
-// Проверка лимитов запросов
 function checkRateLimit(email) {
   const now = Date.now();
   const windowStart = rateLimitWindow.get(email);
@@ -53,7 +55,6 @@ function checkRateLimit(email) {
   return {isLimited: false};
 }
 
-// Проверка пароля и блокировки аккаунта
 function verifyCredentials(user, email, password) {
   if (user?.status === 'locked') {
     return HttpResponse.json(
@@ -89,7 +90,6 @@ function verifyCredentials(user, email, password) {
   return null;
 }
 
-// Проверка специфичных статусов пользователя (MFA, Reset, Verification)
 function handleUserStatus(user) {
   if (user.status === 'unverified') {
     return HttpResponse.json(
@@ -128,7 +128,6 @@ function handleUserStatus(user) {
   );
 }
 
-// Валидация полей запроса
 function validateLoginBody(body) {
   const email = (body.email ?? '').trim();
   const password = body.password ?? '';
@@ -148,7 +147,6 @@ function validateLoginBody(body) {
   };
 }
 
-// Итоговый обработчик
 const authHandlers = [
   http.post(`${BASE_URL}/login`, async ({request}) => {
     let body;
@@ -183,7 +181,6 @@ const authHandlers = [
     return handleUserStatus(user);
   }),
 
-  // POST /api/auth/login/2fa
   http.post(`${BASE_URL}/login/2fa`, async ({request}) => {
     const {tempToken, code} = await request.json();
 
@@ -218,7 +215,6 @@ const authHandlers = [
     );
   }),
 
-  // POST /api/auth/refresh — silent token refresh
   http.post(`${BASE_URL}/refresh`, async ({request}) => {
     const {refreshToken} = await request.json();
 
@@ -237,7 +233,6 @@ const authHandlers = [
     return HttpResponse.json({accessToken, expiresIn: 3600}, {status: 200});
   }),
 
-  // GET /api/auth/me — used by the app to check "am I logged in"
   http.get(`${BASE_URL}/me`, ({request}) => {
     const auth = request.headers.get('authorization') ?? '';
     const token = auth.replace('Bearer ', '');
@@ -249,13 +244,11 @@ const authHandlers = [
     return HttpResponse.json({status: 'authenticated'}, {status: 200});
   }),
 
-  // POST /api/auth/login
   http.post(`${BASE_URL}/login`, async () => {
     await delay(200);
     return HttpResponse.json({error: 'SERVICE_UNAVAILABLE', message: 'Service is under maintenance.'}, {status: 503});
   }),
 
-  // POST /api/auth/logout
   http.post(`${BASE_URL}/logout`, ({request}) => {
     const auth = request.headers.get('authorization') ?? '';
     activeSessions.delete(auth.replace('Bearer ', ''));

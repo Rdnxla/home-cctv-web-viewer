@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
-import {useCameraStreamQuery} from '@/api/cameras/cameraQueries';
 import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
-import type {Camera} from '../model/types';
+import {useCameraStreamQuery} from '@/api/cameras/cameraQueries';
+import type {Camera} from '@/api/cameras/types';
 import {CameraPlayer} from './CameraPlayer';
 import {StreamPlaceholder} from './StreamPlaceholder';
 
@@ -17,7 +17,7 @@ export function CameraLiveView(props: CameraLiveViewProps) {
   const {data: stream, error, refetch} = useCameraStreamQuery(camera.id, isOnline);
 
   const retryStream = useCallback(() => {
-    refetch().catch((e) => (showMessage(e, 'error')));
+    refetch().catch(e => showMessage(e, 'error'));
   }, [refetch, showMessage]);
 
   return (

@@ -3,7 +3,6 @@ const BASE = 1024;
 
 const numberFormat = new Intl.NumberFormat('ru', {maximumFractionDigits: 1});
 
-/** `1,8 ГБ` */
 export function formatFileSize(bytes: number) {
   let value = Math.max(0, bytes);
   let unitIndex = 0;

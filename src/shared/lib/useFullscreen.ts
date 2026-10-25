@@ -1,10 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 
-/**
- * Полноэкранный режим для произвольного элемента.
- *   const {ref, isFullscreen, isSupported, toggle} = useFullscreen<HTMLDivElement>();
- *   <div ref={ref}>…</div>
- */
 export function useFullscreen<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);

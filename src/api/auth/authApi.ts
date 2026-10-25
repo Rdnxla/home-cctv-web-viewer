@@ -1,5 +1,5 @@
 import {apiFetch} from '@/shared/api/http';
-import type {AuthSuccess, LoginPayload, LoginResponse} from './auth.types';
+import type {AuthSuccess, LoginPayload, LoginResponse, TwoFactorPayload} from './types';
 
 function login(payload: LoginPayload) {
   return apiFetch<LoginResponse>('/api/auth/login', {
@@ -8,7 +8,7 @@ function login(payload: LoginPayload) {
   });
 }
 
-function verifyTwoFactor(payload: {tempToken: string; code: string}) {
+function verifyTwoFactor(payload: TwoFactorPayload) {
   return apiFetch<AuthSuccess>('/api/auth/login/2fa', {
     body: JSON.stringify(payload),
     method: 'POST',

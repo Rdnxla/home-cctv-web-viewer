@@ -1,9 +1,9 @@
 import {Flex, Heading, Text} from '@radix-ui/themes';
 import {useCallback, useEffect} from 'react';
-import {useEventsQuery} from '@/entities/event';
-import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import {formatCount} from '@/shared/lib/pluralize';
 import {LoadError} from '@/shared/ui';
+import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
+import {useEventsQuery} from '@/api/events/eventQueries';
 import {hasActiveFilters} from '../model/eventListParams';
 import {useEventListParams} from '../model/useEventListParams';
 import {EventFilters} from './EventFilters';

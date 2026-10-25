@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import type {PlaybackSpeed, PlayerState} from '@/entities/camera';
 import {useCameraPlaybackQuery} from '@/api/cameras/cameraQueries';
+import type {PlaybackSpeed} from '@/api/cameras/types';
+import type {PlayerState} from '@/api/cameras/useWebRtcPlayer';
 import type {TimeRange} from '../../lib/time';
 import {floorToSecond, SECOND_MS} from '../../lib/time';
 
@@ -24,12 +25,9 @@ interface StopState {
 
 interface UsePlaybackOptions {
   cameraId: string;
-  /** Где за день есть запись; `undefined` — ещё загружается */
   coverage: TimeRange[] | undefined;
   day: TimeRange;
-  /** Записать момент в URL */
   onSeek: (time: number) => void;
-  /** Момент из URL — последний явный переход */
   target: number | null;
 }
 
@@ -51,12 +49,10 @@ interface PositionInput {
   target: number | null;
 }
 
-/** Отрезок записи, в который попадает момент */
 function findRangeAt(ranges: TimeRange[], time: number) {
   return ranges.find(range => range.start <= time && time < range.end);
 }
 
-/** С чего начать воспроизведение: сам `time`, если в этот момент есть запись, иначе начало следующей; `null` — дальше записей нет */
 function snapToRecording(ranges: TimeRange[], time: number) {
   for (const range of ranges) {
     if (time < range.start) return range.start;
@@ -207,7 +203,6 @@ export function usePlayback(options: UsePlaybackOptions) {
     if (status === 'idle' && firstRange) seek(firstRange.start);
   }, [coverage, isStreamFailed, key, position, retryStream, seek, status]);
 
-  /** Смена скорости продолжает воспроизведение с текущего места */
   const setSpeed = useCallback(
     (value: PlaybackSpeed) => {
       setSpeedValue(value);

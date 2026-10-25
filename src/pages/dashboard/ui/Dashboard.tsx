@@ -8,12 +8,7 @@ import styles from './Dashboard.module.scss';
 const PLURAL_FORMS = {few: 'камеры', many: 'камер', one: 'камера'};
 
 export function Component() {
-  const {
-    data: cameras,
-    error,
-    isPending,
-    refetch
-  } = useCamerasQuery();
+  const {data: cameras, error, isPending, refetch} = useCamerasQuery();
 
   return (
     <section className={`page ${styles.dashboard}`}>

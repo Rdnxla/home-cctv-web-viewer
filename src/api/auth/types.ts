@@ -2,11 +2,10 @@ type UserRole = 'instructor' | 'client';
 
 type UserStatus = 'active' | 'locked' | 'unverified' | 'password_reset_required';
 
-interface MockUser {
+interface User {
   id: string;
   roles: UserRole[];
   email: string;
-  password: string;
   phone: string;
   firstName: string;
   lastName: string;
@@ -21,8 +20,13 @@ interface LoginPayload {
   password: string;
 }
 
+interface TwoFactorPayload {
+  tempToken: string;
+  code: string;
+}
+
 interface AuthSuccess {
-  user: MockUser;
+  user: User;
   accessToken: string;
   refreshToken: string;
   expiresIn: number;
@@ -36,4 +40,4 @@ interface TwoFactorRequired {
 
 type LoginResponse = AuthSuccess | TwoFactorRequired;
 
-export type {AuthSuccess, LoginPayload, LoginResponse, TwoFactorRequired};
+export type {AuthSuccess, LoginPayload, LoginResponse, TwoFactorPayload, TwoFactorRequired, User};

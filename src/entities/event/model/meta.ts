@@ -1,8 +1,5 @@
-import type {EventCategory, EventPeriod, EventType} from './catalog';
-import {EVENT_TYPES} from './catalog';
-
-const HOUR_MS = 3_600_000;
-const DAY_MS = 24 * HOUR_MS;
+import type {EventCategory, EventPeriod, EventType} from '@/api/events/types';
+import {EVENT_TYPES} from '@/api/events/types';
 
 interface EventCategoryMeta {
   color: 'amber' | 'blue' | 'red';
@@ -18,12 +15,9 @@ interface EventTypeMeta {
 }
 
 interface EventPeriodMeta {
-  /** `null` — без ограничения по времени */
-  durationMs: number | null;
   label: string;
 }
 
-/** Подпись источника для событий самого регистратора */
 export const DEVICE_SOURCE_LABEL = 'Устройство';
 
 export const EVENT_CATEGORY_META: Record<EventCategory, EventCategoryMeta> = {
@@ -49,11 +43,11 @@ export const EVENT_TYPE_META: Record<EventType, EventTypeMeta> = {
 };
 
 export const EVENT_PERIOD_META: Record<EventPeriod, EventPeriodMeta> = {
-  '1h': {durationMs: HOUR_MS, label: 'Последний час'},
-  '7d': {durationMs: 7 * DAY_MS, label: 'Последние 7 дней'},
-  '24h': {durationMs: DAY_MS, label: 'Последние 24 часа'},
-  '30d': {durationMs: 30 * DAY_MS, label: 'Последние 30 дней'},
-  all: {durationMs: null, label: 'Всё время'},
+  '1h': {label: 'Последний час'},
+  '7d': {label: 'Последние 7 дней'},
+  '24h': {label: 'Последние 24 часа'},
+  '30d': {label: 'Последние 30 дней'},
+  all: {label: 'Всё время'},
 };
 
 export function getEventTypesByCategory(category: EventCategory) {

@@ -1,6 +1,6 @@
 import {VideoIcon} from '@radix-ui/react-icons';
 import {Heading, Skeleton, Text} from '@radix-ui/themes';
-import {useNvrInfoQuery} from '@/entities/nvr';
+import {useNvrInfoQuery} from '@/api/nvr/nvrQueries';
 import styles from './DeviceInfo.module.scss';
 
 const FALLBACK_NAME = 'Регистратор';

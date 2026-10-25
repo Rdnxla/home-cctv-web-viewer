@@ -17,7 +17,6 @@ export function pluralize(count: number, forms: PluralForms) {
   return forms.many;
 }
 
-/** `1 234 события` */
 export function formatCount(count: number, forms: PluralForms) {
   return `${numberFormat.format(count)} ${pluralize(count, forms)}`;
 }

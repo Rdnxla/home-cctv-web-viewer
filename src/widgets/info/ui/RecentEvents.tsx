@@ -1,15 +1,15 @@
 import {Flex, Heading, Link, Skeleton, Text} from '@radix-ui/themes';
 import {useCallback, useId} from 'react';
 import {Link as RouterLink} from 'react-router';
-import type {EventListParams, EventListResponse} from '@/entities/event';
-// TODO: убрать запросы из entities
-import {EVENT_CATEGORIES, EventCategoryBadge, EventSummary, useEventsQuery} from '@/entities/event';
+import {EventCategoryBadge, EventSummary} from '@/entities/event';
 import {ROUTES} from '@/shared/config/routes';
 import {formatRelativeTime} from '@/shared/lib/formatRelativeTime';
 import {InlineError} from '@/shared/ui';
+import {useEventsQuery} from '@/api/events/eventQueries';
+import type {EventListParams, EventListResponse} from '@/api/events/types';
+import {EVENT_CATEGORIES} from '@/api/events/types';
 import styles from './RecentEvents.module.scss';
 
-/** Последние события за сутки: та же выборка даёт и список, и счётчики по категориям */
 const RECENT_EVENTS_PARAMS: EventListParams = {
   categories: [],
   order: 'desc',

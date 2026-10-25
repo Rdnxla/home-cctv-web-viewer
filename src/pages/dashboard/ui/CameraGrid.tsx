@@ -1,11 +1,11 @@
 import {VideoIcon} from '@radix-ui/react-icons';
 import {AspectRatio, Flex, Grid, Skeleton, Text} from '@radix-ui/themes';
-import {useCallback} from 'react';
-import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
-import {LoadError} from '@/shared/ui';
-import {CameraGridCard} from './CameraGridCard';
 import type {UseQueryResult} from '@tanstack/react-query';
+import {useCallback} from 'react';
+import {LoadError} from '@/shared/ui';
+import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import type {Camera} from '@/api/cameras/types';
+import {CameraGridCard} from './CameraGridCard';
 
 const GRID_COLUMNS = {initial: '1', sm: '2'};
 const SKELETON_KEYS = ['camera-skeleton-1', 'camera-skeleton-2', 'camera-skeleton-3', 'camera-skeleton-4'];
@@ -18,17 +18,11 @@ interface CameraGridProps {
 }
 
 export function CameraGrid(props: CameraGridProps) {
-  const {
-    cameras,
-    error,
-    isPending,
-    refetch,
-  } = props;
+  const {cameras, error, isPending, refetch} = props;
   const showMessage = useCalloutMessage();
 
   const retry = useCallback(() => {
-    refetch()
-      .catch((e) => (showMessage(e, 'error')));
+    refetch().catch(e => showMessage(e, 'error'));
   }, [refetch, showMessage]);
 
   if (cameras && cameras.length === 0) {

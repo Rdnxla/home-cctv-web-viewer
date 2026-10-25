@@ -1,12 +1,12 @@
 import {delay, HttpResponse, http} from 'msw';
-import type {CreateBookmarkPayload} from '@/entities/bookmark';
-import {BOOKMARK_TITLE_MAX_LENGTH} from '@/entities/bookmark';
-import type {RecordingListResponse} from '@/entities/recording';
 import type {ApiErrorCodeType} from '@/shared/api/authErrorCodes';
 import {ApiErrorCode} from '@/shared/api/authErrorCodes';
+import type {CreateBookmarkPayload} from '@/api/bookmarks/types';
+import {BOOKMARK_TITLE_MAX_LENGTH} from '@/api/bookmarks/types';
+import type {StreamInfo} from '@/api/cameras/types';
+import type {RecordingListResponse} from '@/api/recordings/types';
 import {addBookmark, listBookmarks, removeBookmark} from '../data/bookmarks';
 import {cameras} from '../data/nvr';
-import type {StreamInfo} from '../data/nvrtypes';
 import {getCameraRecordings, hasRecordingAt} from '../data/recordings';
 import {closeMockWhepSession, createMockWhepSession} from './mockWhep';
 
@@ -38,7 +38,6 @@ function parseTime(value: string | null) {
   return Number.isNaN(time) ? null : time;
 }
 
-/** Момент начала и скорость воспроизведения; строка — текст ошибки валидации */
 function parsePlaybackQuery(search: URLSearchParams): PlaybackQuery | string {
   const from = parseTime(search.get('from'));
   const speed = Number(search.get('speed') ?? '1');
@@ -49,7 +48,6 @@ function parsePlaybackQuery(search: URLSearchParams): PlaybackQuery | string {
   return {from, speed};
 }
 
-/** Тело запроса на создание закладки; строка — текст ошибки валидации */
 function parseBookmarkPayload(body: unknown): CreateBookmarkPayload | string {
   if (typeof body !== 'object' || body === null) return 'Ожидается JSON-объект';
   const {at, cameraId, title} = body as Record<string, unknown>;
@@ -64,7 +62,6 @@ function parseBookmarkPayload(body: unknown): CreateBookmarkPayload | string {
 }
 
 export const archiveHandlers = [
-  /** Файлы архива камеры за период `[from, to)` и границы всего архива */
   http.get(`${API}/cameras/:id/recordings`, async ({params, request}) => {
     await delay(300);
     const camera = findCamera(params.id);
@@ -95,7 +92,6 @@ export const archiveHandlers = [
     });
   }),
 
-  /** Параметры WHEP-подключения к архиву с момента `from` со скоростью `speed` */
   http.get(`${API}/cameras/:id/playback`, async ({params, request}) => {
     await delay(250);
     const camera = findCamera(params.id);
@@ -120,7 +116,6 @@ export const archiveHandlers = [
     });
   }),
 
-  // WHEP-сигналинг воспроизведения архива: SDP offer -> SDP answer
   http.post(`${API}/playback/:id/whep`, async ({params, request}) => {
     const camera = findCamera(params.id);
     if (!camera) return cameraNotFound();
@@ -143,13 +138,11 @@ export const archiveHandlers = [
     });
   }),
 
-  // Завершение сеанса воспроизведения
   http.delete(`${API}/playback/:id/whep/:session`, ({params}) => {
     closeMockWhepSession(String(params.session));
     return new HttpResponse(null, {status: 200});
   }),
 
-  /** Закладки архива; `cameraId` — только закладки этой камеры */
   http.get(`${API}/bookmarks`, async ({request}) => {
     await delay(200);
     return HttpResponse.json(listBookmarks(new URL(request.url).searchParams.get('cameraId')));

@@ -1,8 +1,8 @@
 import type {ChangeEvent} from 'react';
 import {useCallback, useMemo} from 'react';
-import {useRecordingsQuery} from '@/entities/recording';
 import {useNow} from '@/shared/lib/useNow';
 import {useCamerasQuery} from '@/api/cameras/cameraQueries';
+import {useRecordingsQuery} from '@/api/recordings/recordingQueries';
 import {getDayRange, parseDayKey, shiftDay, startOfDay, toDayKey} from '../lib/time';
 import {useArchiveParams} from './useArchiveParams';
 
@@ -11,10 +11,6 @@ const TODAY_REFRESH_MS = 60_000;
 
 const dayTitleFormat = new Intl.DateTimeFormat('ru', {day: 'numeric', month: 'long', weekday: 'long', year: 'numeric'});
 
-/**
- * Данные страницы архива: камера, день и момент из URL, список камер, записи выбранной камеры за день
- * и переходы по дням для шапки. Пока камера в URL не выбрана, показывается первая камера из списка.
- */
 export function useArchivePage() {
   const {openMoment, params, seek, selectCamera, selectDay} = useArchiveParams();
   const {dayStart, moment} = params;

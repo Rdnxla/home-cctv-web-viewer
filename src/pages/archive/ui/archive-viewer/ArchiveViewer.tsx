@@ -26,13 +26,14 @@ import {
 import {Slider} from 'radix-ui';
 import {useId} from 'react';
 import {Link as RouterLink} from 'react-router';
-import {BOOKMARK_TITLE_MAX_LENGTH} from '@/entities/bookmark';
 import {CameraPlayer} from '@/entities/camera';
-import type {EventCategory} from '@/entities/event';
-import type {RecordingTrigger} from '@/entities/recording';
-import {RECORDING_TRIGGER_META, RECORDING_TRIGGERS} from '@/entities/recording';
+import {RECORDING_TRIGGER_META} from '@/entities/recording';
 import {ROUTES} from '@/shared/config/routes';
 import {LoadError, MediaWithAside} from '@/shared/ui';
+import {BOOKMARK_TITLE_MAX_LENGTH} from '@/api/bookmarks/types';
+import type {EventCategory} from '@/api/events/types';
+import type {RecordingTrigger} from '@/api/recordings/types';
+import {RECORDING_TRIGGERS} from '@/api/recordings/types';
 import {ArchiveSidebar} from '../archive-sidebar/ArchiveSidebar';
 import styles from './ArchiveViewer.module.scss';
 import type {ArchiveViewerProps} from './useArchiveViewer';
@@ -69,10 +70,7 @@ const LEGEND = [
 
 const EMPTY_THUMB_CLASS = `${styles.archiveViewer__thumb} ${styles.archiveViewer__thumbEmpty}`;
 
-/**
- * Архив выбранной камеры за день: плеер (каждый сеанс воспроизведения — отдельный экземпляр плеера со своим
- * WHEP-подключением), управление воспроизведением, новая закладка, шкала времени, итог дня и боковая панель
- */
+/** Каждый сеанс воспроизведения — отдельный экземпляр плеера (`key` = ключ сеанса) со своим WHEP-подключением */
 export function ArchiveViewer(props: ArchiveViewerProps) {
   const {camera, day, recordingsQuery} = props;
   const {

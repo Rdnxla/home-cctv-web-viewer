@@ -1,4 +1,3 @@
-/** Текущий кадр `<video>` в виде изображения. `null`, если кадра ещё нет. */
 export function captureVideoFrame(video: HTMLVideoElement, type = 'image/png'): Promise<Blob | null> {
   const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;

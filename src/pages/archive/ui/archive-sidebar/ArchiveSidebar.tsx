@@ -12,7 +12,6 @@ const BOOKMARK_SKELETON_KEYS = ['bookmark-skeleton-1', 'bookmark-skeleton-2', 'b
 const FILE_SKELETON_KEYS = ['file-skeleton-1', 'file-skeleton-2', 'file-skeleton-3', 'file-skeleton-4'];
 const CURRENT_BUTTON_CLASS = `${styles.archiveSidebar__button} ${styles.archiveSidebar__current}`;
 
-/** Боковая панель архива: события дня, закладки камеры и файлы записи; пункт списка — переход к моменту записи */
 export function ArchiveSidebar(props: ArchiveSidebarProps) {
   const {bookmarks, deleteBookmark, events, files, openBookmark, retryBookmarks, retryEvents, retryFiles, seekToItem} =
     useArchiveSidebar(props);

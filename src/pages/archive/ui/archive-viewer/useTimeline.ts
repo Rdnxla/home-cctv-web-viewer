@@ -1,19 +1,17 @@
 import type {PointerEvent} from 'react';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import type {Bookmark} from '@/entities/bookmark';
-import type {NvrEvent} from '@/entities/event';
-import type {RecordingTrigger} from '@/entities/recording';
 import {isOneOf} from '@/shared/lib/isOneOf';
+import type {Bookmark} from '@/api/bookmarks/types';
+import type {NvrEvent} from '@/api/events/types';
 import type {TimeRange} from '../../lib/time';
 import {formatClock, formatDateTime, HOUR_MS, MINUTE_MS, SECOND_MS} from '../../lib/time';
+import type {RecordingSegment} from '../../model/recordingSegments';
 
-/** Подписи у самого края шкалы обрезались бы */
 const TICK_EDGE_PERCENT = 3;
 /** Самый короткий отрезок записи всё равно виден (≈2 px на ширине 1000 px) */
 const MIN_SEGMENT_PERCENT = 0.2;
 /** Стрелки клавиатуры подтверждают каждое нажатие — переходим, когда пользователь остановился */
 const COMMIT_DELAY_MS = 300;
-/** Масштабы шкалы — сколько времени видно сразу */
 const TIMELINE_ZOOMS = ['24h', '6h', '1h', '15m'] as const;
 
 const shortClockFormat = new Intl.DateTimeFormat('ru', {hour: '2-digit', minute: '2-digit'});
@@ -23,9 +21,7 @@ type TimelineZoom = (typeof TIMELINE_ZOOMS)[number];
 interface TimelineZoomMeta {
   durationMs: number;
   label: string;
-  /** Шаг ползунка: точность щелчка и стрелок клавиатуры (с Shift — в 10 раз больше) */
   stepMs: number;
-  /** Шаг подписей времени под шкалой */
   tickMs: number;
 }
 
@@ -38,20 +34,16 @@ interface ScrubState {
 interface TimelineTick {
   label: string;
   time: number;
-  /** Положение на шкале, % ширины */
   x: string;
 }
 
 interface UseTimelineOptions {
-  /** Закладки камеры за все дни */
   bookmarks: Bookmark[] | undefined;
   day: TimeRange;
-  /** События дня */
   events: NvrEvent[];
   now: number;
   onSeek: (time: number) => void;
   position: number | null;
-  /** Отрезки записи дня; `undefined` — записи ещё загружаются */
   segments: RecordingSegment[] | undefined;
 }
 
@@ -68,21 +60,11 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-/** Положение момента на шкале, % ширины */
 function toPercent(time: number, view: TimeRange) {
   return ((time - view.start) / (view.end - view.start)) * 100;
 }
 
-/** Непрерывный отрезок записи одного режима */
-export interface RecordingSegment extends TimeRange {
-  trigger: RecordingTrigger;
-}
-
-/**
- * Шкала времени дня: масштаб, перетаскивание ползунка и момент под указателем. Шкала рисуется в SVG,
- * поэтому отрезки записи, события, закладки и отметки времени сразу получают положение в процентах её ширины.
- * Щелчок или перетаскивание — переход к моменту, стрелки — шаг по шкале (с Shift — крупнее).
- */
+/** Шкала рисуется в SVG, поэтому отрезки, отметки и подписи сразу получают положение в процентах её ширины */
 export function useTimeline(options: UseTimelineOptions) {
   const {bookmarks, day, events, now, onSeek, position, segments} = options;
   const [zoom, setZoom] = useState<TimelineZoom>('24h');

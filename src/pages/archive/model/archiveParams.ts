@@ -9,18 +9,14 @@ import {formatLocalDateTime, parseDayKey, parseLocalDateTime, startOfDay, toDayK
 const URL_KEYS = {cameraId: 'camera', day: 'day', moment: 't'} as const;
 
 export interface ArchiveParams {
-  /** `null` — камера не выбрана, показывается первая из списка */
   cameraId: string | null;
-  /** Полночь выбранного дня */
   dayStart: number;
-  /** Последний выбранный момент; `null` — не выбран */
   moment: number | null;
 }
 
 export function parseArchiveParams(search: URLSearchParams, now: number): ArchiveParams {
   const today = startOfDay(now);
   const parsedMoment = parseLocalDateTime(search.get(URL_KEYS.moment));
-  // Будущего в архиве нет
   const moment = parsedMoment !== null && parsedMoment <= now ? parsedMoment : null;
   const requestedDay = moment === null ? parseDayKey(search.get(URL_KEYS.day)) : startOfDay(moment);
 

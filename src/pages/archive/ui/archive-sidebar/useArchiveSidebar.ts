@@ -1,17 +1,16 @@
 import type {UseQueryResult} from '@tanstack/react-query';
 import type {MouseEvent} from 'react';
 import {useCallback} from 'react';
-import type {Bookmark} from '@/entities/bookmark';
-import {useDeleteBookmarkMutation} from '@/entities/bookmark';
-import type {EventListResponse} from '@/entities/event';
-import type {RecordingListResponse} from '@/entities/recording';
 import {formatDuration} from '@/shared/lib/formatDuration';
 import {formatFileSize} from '@/shared/lib/formatFileSize';
 import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
+import {useDeleteBookmarkMutation} from '@/api/bookmarks/bookmarkQueries';
+import type {Bookmark} from '@/api/bookmarks/types';
+import type {EventListResponse} from '@/api/events/types';
+import type {RecordingListResponse} from '@/api/recordings/types';
 import type {TimeRange} from '../../lib/time';
 import {formatClock, formatDateTime, getEventSeekTime} from '../../lib/time';
 
-/** Что показывает вкладка: заглушки на время загрузки, ошибку, пустой список или сам список */
 type ListStatus = 'empty' | 'error' | 'loading' | 'ready';
 
 const countFormat = new Intl.NumberFormat('ru');
@@ -30,7 +29,6 @@ export interface ArchiveSidebarProps {
   day: TimeRange;
   eventsQuery: UseQueryResult<EventListResponse>;
   now: number;
-  /** Переход к моменту закладки — в том числе на другой день */
   onOpenBookmark: (time: number) => void;
   onSeek: (time: number) => void;
   position: number | null;
@@ -38,7 +36,6 @@ export interface ArchiveSidebarProps {
 }
 
 /**
- * Списки боковой панели архива: события дня, закладки камеры за все дни (новые моменты сверху) и файлы записи.
  * Кнопка пункта хранит момент перехода в `data-time`, кнопка удаления закладки — её id в `data-id`,
  * поэтому на каждый список хватает одного обработчика.
  */
@@ -52,7 +49,6 @@ export function useArchiveSidebar(props: ArchiveSidebarProps) {
   const {mutate: deleteBookmarkById} = deletion;
   const deletingId = deletion.isPending ? deletion.variables : null;
 
-  // Подсвечено последнее событие, до которого дошло воспроизведение
   const currentEventId =
     position === null ? null : (events?.items.findLast(event => getEventSeekTime(event) <= position)?.id ?? null);
   const eventsNote =

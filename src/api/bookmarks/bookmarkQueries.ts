@@ -4,7 +4,6 @@ import {createBookmark, deleteBookmark, getBookmarks} from './bookmarkApi';
 
 const BOOKMARKS_KEY = 'bookmarks';
 
-/** Ключи начинаются с имени сущности: после изменения сбрасываются все списки закладок */
 export const bookmarkKeys = {
   all: [BOOKMARKS_KEY] as const,
   list: (cameraId: string) => [BOOKMARKS_KEY, 'list', cameraId] as const,

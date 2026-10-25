@@ -1,5 +1,5 @@
-import type {Bookmark, CreateBookmarkPayload} from '@/entities/bookmark';
-import type {EventType} from '@/entities/event';
+import type {Bookmark, CreateBookmarkPayload} from '@/api/bookmarks/types';
+import type {EventType} from '@/api/events/types';
 import {events} from './events';
 import {hasRecordingAt} from './recordings';
 
@@ -74,7 +74,6 @@ function storeBookmarks(list: Bookmark[]) {
 
 let bookmarks: Bookmark[] = readStoredBookmarks() ?? createSeedBookmarks(Date.now());
 
-/** Закладки камеры (`null` — всех камер), новые моменты сверху */
 export function listBookmarks(cameraId: string | null) {
   return bookmarks
     .filter(bookmark => cameraId === null || bookmark.cameraId === cameraId)
@@ -88,7 +87,6 @@ export function addBookmark(payload: CreateBookmarkPayload, now: number) {
   return bookmark;
 }
 
-/** `false` — закладки с таким id нет */
 export function removeBookmark(id: string) {
   const next = bookmarks.filter(bookmark => bookmark.id !== id);
   if (next.length === bookmarks.length) return false;

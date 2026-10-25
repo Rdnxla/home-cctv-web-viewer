@@ -2,7 +2,6 @@ const SECOND_MS = 1000;
 const MINUTE_S = 60;
 const HOUR_S = 3600;
 
-/** `2 ч 15 мин`, `12 мин 30 с`, `45 с` */
 export function formatDuration(durationMs: number) {
   const totalSeconds = Math.max(0, Math.round(durationMs / SECOND_MS));
   const hours = Math.floor(totalSeconds / HOUR_S);

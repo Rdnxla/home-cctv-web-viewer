@@ -1,10 +1,10 @@
 import {ArrowRightIcon} from '@radix-ui/react-icons';
 import {Card, Flex, Link} from '@radix-ui/themes';
 import {Link as RouterLink} from 'react-router';
-import type {Camera} from '@/entities/camera';
 import {CameraLiveView} from '@/entities/camera';
-import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
 import {ROUTES} from '@/shared/config/routes';
+import {CameraStatusBadge} from '@/shared/ui/cam-status-badge/CameraStatusBadge';
+import type {Camera} from '@/api/cameras/types';
 
 interface CameraGridCardProps {
   camera: Camera;

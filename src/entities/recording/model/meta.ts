@@ -1,10 +1,8 @@
-import type {RecordingTrigger} from './catalog';
+import type {RecordingTrigger} from '@/api/recordings/types';
 
 interface RecordingTriggerMeta {
   color: 'orange' | 'teal';
-  /** Подпись в легенде шкалы времени */
   label: string;
-  /** Подпись в списке файлов */
   shortLabel: string;
 }
 

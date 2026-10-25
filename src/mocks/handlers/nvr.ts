@@ -1,16 +1,12 @@
 import {delay, HttpResponse, http} from 'msw';
+import type {Camera, CameraError, StreamInfo} from '@/api/cameras/types';
 import {cameras, getNvrInfo, poePorts, sortCameras, whepUrl} from '../data/nvr';
-import type {ApiErrorBody, Camera, StreamInfo} from '../data/nvrtypes';
 import {closeMockWhepSession, createMockWhepSession} from './mockWhep';
 
 const API = '/api';
 
-const errorResponse = (status: number, body: ApiErrorBody) => HttpResponse.json(body, {status});
+const errorResponse = (status: number, body: CameraError) => HttpResponse.json(body, {status});
 
-/**
- * Общая проверка доступности камеры для /stream и /whep.
- * Возвращает Response с ошибкой или null, если камера online.
- */
 async function guardCamera(camera: Camera | undefined) {
   if (!camera) {
     await delay(200);
@@ -55,7 +51,6 @@ export const nvrHandlers = [
     return HttpResponse.json(camera);
   }),
 
-  // Параметры WebRTC-подключения
   http.get(`${API}/cameras/:id/stream`, async ({params}) => {
     const camera = cameras.find(c => c.id === params.id);
     const failure = await guardCamera(camera);
@@ -75,7 +70,6 @@ export const nvrHandlers = [
     return HttpResponse.json(stream);
   }),
 
-  // WHEP signaling: SDP offer -> SDP answer
   http.post(`${API}/webrtc/:id/whep`, async ({params, request}) => {
     const camera = cameras.find(c => c.id === params.id);
     const failure = await guardCamera(camera);
@@ -101,7 +95,6 @@ export const nvrHandlers = [
     });
   }),
 
-  // Завершение WHEP-сессии
   http.delete(`${API}/webrtc/:id/whep/:session`, ({params}) => {
     closeMockWhepSession(String(params.session));
     return new HttpResponse(null, {status: 200});
