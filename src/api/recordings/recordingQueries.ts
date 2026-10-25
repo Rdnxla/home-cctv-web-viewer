@@ -7,12 +7,12 @@ const RECORDINGS_KEY = 'recordings';
 /** Пока период не закончился, архив растёт: файл, который пишется сейчас, удлиняется, появляются новые */
 const GROWING_ARCHIVE_REFRESH_MS = 60_000;
 
-export const recordingKeys = {
+const recordingKeys = {
   all: [RECORDINGS_KEY] as const,
   list: (params: RecordingListParams | null) => [RECORDINGS_KEY, 'list', params] as const,
 };
 
-export function useRecordingsQuery(params: RecordingListParams | null) {
+function useRecordingsQuery(params: RecordingListParams | null) {
   return useQuery({
     queryFn: params === null ? skipToken : () => getRecordings(params),
     queryKey: recordingKeys.list(params),
@@ -20,3 +20,5 @@ export function useRecordingsQuery(params: RecordingListParams | null) {
     retry: retryUnlessClientError,
   });
 }
+
+export {recordingKeys, useRecordingsQuery};

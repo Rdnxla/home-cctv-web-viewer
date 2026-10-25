@@ -18,7 +18,7 @@ function mergeRanges<T extends TimeRange>(ranges: T[], canMerge: (last: T, next:
   return merged;
 }
 
-export interface RecordingSegment extends TimeRange {
+interface RecordingSegment extends TimeRange {
   trigger: RecordingTrigger;
 }
 
@@ -26,7 +26,7 @@ export interface RecordingSegment extends TimeRange {
  * Файл, который ещё пишется, тянется до конца дня: где кончается запись на самом деле,
  * знает только «сейчас», его учитывают при показе и воспроизведении.
  */
-export function getRecordingSegments(recordings: Recording[], day: TimeRange): RecordingSegment[] {
+function getRecordingSegments(recordings: Recording[], day: TimeRange): RecordingSegment[] {
   const clipped = recordings
     .map(recording => ({
       end: Math.min(recording.endedAt === null ? day.end : Date.parse(recording.endedAt), day.end),
@@ -37,9 +37,12 @@ export function getRecordingSegments(recordings: Recording[], day: TimeRange): R
   return mergeRanges(clipped, (last, next) => last.trigger === next.trigger);
 }
 
-export function getCoverage(segments: RecordingSegment[]): TimeRange[] {
+function getCoverage(segments: RecordingSegment[]): TimeRange[] {
   return mergeRanges(
     segments.map(({end, start}) => ({end, start})),
     () => true
   );
 }
+
+export type {RecordingSegment};
+export {getCoverage, getRecordingSegments};

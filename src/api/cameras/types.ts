@@ -1,11 +1,11 @@
-export type CameraStatus = 'online' | 'error' | 'no_connection';
+type CameraStatus = 'online' | 'error' | 'no_connection';
 
-export interface CameraError {
+interface CameraError {
   code: string;
   message: string;
 }
 
-export interface Camera {
+interface Camera {
   id: string;
   name: string;
   portId: number;
@@ -20,13 +20,13 @@ export interface Camera {
   error: CameraError | null;
 }
 
-export interface IceServer {
+interface IceServer {
   urls: string | string[];
   username?: string;
   credential?: string;
 }
 
-export interface StreamInfo {
+interface StreamInfo {
   cameraId: string;
   protocol: 'webrtc';
   whepUrl: string;
@@ -37,11 +37,14 @@ export interface StreamInfo {
   expiresAt: string;
 }
 
-export const PLAYBACK_SPEEDS = [0.5, 1, 2, 4, 8, 16] as const;
+const PLAYBACK_SPEEDS = [0.5, 1, 2, 4, 8, 16] as const;
 
-export type PlaybackSpeed = (typeof PLAYBACK_SPEEDS)[number];
+type PlaybackSpeed = (typeof PLAYBACK_SPEEDS)[number];
 
-export interface CameraPlaybackParams {
+interface CameraPlaybackParams {
   from: string;
   speed: PlaybackSpeed;
 }
+
+export type {Camera, CameraError, CameraPlaybackParams, CameraStatus, IceServer, PlaybackSpeed, StreamInfo};
+export {PLAYBACK_SPEEDS};

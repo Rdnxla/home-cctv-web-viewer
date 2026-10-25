@@ -4,9 +4,9 @@ import type {NvrInfo, PoePort} from '@/api/nvr/types';
 const now = Date.now();
 const minutesAgo = (m: number) => new Date(now - m * 60_000).toISOString();
 
-export const NVR_IP = '192.168.1.10';
+const NVR_IP = '192.168.1.10';
 
-export const cameras: Camera[] = [
+const cameras: Camera[] = [
   {
     codec: null,
     error: null,
@@ -68,17 +68,17 @@ export const cameras: Camera[] = [
   },
 ];
 
-export const STATUS_ORDER: Record<CameraStatus, number> = {
+const STATUS_ORDER: Record<CameraStatus, number> = {
   error: 1,
   no_connection: 2,
   online: 0,
 };
 
-export function sortCameras(list: Camera[]): Camera[] {
+function sortCameras(list: Camera[]): Camera[] {
   return [...list].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.portId - b.portId);
 }
 
-export const poePorts: PoePort[] = [
+const poePorts: PoePort[] = [
   {cameraId: 'cam-1', id: 1, linkUp: true, maxPowerW: 30, number: 1, poeEnabled: true, powerW: 6.8},
   {cameraId: 'cam-2', id: 2, linkUp: true, maxPowerW: 30, number: 2, poeEnabled: true, powerW: 5.2},
   // Питание подаётся, линк есть, но камера не отвечает по RTSP
@@ -86,7 +86,7 @@ export const poePorts: PoePort[] = [
   {cameraId: null, id: 4, linkUp: false, maxPowerW: 30, number: 4, poeEnabled: true, powerW: 0},
 ];
 
-export function getNvrInfo(): NvrInfo {
+function getNvrInfo(): NvrInfo {
   const poeUsedW = Number(poePorts.reduce((sum, p) => sum + p.powerW, 0).toFixed(1));
   return {
     firmware: 'V4.001.0000000.2',
@@ -104,15 +104,15 @@ export function getNvrInfo(): NvrInfo {
 }
 
 /** Внутренний RTSP-адрес — используется только шлюзом, браузеру он не отдаётся */
-export function rtspSource(camera: Camera): string {
+function rtspSource(camera: Camera): string {
   return `rtsp://${NVR_IP}:554/cam/realmonitor?channel=${camera.portId}&subtype=0`;
 }
 
-export function whepUrl(camera: Camera): string {
+function whepUrl(camera: Camera): string {
   return `/api/webrtc/${camera.id}/whep`;
 }
 
-export const MOCK_SDP_ANSWER = [
+const MOCK_SDP_ANSWER = [
   'v=0',
   'o=- 1 1 IN IP4 127.0.0.1',
   's=-',
@@ -130,3 +130,5 @@ export const MOCK_SDP_ANSWER = [
   'a=setup:passive',
   '',
 ].join('\r\n');
+
+export {cameras, getNvrInfo, MOCK_SDP_ANSWER, NVR_IP, poePorts, rtspSource, STATUS_ORDER, sortCameras, whepUrl};

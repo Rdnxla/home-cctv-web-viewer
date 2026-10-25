@@ -8,13 +8,13 @@ import {formatLocalDateTime, parseDayKey, parseLocalDateTime, startOfDay, toDayK
 
 const URL_KEYS = {cameraId: 'camera', day: 'day', moment: 't'} as const;
 
-export interface ArchiveParams {
+interface ArchiveParams {
   cameraId: string | null;
   dayStart: number;
   moment: number | null;
 }
 
-export function parseArchiveParams(search: URLSearchParams, now: number): ArchiveParams {
+function parseArchiveParams(search: URLSearchParams, now: number): ArchiveParams {
   const today = startOfDay(now);
   const parsedMoment = parseLocalDateTime(search.get(URL_KEYS.moment));
   const moment = parsedMoment !== null && parsedMoment <= now ? parsedMoment : null;
@@ -27,7 +27,7 @@ export function parseArchiveParams(search: URLSearchParams, now: number): Archiv
   };
 }
 
-export function serializeArchiveParams(params: ArchiveParams, now: number) {
+function serializeArchiveParams(params: ArchiveParams, now: number) {
   const search = new URLSearchParams();
 
   if (params.cameraId !== null) search.set(URL_KEYS.cameraId, params.cameraId);
@@ -39,3 +39,6 @@ export function serializeArchiveParams(params: ArchiveParams, now: number) {
 
   return search;
 }
+
+export type {ArchiveParams};
+export {parseArchiveParams, serializeArchiveParams};

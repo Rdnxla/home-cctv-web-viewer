@@ -1,8 +1,8 @@
 import type {PaginatedResponse, SortOrder} from '@/shared/api/pagination';
 
-export const EVENT_CATEGORIES = ['alarm', 'warning', 'detection'] as const;
+const EVENT_CATEGORIES = ['alarm', 'warning', 'detection'] as const;
 
-export const EVENT_TYPES = [
+const EVENT_TYPES = [
   'intrusion',
   'tampering',
   'video_loss',
@@ -18,18 +18,18 @@ export const EVENT_TYPES = [
   'line_crossing',
 ] as const;
 
-export const EVENT_PERIODS = ['1h', '24h', '7d', '30d', 'all'] as const;
+const EVENT_PERIODS = ['1h', '24h', '7d', '30d', 'all'] as const;
 
-export const EVENT_SORT_FIELDS = ['occurredAt', 'category', 'type', 'source'] as const;
+const EVENT_SORT_FIELDS = ['occurredAt', 'category', 'type', 'source'] as const;
 
-export const DEVICE_SOURCE = 'device';
+const DEVICE_SOURCE = 'device';
 
-export type EventCategory = (typeof EVENT_CATEGORIES)[number];
-export type EventType = (typeof EVENT_TYPES)[number];
-export type EventPeriod = (typeof EVENT_PERIODS)[number];
-export type EventSortField = (typeof EVENT_SORT_FIELDS)[number];
+type EventCategory = (typeof EVENT_CATEGORIES)[number];
+type EventType = (typeof EVENT_TYPES)[number];
+type EventPeriod = (typeof EVENT_PERIODS)[number];
+type EventSortField = (typeof EVENT_SORT_FIELDS)[number];
 
-export interface NvrEvent {
+interface NvrEvent {
   cameraId: string | null;
   cameraName: string | null;
   category: EventCategory;
@@ -39,7 +39,7 @@ export interface NvrEvent {
   type: EventType;
 }
 
-export interface EventListParams {
+interface EventListParams {
   categories: EventCategory[];
   order: SortOrder;
   page: number;
@@ -51,13 +51,25 @@ export interface EventListParams {
   types: EventType[];
 }
 
-export interface EventRangeParams {
+interface EventRangeParams {
   cameraId: string;
   from: string;
   to: string;
 }
 
-export interface EventListResponse extends PaginatedResponse<NvrEvent> {
+interface EventListResponse extends PaginatedResponse<NvrEvent> {
   /** Число событий по категориям с учётом всех фильтров, кроме самой категории */
   categoryCounts: Record<EventCategory, number>;
 }
+
+export type {
+  EventCategory,
+  EventListParams,
+  EventListResponse,
+  EventPeriod,
+  EventRangeParams,
+  EventSortField,
+  EventType,
+  NvrEvent,
+};
+export {DEVICE_SOURCE, EVENT_CATEGORIES, EVENT_PERIODS, EVENT_SORT_FIELDS, EVENT_TYPES};

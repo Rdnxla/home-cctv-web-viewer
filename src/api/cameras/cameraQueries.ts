@@ -5,7 +5,7 @@ import type {Camera, CameraPlaybackParams} from './types';
 
 const CAMERAS_KEY = 'cameras';
 
-export const cameraKeys = {
+const cameraKeys = {
   all: [CAMERAS_KEY] as const,
   detail: (id: string) => [CAMERAS_KEY, 'detail', id] as const,
   list: () => [CAMERAS_KEY, 'list'] as const,
@@ -13,7 +13,7 @@ export const cameraKeys = {
   stream: (id: string) => [CAMERAS_KEY, 'stream', id] as const,
 };
 
-export function useCamerasQuery() {
+function useCamerasQuery() {
   return useQuery({
     queryFn: getCameras,
     queryKey: cameraKeys.list(),
@@ -21,7 +21,7 @@ export function useCamerasQuery() {
   });
 }
 
-export function useCameraQuery(id: string) {
+function useCameraQuery(id: string) {
   const queryClient = useQueryClient();
 
   return useQuery({
@@ -32,7 +32,7 @@ export function useCameraQuery(id: string) {
   });
 }
 
-export function useCameraStreamQuery(id: string, enabled: boolean) {
+function useCameraStreamQuery(id: string, enabled: boolean) {
   return useQuery({
     enabled,
     queryFn: () => getCameraStream(id),
@@ -42,7 +42,7 @@ export function useCameraStreamQuery(id: string, enabled: boolean) {
   });
 }
 
-export function useCameraPlaybackQuery(id: string, params: CameraPlaybackParams | null) {
+function useCameraPlaybackQuery(id: string, params: CameraPlaybackParams | null) {
   return useQuery({
     queryFn: params === null ? skipToken : () => getCameraPlayback(id, params),
     queryKey: cameraKeys.playback(id, params),
@@ -50,3 +50,5 @@ export function useCameraPlaybackQuery(id: string, params: CameraPlaybackParams 
     retry: retryUnlessClientError,
   });
 }
+
+export {cameraKeys, useCameraPlaybackQuery, useCameraQuery, useCameraStreamQuery, useCamerasQuery};

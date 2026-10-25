@@ -1,8 +1,8 @@
-export const RECORDING_TRIGGERS = ['continuous', 'event'] as const;
+const RECORDING_TRIGGERS = ['continuous', 'event'] as const;
 
-export type RecordingTrigger = (typeof RECORDING_TRIGGERS)[number];
+type RecordingTrigger = (typeof RECORDING_TRIGGERS)[number];
 
-export interface Recording {
+interface Recording {
   cameraId: string;
   endedAt: string | null;
   id: string;
@@ -11,18 +11,21 @@ export interface Recording {
   trigger: RecordingTrigger;
 }
 
-export interface ArchiveBounds {
+interface ArchiveBounds {
   from: string;
   to: string;
 }
 
-export interface RecordingListParams {
+interface RecordingListParams {
   cameraId: string;
   from: string;
   to: string;
 }
 
-export interface RecordingListResponse {
+interface RecordingListResponse {
   bounds: ArchiveBounds | null;
   items: Recording[];
 }
+
+export type {ArchiveBounds, Recording, RecordingListParams, RecordingListResponse, RecordingTrigger};
+export {RECORDING_TRIGGERS};

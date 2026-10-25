@@ -5,13 +5,13 @@ import userEvent from '@testing-library/user-event';
 import type {PropsWithChildren, ReactElement} from 'react';
 import {BrowserRouter} from 'react-router';
 
-export const queryClient = new QueryClient({
+const queryClient = new QueryClient({
   defaultOptions: {
     queries: {gcTime: Number.POSITIVE_INFINITY, retry: false},
   },
 });
 
-export function render(
+function render(
   ui: ReactElement,
   {route, ...options}: Omit<RenderOptions, 'wrapper'> & {route?: string} = {
     reactStrictMode: true,
@@ -34,3 +34,4 @@ export function render(
 
 // biome-ignore lint: test file
 export * from '@testing-library/react';
+export {queryClient, render};

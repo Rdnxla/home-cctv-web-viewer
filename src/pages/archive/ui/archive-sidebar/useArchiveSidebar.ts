@@ -24,7 +24,7 @@ function withCount(label: string, count: number | undefined) {
   return count === undefined ? label : `${label} · ${countFormat.format(count)}`;
 }
 
-export interface ArchiveSidebarProps {
+interface ArchiveSidebarProps {
   bookmarksQuery: UseQueryResult<Bookmark[]>;
   day: TimeRange;
   eventsQuery: UseQueryResult<EventListResponse>;
@@ -39,7 +39,7 @@ export interface ArchiveSidebarProps {
  * Кнопка пункта хранит момент перехода в `data-time`, кнопка удаления закладки — её id в `data-id`,
  * поэтому на каждый список хватает одного обработчика.
  */
-export function useArchiveSidebar(props: ArchiveSidebarProps) {
+function useArchiveSidebar(props: ArchiveSidebarProps) {
   const {bookmarksQuery, day, eventsQuery, now, onOpenBookmark, onSeek, position, recordingsQuery} = props;
   const {data: events, isPending: isEventsPending, refetch: refetchEvents} = eventsQuery;
   const {data: bookmarks, isPending: isBookmarksPending, refetch: refetchBookmarks} = bookmarksQuery;
@@ -154,3 +154,6 @@ export function useArchiveSidebar(props: ArchiveSidebarProps) {
     seekToItem,
   };
 }
+
+export type {ArchiveSidebarProps};
+export {useArchiveSidebar};

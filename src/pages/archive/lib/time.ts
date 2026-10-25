@@ -40,61 +40,79 @@ function parseLocal(pattern: RegExp, value: string | null) {
   return groups ? fromLocalParts(groups) : null;
 }
 
-export const SECOND_MS = 1000;
-export const MINUTE_MS = 60 * SECOND_MS;
-export const HOUR_MS = 60 * MINUTE_MS;
+const SECOND_MS = 1000;
+const MINUTE_MS = 60 * SECOND_MS;
+const HOUR_MS = 60 * MINUTE_MS;
 
 /** `[start, end)`, мс */
-export interface TimeRange {
+interface TimeRange {
   end: number;
   start: number;
 }
 
-export function startOfDay(time: number) {
+function startOfDay(time: number) {
   const date = new Date(time);
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
 }
 
 /** Длина дня при переводе часов учитывается */
-export function shiftDay(dayStart: number, days: number) {
+function shiftDay(dayStart: number, days: number) {
   const date = new Date(dayStart);
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days).getTime();
 }
 
-export function getDayRange(dayStart: number): TimeRange {
+function getDayRange(dayStart: number): TimeRange {
   return {end: shiftDay(dayStart, 1), start: dayStart};
 }
 
-export function floorToSecond(time: number) {
+function floorToSecond(time: number) {
   return Math.floor(time / SECOND_MS) * SECOND_MS;
 }
 
-export function toDayKey(time: number) {
+function toDayKey(time: number) {
   const date = new Date(time);
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
-export function parseDayKey(value: string | null) {
+function parseDayKey(value: string | null) {
   return parseLocal(DAY_KEY_PATTERN, value);
 }
 
-export function formatClock(time: number) {
+function formatClock(time: number) {
   const date = new Date(time);
   return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
-export function formatDateTime(time: number) {
+function formatDateTime(time: number) {
   return dateTimeFormat.format(time);
 }
 
-export function formatLocalDateTime(time: number) {
+function formatLocalDateTime(time: number) {
   return `${toDayKey(time)}T${formatClock(time)}`;
 }
 
-export function parseLocalDateTime(value: string | null) {
+function parseLocalDateTime(value: string | null) {
   return parseLocal(DATE_TIME_PATTERN, value);
 }
 
-export function getEventSeekTime(event: NvrEvent) {
+function getEventSeekTime(event: NvrEvent) {
   return Date.parse(event.occurredAt) - EVENT_PREROLL_MS;
 }
+
+export type {TimeRange};
+export {
+  floorToSecond,
+  formatClock,
+  formatDateTime,
+  formatLocalDateTime,
+  getDayRange,
+  getEventSeekTime,
+  HOUR_MS,
+  MINUTE_MS,
+  parseDayKey,
+  parseLocalDateTime,
+  SECOND_MS,
+  shiftDay,
+  startOfDay,
+  toDayKey,
+};

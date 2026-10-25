@@ -127,13 +127,13 @@ function splitIntoFiles(cameraId: string, plan: ArchivePlan, interval: Interval,
   return files;
 }
 
-export function getCameraRecordings(cameraId: string, now: number): Recording[] {
+function getCameraRecordings(cameraId: string, now: number): Recording[] {
   const archive = archives.get(cameraId);
   if (!archive) return [];
   return archive.coverage.flatMap(interval => splitIntoFiles(cameraId, archive.plan, interval, now));
 }
 
-export function hasRecordingAt(cameraId: string, time: number, now: number) {
+function hasRecordingAt(cameraId: string, time: number, now: number) {
   const archive = archives.get(cameraId);
   return (
     archive !== undefined &&
@@ -141,3 +141,5 @@ export function hasRecordingAt(cameraId: string, time: number, now: number) {
     archive.coverage.some(interval => interval.start <= time && time < interval.end)
   );
 }
+
+export {getCameraRecordings, hasRecordingAt};

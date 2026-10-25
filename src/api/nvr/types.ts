@@ -1,12 +1,12 @@
-export type NvrStorageStatus = 'ok' | 'degraded' | 'missing';
+type NvrStorageStatus = 'ok' | 'degraded' | 'missing';
 
-export interface NvrStorage {
+interface NvrStorage {
   status: NvrStorageStatus;
   totalGb: number;
   usedGb: number;
 }
 
-export interface NvrInfo {
+interface NvrInfo {
   firmware: string;
   id: string;
   ip: string;
@@ -20,7 +20,7 @@ export interface NvrInfo {
   uptimeSec: number;
 }
 
-export interface PoePort {
+interface PoePort {
   id: number;
   number: number;
   linkUp: boolean;
@@ -29,3 +29,5 @@ export interface PoePort {
   maxPowerW: number;
   cameraId: string | null;
 }
+
+export type {NvrInfo, NvrStorage, NvrStorageStatus, PoePort};

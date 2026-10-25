@@ -31,9 +31,9 @@ function parsePage(value: string | null) {
   return Number.isInteger(page) && page >= 1 ? page : 1;
 }
 
-export const PAGE_SIZE_OPTIONS: readonly number[] = [10, 25, 50, 100];
+const PAGE_SIZE_OPTIONS: readonly number[] = [10, 25, 50, 100];
 
-export const DEFAULT_EVENT_LIST_PARAMS: EventListParams = {
+const DEFAULT_EVENT_LIST_PARAMS: EventListParams = {
   categories: [],
   order: 'desc',
   page: 1,
@@ -45,9 +45,9 @@ export const DEFAULT_EVENT_LIST_PARAMS: EventListParams = {
   types: [],
 };
 
-export type EventListFilters = Pick<EventListParams, 'categories' | 'period' | 'query' | 'source' | 'types'>;
+type EventListFilters = Pick<EventListParams, 'categories' | 'period' | 'query' | 'source' | 'types'>;
 
-export function parseEventListParams(search: URLSearchParams): EventListParams {
+function parseEventListParams(search: URLSearchParams): EventListParams {
   const defaults = DEFAULT_EVENT_LIST_PARAMS;
   const sortParam = search.get(URL_KEYS.sort);
   const orderParam = search.get(URL_KEYS.order);
@@ -78,7 +78,7 @@ export function parseEventListParams(search: URLSearchParams): EventListParams {
   };
 }
 
-export function serializeEventListParams(params: EventListParams) {
+function serializeEventListParams(params: EventListParams) {
   const defaults = DEFAULT_EVENT_LIST_PARAMS;
   const search = new URLSearchParams();
 
@@ -95,7 +95,7 @@ export function serializeEventListParams(params: EventListParams) {
   return search;
 }
 
-export function getNextSort(
+function getNextSort(
   current: Pick<EventListParams, 'order' | 'sort'>,
   field: EventSortField
 ): Pick<EventListParams, 'order' | 'sort'> {
@@ -105,7 +105,7 @@ export function getNextSort(
   return {order: DEFAULT_ORDER[field], sort: field};
 }
 
-export function hasActiveFilters(params: EventListParams) {
+function hasActiveFilters(params: EventListParams) {
   const defaults = DEFAULT_EVENT_LIST_PARAMS;
   return (
     params.categories.length > 0 ||
@@ -115,3 +115,13 @@ export function hasActiveFilters(params: EventListParams) {
     params.query.trim() !== ''
   );
 }
+
+export type {EventListFilters};
+export {
+  DEFAULT_EVENT_LIST_PARAMS,
+  getNextSort,
+  hasActiveFilters,
+  PAGE_SIZE_OPTIONS,
+  parseEventListParams,
+  serializeEventListParams,
+};

@@ -1,8 +1,10 @@
-export type SortOrder = 'asc' | 'desc';
+type SortOrder = 'asc' | 'desc';
 
-export interface PaginatedResponse<T> {
+interface PaginatedResponse<T> {
   items: T[];
   page: number;
   pageSize: number;
   total: number;
 }
+
+export type {PaginatedResponse, SortOrder};
