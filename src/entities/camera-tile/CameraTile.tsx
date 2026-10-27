@@ -50,12 +50,6 @@ export function CameraTile(props: CameraTileProps) {
             justify='between'
           >
             <CameraStatusBadge status={camera.status} />
-            <Text
-              color='gray'
-              size='1'
-            >
-              {`Порт ${camera.portId}`}
-            </Text>
           </Flex>
         </Flex>
       </Link>

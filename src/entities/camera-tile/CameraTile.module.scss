@@ -1,9 +1,18 @@
 .cameraTile {
-  flex-shrink: 0;
-  width: 200px;
+  flex: 0 0 200px;
 }
 
 .cameraTile__preview {
   aspect-ratio: 16 / 9;
   background-color: var(--gray-3);
+}
+
+@media (max-width: 768px) {
+  .cameraTile {
+    flex: 0 0 150px;
+  }
+
+  .cameraTile__preview {
+    display: none;
+  }
 }

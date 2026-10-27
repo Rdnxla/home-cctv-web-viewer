@@ -1,8 +1,9 @@
-import {Badge, Button, DropdownMenu} from '@radix-ui/themes';
+import {Badge, Button, DropdownMenu, Flex} from '@radix-ui/themes';
 import {Fragment, useCallback} from 'react';
 import {EVENT_CATEGORY_META, EventTypeLabel, getEventTypesByCategory} from '@/entities/event';
 import type {EventCategory, EventType} from '@/api/events/types';
 import {EVENT_CATEGORIES, EVENT_TYPES} from '@/api/events/types';
+import styles from './EventTypeFilter.module.scss';
 
 function keepMenuOpen(event: Event) {
   event.preventDefault();
@@ -66,20 +67,27 @@ export function EventTypeFilter(props: EventTypeFilterProps) {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <Button
+          className={styles.eventTypeFilter__trigger}
           color='gray'
           variant='surface'
         >
           Тип события
-          {value.length > 0 ? (
-            <Badge
-              radius='full'
-              size='1'
-              variant='solid'
-            >
-              {value.length}
-            </Badge>
-          ) : null}
-          <DropdownMenu.TriggerIcon />
+          <Flex
+            align='center'
+            as='span'
+            gap='2'
+          >
+            {value.length > 0 ? (
+              <Badge
+                radius='full'
+                size='1'
+                variant='solid'
+              >
+                {value.length}
+              </Badge>
+            ) : null}
+            <DropdownMenu.TriggerIcon />
+          </Flex>
         </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>

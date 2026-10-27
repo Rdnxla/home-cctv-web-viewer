@@ -8,9 +8,12 @@ import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import type {EventCategory, EventListParams, EventType} from '@/api/events/types';
 import {DEVICE_SOURCE, EVENT_CATEGORIES, EVENT_PERIODS} from '@/api/events/types';
 import type {EventListFilters} from '../model/eventListParams';
+import {PAGE_SIZE_OPTIONS} from '../model/eventListParams';
 import {EventTypeFilter} from './EventTypeFilter';
 
 const ALL = 'all';
+const INLINE_LAYOUT = {align: 'center', direction: 'row', gap: '2', wrap: 'wrap'} as const;
+const STACKED_LAYOUT = {align: 'stretch', direction: 'column', gap: '3', wrap: 'nowrap'} as const;
 
 const countFormat = new Intl.NumberFormat('ru');
 
@@ -22,12 +25,14 @@ interface EventFiltersProps {
   categoryCounts: Record<EventCategory, number> | undefined;
   hasActiveFilters: boolean;
   onChange: (patch: Partial<EventListFilters>) => void;
+  onPageSizeChange: (pageSize: number) => void;
   onReset: () => void;
   params: EventListParams;
+  stacked?: boolean;
 }
 
 export function EventFilters(props: EventFiltersProps) {
-  const {categoryCounts, hasActiveFilters, onChange, onReset, params} = props;
+  const {categoryCounts, hasActiveFilters, onChange, onPageSizeChange, onReset, params, stacked = false} = props;
   const {data: cameras} = useCamerasQuery();
   const category = params.categories[0] ?? null;
   const totalCount = categoryCounts ? EVENT_CATEGORIES.reduce((sum, item) => sum + categoryCounts[item], 0) : undefined;
@@ -72,14 +77,17 @@ export function EventFilters(props: EventFiltersProps) {
     [onChange]
   );
 
+  const changePageSize = useCallback(
+    (value: string) => {
+      onPageSizeChange(Number(value));
+    },
+    [onPageSizeChange]
+  );
+
   return (
-    <Flex
-      align='center'
-      gap='2'
-      wrap='wrap'
-    >
+    <Flex {...(stacked ? STACKED_LAYOUT : INLINE_LAYOUT)}>
       <Box
-        flexBasis='260px'
+        flexBasis={stacked ? 'auto' : '260px'}
         flexGrow='1'
       >
         <SearchField
@@ -158,11 +166,28 @@ export function EventFilters(props: EventFiltersProps) {
         </Select.Content>
       </Select.Root>
 
+      <Select.Root
+        onValueChange={changePageSize}
+        value={String(params.pageSize)}
+      >
+        <Select.Trigger aria-label='Событий на странице' />
+        <Select.Content position='popper'>
+          {PAGE_SIZE_OPTIONS.map(option => (
+            <Select.Item
+              key={option}
+              value={String(option)}
+            >
+              {option} на странице
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
+
       {hasActiveFilters ? (
         <Button
           color='gray'
           onClick={onReset}
-          variant='ghost'
+          variant={stacked ? 'soft' : 'ghost'}
         >
           <Cross2Icon />
           Сбросить

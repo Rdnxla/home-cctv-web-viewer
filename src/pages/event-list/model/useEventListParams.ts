@@ -28,7 +28,6 @@ export function useEventListParams() {
 
   const setFilters = useCallback(
     (patch: Partial<EventListFilters>) => {
-      // Набор в поиске не засоряет историю: каждая пауза в наборе заменяет запись, а не добавляет
       update(() => ({...patch, page: 1}), 'query' in patch);
     },
     [update]
@@ -41,7 +40,6 @@ export function useEventListParams() {
     [update]
   );
 
-  /** Исправление номера страницы вне диапазона — без новой записи в истории */
   const replacePage = useCallback(
     (page: number) => {
       update(() => ({page}), true);

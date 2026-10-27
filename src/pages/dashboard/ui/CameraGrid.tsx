@@ -2,12 +2,15 @@ import {VideoIcon} from '@radix-ui/react-icons';
 import {AspectRatio, Flex, Grid, Skeleton, Text} from '@radix-ui/themes';
 import type {UseQueryResult} from '@tanstack/react-query';
 import {useCallback} from 'react';
+import {CameraTile} from '@/entities/camera-tile/CameraTile';
+import {ROUTES} from '@/shared/config/routes';
+import {useMediaQuery} from '@/shared/lib/useMediaQuery';
 import {LoadError} from '@/shared/ui';
 import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import type {Camera} from '@/api/cameras/types';
 import {CameraGridCard} from './CameraGridCard';
 
-const GRID_COLUMNS = {initial: '1', sm: '2'};
+const GRID_COLUMNS = {initial: '2', sm: '2'};
 const SKELETON_KEYS = ['camera-skeleton-1', 'camera-skeleton-2', 'camera-skeleton-3', 'camera-skeleton-4'];
 
 interface CameraGridProps {
@@ -20,6 +23,7 @@ interface CameraGridProps {
 export function CameraGrid(props: CameraGridProps) {
   const {cameras, error, isPending, refetch} = props;
   const showMessage = useCalloutMessage();
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const retry = useCallback(() => {
     refetch().catch(e => showMessage(e, 'error'));
@@ -63,14 +67,22 @@ export function CameraGrid(props: CameraGridProps) {
     return (
       <Grid
         columns={GRID_COLUMNS}
-        gap='3'
+        gap='2'
       >
-        {cameras.map(camera => (
-          <CameraGridCard
-            camera={camera}
-            key={camera.id}
-          />
-        ))}
+        {cameras.map(camera =>
+          isMobile ? (
+            <CameraTile
+              camera={camera}
+              key={camera.id}
+              to={ROUTES.cameraDetail(camera.id)}
+            />
+          ) : (
+            <CameraGridCard
+              camera={camera}
+              key={camera.id}
+            />
+          )
+        )}
       </Grid>
     );
   }

@@ -4,6 +4,7 @@ import {isOneOf} from '@/shared/lib/isOneOf';
 import type {EventListParams, EventSortField} from '@/api/events/types';
 import {EVENT_CATEGORIES, EVENT_PERIODS, EVENT_SORT_FIELDS, EVENT_TYPES} from '@/api/events/types';
 
+const EVENT_FORMS = {few: 'события', many: 'событий', one: 'событие'};
 const SORT_ORDERS: readonly SortOrder[] = ['asc', 'desc'];
 
 /** Направление при первом клике по колонке: время и категория — сначала новые и важные */
@@ -105,20 +106,26 @@ function getNextSort(
   return {order: DEFAULT_ORDER[field], sort: field};
 }
 
-function hasActiveFilters(params: EventListParams) {
+function countActiveFilters(params: EventListParams) {
   const defaults = DEFAULT_EVENT_LIST_PARAMS;
-  return (
-    params.categories.length > 0 ||
-    params.types.length > 0 ||
-    params.source !== null ||
-    params.period !== defaults.period ||
-    params.query.trim() !== ''
-  );
+  return [
+    params.categories.length > 0,
+    params.types.length > 0,
+    params.source !== null,
+    params.period !== defaults.period,
+    params.query.trim() !== '',
+  ].filter(Boolean).length;
+}
+
+function hasActiveFilters(params: EventListParams) {
+  return countActiveFilters(params) > 0;
 }
 
 export type {EventListFilters};
 export {
+  countActiveFilters,
   DEFAULT_EVENT_LIST_PARAMS,
+  EVENT_FORMS,
   getNextSort,
   hasActiveFilters,
   PAGE_SIZE_OPTIONS,

@@ -1,0 +1,4 @@
+// Растянутая на всю ширину кнопка (фильтры в боковой панели) выглядит как Select: подпись слева, шеврон справа
+.eventTypeFilter__trigger {
+  justify-content: space-between;
+}

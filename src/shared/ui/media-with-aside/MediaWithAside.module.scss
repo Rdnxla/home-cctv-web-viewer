@@ -13,8 +13,6 @@ $columns-md: minmax(0, auto) minmax($aside-min-w, 1fr);
   }
 }
 
-// Колонка растёт, пока видео 16:9 вместе с остальным её содержимым помещается по высоте;
-// дальше ширина уходит боковой панели. --rest-height — высота колонки без видео, её задаёт компонент.
 .mediaWithAside__main {
   @media (min-width: 1024px) {
     align-self: start;
@@ -23,10 +21,20 @@ $columns-md: minmax(0, auto) minmax($aside-min-w, 1fr);
 }
 
 .mediaWithAside__aside {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--gray-5);
+  border-radius: $base-radius;
 
   @media (min-width: 1024px) {
     min-height: 0;
     overflow: auto;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0;
+    border: none;
   }
 }
