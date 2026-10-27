@@ -1,0 +1,83 @@
+// Длительности оверлея и панели совпадают: панель размонтируется вместе с оверлеем
+.sideSheet__overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-overlay);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: sideSheetFadeIn .2s ease-out;
+
+    &[data-state="closed"] {
+      animation: sideSheetFadeOut .2s ease-in;
+    }
+  }
+}
+
+.sideSheet {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  box-shadow: var(--shadow-6);
+  background: $surface-bg;
+  outline: none;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: sideSheetSlideIn .2s ease-out;
+
+    &[data-state="closed"] {
+      animation: sideSheetSlideOut .2s ease-in;
+    }
+  }
+}
+
+.sideSheet__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--gray-a5);
+}
+
+.sideSheet__body {
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sideSheet__footer {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid var(--gray-a5);
+
+  > * {
+    flex: 1;
+  }
+}
+
+@keyframes sideSheetFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sideSheetFadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sideSheetSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes sideSheetSlideOut {
+  to {
+    transform: translateX(100%);
+  }
+}

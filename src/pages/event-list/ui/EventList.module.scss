@@ -8,4 +8,8 @@
   box-shadow: $base-shadow;
   background: $surface-bg;
   overflow: auto;
+
+  @media (max-width: 768px) {
+    padding: 8px;
+  }
 }

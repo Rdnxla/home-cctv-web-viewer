@@ -61,7 +61,9 @@ function EventRow(props: EventRowProps) {
           </Link>
         )}
       </Table.Cell>
-      <Table.Cell>{event.message}</Table.Cell>
+      <Table.Cell>
+        <span className={styles.eventTable__message}>{event.message}</span>
+      </Table.Cell>
     </Table.Row>
   );
 }
@@ -189,6 +191,7 @@ export function EventTable(props: EventTableProps) {
     <Table.Root
       aria-busy={isStale}
       className={isStale ? `${styles.eventTable} ${styles.eventTable__stale}` : styles.eventTable}
+      size={{initial: '1', sm: '2'}}
       variant='surface'
     >
       <Table.Header className={styles.eventTable__header}>

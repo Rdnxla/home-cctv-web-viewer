@@ -1,23 +1,32 @@
 import {Flex, Heading, Text} from '@radix-ui/themes';
 import {useCallback, useEffect} from 'react';
-import {formatCount} from '@/shared/lib/pluralize';
+import {useMediaQuery} from '@/shared/lib/useMediaQuery';
 import {LoadError} from '@/shared/ui';
 import {useCalloutMessage} from '@/shared/ui/callout/CalloutMessage';
 import {useEventsQuery} from '@/api/events/eventQueries';
 import {hasActiveFilters} from '../model/eventListParams';
 import {useEventListParams} from '../model/useEventListParams';
 import {EventFilters} from './EventFilters';
+import {EventFiltersSheet} from './EventFiltersSheet';
 import styles from './EventList.module.scss';
 import {EventListFooter} from './EventListFooter';
 import {EventTable} from './EventTable';
 
-const EVENT_FORMS = {few: 'события', many: 'событий', one: 'событие'};
+const countFormat = new Intl.NumberFormat('ru');
+
+function formatRange(page: number, pageSize: number, total: number) {
+  if (total === 0) return 'Нет событий';
+  const first = (page - 1) * pageSize + 1;
+  const last = Math.min(page * pageSize, total);
+  return `${countFormat.format(first)}–${countFormat.format(last)} из ${countFormat.format(total)}`;
+}
 
 export function Component() {
   const {params, replacePage, resetFilters, setFilters, setPage, setPageSize, toggleSort} = useEventListParams();
   const {data, error, isError, isPlaceholderData, isRefetchError, refetch} = useEventsQuery(params);
   const showMessage = useCalloutMessage();
   const isFiltered = hasActiveFilters(params);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const retry = useCallback(() => {
     refetch().catch(() => ({}));
@@ -40,7 +49,7 @@ export function Component() {
       <Flex
         direction='column'
         flexGrow='1'
-        gap='4'
+        gap={{initial: '3', sm: '4'}}
         minHeight='0'
       >
         <Flex
@@ -61,22 +70,37 @@ export function Component() {
             </Heading>
             {data ? (
               <Text
+                aria-live='polite'
                 color='gray'
                 size='2'
               >
-                {formatCount(data.total, EVENT_FORMS)}
+                {formatRange(params.page, params.pageSize, data.total)}
               </Text>
             ) : null}
           </Flex>
+          {isMobile ? (
+            <EventFiltersSheet
+              categoryCounts={data?.categoryCounts}
+              hasActiveFilters={isFiltered}
+              onChange={setFilters}
+              onPageSizeChange={setPageSize}
+              onReset={resetFilters}
+              params={params}
+              total={data && !isPlaceholderData ? data.total : null}
+            />
+          ) : null}
         </Flex>
 
-        <EventFilters
-          categoryCounts={data?.categoryCounts}
-          hasActiveFilters={isFiltered}
-          onChange={setFilters}
-          onReset={resetFilters}
-          params={params}
-        />
+        {isMobile ? null : (
+          <EventFilters
+            categoryCounts={data?.categoryCounts}
+            hasActiveFilters={isFiltered}
+            onChange={setFilters}
+            onPageSizeChange={setPageSize}
+            onReset={resetFilters}
+            params={params}
+          />
+        )}
 
         {isError && !data ? (
           <LoadError
@@ -97,7 +121,6 @@ export function Component() {
               <EventListFooter
                 disabled={isPlaceholderData}
                 onPageChange={setPage}
-                onPageSizeChange={setPageSize}
                 page={params.page}
                 pageSize={params.pageSize}
                 total={data.total}

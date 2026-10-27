@@ -33,6 +33,16 @@
   padding: 40px 16px;
 }
 
+@media (max-width: 768px) {
+  .eventTable__message {
+    display: block;
+    max-width: 70vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .eventTable {
     transition: none;
