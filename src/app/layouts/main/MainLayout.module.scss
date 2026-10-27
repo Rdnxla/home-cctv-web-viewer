@@ -6,4 +6,8 @@
   padding: 16px;
   min-height: 100%;
   background-color: $base-bg;
+
+  @media (max-width: 1024px) {
+    padding: 0;
+  }
 }

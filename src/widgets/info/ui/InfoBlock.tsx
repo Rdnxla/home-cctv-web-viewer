@@ -1,5 +1,4 @@
 import {Flex, Heading, Separator} from '@radix-ui/themes';
-import {CameraSummary} from './CameraSummary';
 import styles from './InfoBlock.module.scss';
 import {RecentEvents} from './RecentEvents';
 
@@ -17,11 +16,10 @@ export function InfoBlock() {
       >
         <Heading
           as='h3'
-          size='6'
+          size='4'
         >
           Обзор
         </Heading>
-        <CameraSummary />
         <Separator size='4' />
         <RecentEvents />
       </Flex>

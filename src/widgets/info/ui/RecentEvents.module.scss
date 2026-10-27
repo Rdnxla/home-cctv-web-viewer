@@ -12,18 +12,11 @@
   flex-grow: 1;
   gap: 6px;
   min-height: 0;
-  // В одну колонку (уже брейкпоинта md у Radix) панель идёт под камерами и не ограничена по высоте —
-  // список ограничен сам, чтобы не растягивать страницу
-  max-height: 60dvh;
+  max-height: none;
   margin: 0;
   padding: 0;
   overflow-y: auto;
   list-style: none;
-
-  // Рядом с камерами высоту задаёт панель «Обзор» (см. InfoBlock.module.scss)
-  @media (min-width: 1024px) {
-    max-height: none;
-  }
 }
 
 .recentEvents__item {

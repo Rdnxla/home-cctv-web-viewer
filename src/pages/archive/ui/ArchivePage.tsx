@@ -211,7 +211,7 @@ export function Component() {
           >
             <Heading
               as='h2'
-              size='6'
+              size='3'
             >
               Архив
             </Heading>

@@ -172,5 +172,10 @@ q::after {
 
   @media (max-width: 1024px) {
     overflow: auto;
+    border-radius: $base-radius $base-radius 0 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px;
   }
 }

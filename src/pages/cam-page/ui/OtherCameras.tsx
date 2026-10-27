@@ -25,7 +25,6 @@ function OtherCamerasContent(props: OtherCamerasContentProps) {
       >
         <Flex
           gap='3'
-          pb='3'
         >
           {cameras.map(camera => (
             <CameraTile
@@ -85,7 +84,7 @@ export function OtherCameras(props: OtherCamerasProps) {
       <Flex
         align='center'
         gap='2'
-        mb='3'
+        mb='2'
       >
         <Heading
           as='h3'

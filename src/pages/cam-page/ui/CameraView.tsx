@@ -1,5 +1,5 @@
 import {CounterClockwiseClockIcon} from '@radix-ui/react-icons';
-import {Button, Flex, Heading, Text} from '@radix-ui/themes';
+import {Button, Flex, Heading} from '@radix-ui/themes';
 import {Link as RouterLink} from 'react-router';
 import {CameraControls} from '@/widgets/camera-control';
 import {CameraLiveView} from '@/entities/camera';
@@ -15,7 +15,6 @@ interface CameraViewProps {
 
 export function CameraView(props: CameraViewProps) {
   const {camera} = props;
-  const subtitle = camera.model ? `${camera.model} · порт ${camera.portId}` : `Порт ${camera.portId}`;
 
   return (
     <>
@@ -27,7 +26,7 @@ export function CameraView(props: CameraViewProps) {
       >
         <Heading
           as='h2'
-          size='6'
+          size='3'
         >
           {camera.name}
         </Heading>
@@ -35,12 +34,6 @@ export function CameraView(props: CameraViewProps) {
           size='2'
           status={camera.status}
         />
-        <Text
-          color='gray'
-          size='2'
-        >
-          {subtitle}
-        </Text>
         <Button
           asChild
           color='gray'
