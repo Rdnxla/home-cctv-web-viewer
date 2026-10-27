@@ -38,7 +38,7 @@ export const nvrHandlers = [
   }),
 
   http.get(`${API}/cameras`, async () => {
-    await delay(5000);
+    await delay(1000);
     return HttpResponse.json(sortCameras(cameras));
   }),
 
@@ -56,7 +56,7 @@ export const nvrHandlers = [
     const failure = await guardCamera(camera);
     if (failure || !camera) return failure;
 
-    await delay(5000);
+    await delay(1000);
     const stream: StreamInfo = {
       cameraId: camera.id,
       codec: camera.codec,

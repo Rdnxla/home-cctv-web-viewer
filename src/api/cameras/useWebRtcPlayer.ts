@@ -1,53 +1,14 @@
 import {useEffect, useRef, useState} from 'react';
+import {createCanvasStream, drawLandscapeFrame} from '@/shared/lib/canvasVideo';
+import {waitForIceGathering} from '@/shared/lib/waitForIceGathering';
 import type {StreamInfo} from './types';
 
 type PlayerState = 'idle' | 'connecting' | 'playing' | 'failed';
 
 function createMockMediaStream(label: string) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 640;
-  canvas.height = 360;
-  const ctx = canvas.getContext('2d');
-
-  const draw = () => {
-    if (!ctx) return;
-    ctx.fillStyle = '#111';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#2a9d5c';
-    ctx.font = '28px sans-serif';
-    ctx.fillText(label, 24, 48);
-    ctx.fillStyle = '#ddd';
-    ctx.font = '20px monospace';
-    ctx.fillText(new Date().toLocaleTimeString(), 24, canvas.height - 24);
-  };
-
-  draw();
-  const timer = setInterval(draw, 200);
-  const stream = canvas.captureStream(25);
-
-  return {
-    stop: () => {
-      clearInterval(timer);
-      stream.getTracks().forEach(t => {
-        t.stop();
-      });
-    },
-    stream,
-  };
-}
-
-function waitForIceGathering(pc: RTCPeerConnection) {
-  return new Promise<void>(resolve => {
-    if (pc.iceGatheringState === 'complete') return resolve();
-    const onChange = () => {
-      if (pc.iceGatheringState === 'complete') {
-        pc.removeEventListener('icegatheringstatechange', onChange);
-        resolve();
-      }
-    };
-    pc.addEventListener('icegatheringstatechange', onChange);
-    setTimeout(resolve, 2000);
-  });
+  return createCanvasStream(ctx => {
+    drawLandscapeFrame(ctx, {caption: new Date().toLocaleTimeString(), seconds: Date.now() / 1000, title: label});
+  }, 200);
 }
 
 function useWebRtcPlayer(stream: StreamInfo | undefined, label = 'Camera') {
