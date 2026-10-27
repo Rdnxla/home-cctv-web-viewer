@@ -10,12 +10,14 @@ import {router} from '@/app/routes';
 const queryClient = new QueryClient();
 
 async function enableMocking() {
-  if (!import.meta.env.DEV) {
+  // GitHub Pages has no backend, so the `pages` build ships the mocks as a demo
+  if (!import.meta.env.DEV && import.meta.env.MODE !== 'pages') {
     return;
   }
   const {worker} = await import('./mocks/browser');
   return worker.start({
     quiet: true,
+    serviceWorker: {url: `${import.meta.env.BASE_URL}mockServiceWorker.js`},
   });
 }
 

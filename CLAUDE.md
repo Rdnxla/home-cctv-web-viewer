@@ -4,7 +4,7 @@ Guidance for Claude Code in this repository.
 
 ## What this is
 
-A React SPA for an NVR (network video recorder): a camera dashboard with live WebRTC video, a camera detail page, an event log, archive playback with a timeline and bookmarks, and login with 2FA. UI text is Russian and hard-coded in JSX (no i18n). There is no backend: in DEV, MSW (`src/mocks`) answers every `/api/*` request. Production builds don't start MSW, and nothing proxies `/api`.
+A React SPA for an NVR (network video recorder): a camera dashboard with live WebRTC video, a camera detail page, an event log, archive playback with a timeline and bookmarks, and login with 2FA. UI text is Russian and hard-coded in JSX (no i18n). There is no backend: in DEV, MSW (`src/mocks`) answers every `/api/*` request. Regular production builds (`yarn build`) don't start MSW, and nothing proxies `/api`. The GitHub Pages build (`yarn build:pages`, `--mode pages`, base `/home-cctv-web-viewer/`) ships MSW as a demo backend and is deployed by `.github/workflows/deploy.yml` on push to `main`; `docs/` is git-ignored and holds only the reports below, never build output.
 
 ## Stack
 
@@ -33,6 +33,7 @@ A React SPA for an NVR (network video recorder): a camera dashboard with live We
 - `check`: `biome check --write`
 - `validate`: `yarn lint && yarn test:ci && yarn test:e2e:ci`
 - `build`: `vite build`
+- `build:pages`: `vite build --mode pages --base /home-cctv-web-viewer/` (CI also copies `dist/index.html` to `404.html` for deep links)
 - `preview`: `vite preview`
 
 Do not run scripts/commands that write or format files (`yarn lint`, `yarn lint:biome`, `yarn check`, `yarn format`, or Biome `--write`/`--unsafe`) unless the user explicitly asks.
@@ -56,7 +57,7 @@ The user may specify a role at the start of a task. Follow that role's boundarie
 6. **Types:** (a) server data is typed only in `src/api/<domain>/types.ts`; when data is used as received, import those types directly — never re-export, alias, or duplicate them in slices. (b) When a module aggregates or transforms server data, it defines the type of the result next to that transformation (usually the slice's `model/`) and exports it for other modules — e.g. `RecordingSegment` in `pages/archive/model/recordingSegments.ts`. UI metadata for server enums (labels, colors, ranks) lives in `entities/*/model/meta.ts`; page URL state (filters, sorting, pagination) lives in `pages/*/model/`.
 7. **Reuse existing data APIs:** cameras: `cameraKeys`, `useCamerasQuery`, `useCameraQuery`, `useCameraStreamQuery`, `useCameraPlaybackQuery` (`@/api/cameras/cameraQueries`), `useWebRtcPlayer` (`@/api/cameras/useWebRtcPlayer`); events: `eventKeys`, `useEventsQuery`, `useEventsInRangeQuery` (`@/api/events/eventQueries`); recordings: `recordingKeys`, `useRecordingsQuery` (`@/api/recordings/recordingQueries`); bookmarks: `bookmarkKeys`, `useBookmarksQuery`, `useCreateBookmarkMutation`, `useDeleteBookmarkMutation` (`@/api/bookmarks/bookmarkQueries`); NVR: `nvrKeys`, `useNvrInfoQuery` (`@/api/nvr/nvrQueries`); auth: `useLoginMutation`, `useVerifyTwoFactorMutation` (`@/api/auth/authQueries`). Bookmark mutations are the reference pattern. Optional queries accept `params | null` and use `skipToken`. Reuse `retryUnlessClientError` from `@/shared/api/retry` for new queries.
 8. **UI placement:** split UI by role, even if there is one consumer. Entity representation belongs in `entities/*/ui`, user actions in `features`, and self-contained composed blocks in `widgets`. Use `shared/ui` only for domain-independent components and `shared/lib` only for generic helpers. A component needed by another page must not be imported from the first page; move it to the appropriate lower layer. Check existing UI before creating another version.
-9. **Pages and layouts:** export `function Component()` because React Router lazy routes rely on it (`src/app/routes.ts`). Routes currently live in `src/app/routes.ts`; agreed target location is `src/app/router/`. `EmptyLayout` is used for `/` (login); `MainLayout` (header and toast provider) wraps `/dashboard`, `/:id/detail`, `/events`, `/archive`. Pages are lazy-loaded. There is no `errorElement` or route guard. Paths are duplicated in `ROUTES` (`src/shared/config/routes.ts`), `widgets/the-header`, and `pages/auth`; change related paths together.
+9. **Pages and layouts:** export `function Component()` because React Router lazy routes rely on it (`src/app/routes.ts`). Routes currently live in `src/app/routes.ts` (router `basename` is `import.meta.env.BASE_URL`); agreed target location is `src/app/router/`. `EmptyLayout` is used for `/` (login); `MainLayout` (header and toast provider) wraps `/dashboard`, `/:id/detail`, `/events`, `/archive`. Pages are lazy-loaded. There is no `errorElement` or route guard. Paths are duplicated in `ROUTES` (`src/shared/config/routes.ts`), `widgets/the-header`, and `pages/auth`; change related paths together.
 10. **HTTP and errors:** use only `apiFetch<T>` from `@/shared/api/http`, and only inside `src/api/**`. Check errors with `isApiError(err)` and `ApiErrorCode` from `@/shared/api/authErrorCodes`. New MSW error bodies must use `{ error: '<CODE>', message }`; do not add `{ code, message }`.
 11. **TanStack Query:** use v5 object syntax. Query keys start with the domain name (e.g. `['cameras', 'list']`) for prefix invalidation.
 12. **MSW v2:** use `http`, `HttpResponse`, and `delay`. Register each new handler array in `src/mocks/handlers/index.js`, `src/mocks/browser.js`, and `src/mocks/server.js`. Current handler groups include `authHandlers`, `nvrHandlers`, `eventHandlers`, and `archiveHandlers`.
@@ -90,7 +91,7 @@ Run only non-mutating checks unless the user explicitly authorizes write-mode co
 ## Architecture and runtime notes
 
 ### Bootstrap and state
-In DEV, `src/main.tsx` dynamically imports `src/mocks/browser.js` and waits for `worker.start()` before rendering `StrictMode > QueryClientProvider > ReactQueryDevtools + RouterProvider`. The `QueryClient` (`src/main.tsx:10`) uses library defaults. There is no global store; server state lives in TanStack Query.
+In DEV and in `pages` mode, `src/main.tsx` dynamically imports `src/mocks/browser.js` and waits for `worker.start()` (worker URL under `BASE_URL`) before rendering `StrictMode > QueryClientProvider > ReactQueryDevtools + RouterProvider`. The `QueryClient` (`src/main.tsx:10`) uses library defaults. There is no global store; server state lives in TanStack Query.
 
 ### FSD structure
 - `pages`: `auth`, `dashboard`, `cam-page`, `event-list`, `archive` (URL state and recording-segment aggregation in `model/`; view hooks `useArchiveViewer`, `usePlayback`, `useTimeline`, `useBookmarkForm`, `useArchiveSidebar` sit next to their components in `ui/`).

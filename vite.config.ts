@@ -5,9 +5,7 @@ import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import {defineConfig} from 'vite';
 
-export default defineConfig(() => ({
-  base: '/',
-  build: { outDir: 'docs' },
+export default defineConfig(({command}) => ({
   css: {
     api: 'modern-compiler',
     preprocessorOptions: {
@@ -24,12 +22,16 @@ export default defineConfig(() => ({
       '@': path.resolve(import.meta.dirname, './src'),
     },
   },
-  server: {
-    https: {
-      cert: fs.readFileSync('./certs/localhost.pem'),
-      key: fs.readFileSync('./certs/localhost-key.pem'),
-    },
-  },
+  // certs/ is git-ignored, so the production build (GitHub Pages on CI) must not read it
+  server:
+    command === 'serve'
+      ? {
+          https: {
+            cert: fs.readFileSync('./certs/localhost.pem'),
+            key: fs.readFileSync('./certs/localhost-key.pem'),
+          },
+        }
+      : {},
   test: {
     bail: 1,
     clearMocks: true,

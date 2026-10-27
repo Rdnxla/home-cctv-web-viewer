@@ -16,6 +16,7 @@
     "check": "biome check --write",
     "validate": "yarn lint && yarn test:ci && yarn test:e2e:ci",
     "build": "vite build",
+    "build:pages": "vite build --mode pages --base /home-cctv-web-viewer/",
     "preview": "vite preview"
   },
   "dependencies": {
