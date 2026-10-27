@@ -42,11 +42,11 @@ jobs:
 
       # GitHub Pages has no SPA fallback: deep links such as /dashboard would otherwise return its own 404 page.
       - name: SPA fallback
-        run: cp dist/index.html dist/404.html
+        run: cp docs/index.html docs/404.html
 
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: dist
+          path: docs
 
   Deploy:
     needs: Build
