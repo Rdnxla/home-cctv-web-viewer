@@ -1,6 +1,5 @@
 node_modules
 .DS_Store
-dist
 dist-ssr
 certs
 *.local
@@ -12,4 +11,3 @@ mockServiceWorker.js
 /blob-report/
 /playwright/.cache/
 .yarn/
-docs
