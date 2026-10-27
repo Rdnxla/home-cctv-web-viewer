@@ -4,7 +4,7 @@ Guidance for Claude Code in this repository.
 
 ## What this is
 
-A React SPA for an NVR (network video recorder): a camera dashboard with live WebRTC video, a camera detail page, an event log, archive playback with a timeline and bookmarks, and login with 2FA. UI text is Russian and hard-coded in JSX (no i18n). There is no backend: in DEV, MSW (`src/mocks`) answers every `/api/*` request. Regular production builds (`yarn build`) don't start MSW, and nothing proxies `/api`. The GitHub Pages build (`yarn build:pages`, `--mode pages`, base `/home-cctv-web-viewer/`) ships MSW as a demo backend and is deployed by `.github/workflows/deploy.yml` on push to `main`; `docs/` is git-ignored and holds only the reports below, never build output.
+A React SPA for an NVR (network video recorder): a camera dashboard with live WebRTC video, a camera detail page, an event log, archive playback with a timeline and bookmarks, and login with 2FA. UI text is Russian and hard-coded in JSX (no i18n). There is no backend: in DEV, MSW (`src/mocks`) answers every `/api/*` request. Regular production builds (`yarn build`) don't start MSW, and nothing proxies `/api`. The GitHub Pages build (`yarn build:pages`, `--mode pages`, base `/home-cctv-web-viewer/`) ships MSW as a demo backend and is deployed by `.github/workflows/deploy.yml` on push to `main`;
 
 ## Stack
 
@@ -33,7 +33,7 @@ A React SPA for an NVR (network video recorder): a camera dashboard with live We
 - `check`: `biome check --write`
 - `validate`: `yarn lint && yarn test:ci && yarn test:e2e:ci`
 - `build`: `vite build`
-- `build:pages`: `vite build --mode pages --base /home-cctv-web-viewer/` (CI also copies `dist/index.html` to `404.html` for deep links)
+- `build:pages`: `vite build --mode pages --base /home-cctv-web-viewer/` (CI also copies `docs/index.html` to `404.html` for deep links)
 - `preview`: `vite preview`
 
 Do not run scripts/commands that write or format files (`yarn lint`, `yarn lint:biome`, `yarn check`, `yarn format`, or Biome `--write`/`--unsafe`) unless the user explicitly asks.
@@ -73,8 +73,8 @@ The user may specify a role at the start of a task. Follow that role's boundarie
 
 - Stay inside the repository root. Never read or write home directories, neighboring projects, or global configuration.
 - Source and configuration are read-only by default: `src/**`, `public/**`, `biome.json`, `package.json`, `tsconfig*`, `vite.config.*`, and similar files. Do not edit, rename, format, or install/update dependencies unless the user explicitly grants permission for the specific task.
-- Writable locations are limited to `.claude/agents/**` and this `CLAUDE.md`. Do not assume any previously used `docs/ai/**` or audit files exist.
-- Do not read `node_modules`, `dist`, `build`, `coverage`, `.env*`, or whole lockfiles. Do not inspect `.git` except for the explicitly listed read-only freshness commands.
+- Writable locations are limited to `.claude/agents/**` and this `CLAUDE.md`.
+- Do not read `node_modules`, `docs`, `build`, `coverage`, `.env*`, or whole lockfiles. Do not inspect `.git` except for the explicitly listed read-only freshness commands.
 - No network access. If a task requires a package installation or network access, stop and ask the user.
 
 ## Validation
@@ -109,7 +109,7 @@ Components call hooks from `src/api/<domain>/<domain>Queries.ts`, which call req
 Live view and archive playback use WHEP (WebRTC over HTTP). The WHEP client hook `useWebRtcPlayer` and its `PlayerState` live in `src/api/cameras/useWebRtcPlayer.ts`; its `__MSW_ACTIVE__` canvas branch is dormant (nothing sets the flag), so in DEV the regular WHEP path runs against `src/mocks/handlers/mockWhep.ts`. `entities/camera` owns the only player, `CameraPlayer`. `CameraLiveView` wraps it for live view; the archive (`pages/archive/ui/archive-viewer`) reuses it through props. WHEP has no native pause, seek, or speed control; archive seek, resume, or speed changes open a new session via the player's `key`.
 
 ### Theme
-Light/dark is a `.light`/`.dark` class on `<html>`. An inline script in `index.html` sets it before first paint (stored `localStorage['theme']`, else `prefers-color-scheme`), and an inline `html.dark` rule there paints the dark background before any CSS arrives (in DEV Vite injects CSS only from JS; keep its colour in sync with dark slate `--gray-1`); `features/toggle-theme` toggles and persists it. Root `<Theme>` in both layouts has no `appearance` so Radix inherits the class — setting `appearance` there would make Radix overwrite the `<html>` class. `CameraPlayer` keeps its nested `appearance='dark'`. App surfaces use `$base-bg` / `$surface-bg` / `$base-shadow` (backed by `--app-*` custom properties in `src/app/global.scss`, declared on both `:root` and `.radix-themes` so `var(--gray-*)` resolves to the Theme's slate scale, and switched under `.dark`); prefer them over raw `--gray-1`/`--gray-3` for page backgrounds and cards. Tailwind is not compiled (see `docs/dev-errors-report.md` #9), so `dark:` utilities do nothing.
+Light/dark is a `.light`/`.dark` class on `<html>`. An inline script in `index.html` sets it before first paint (stored `localStorage['theme']`, else `prefers-color-scheme`), and an inline `html.dark` rule there paints the dark background before any CSS arrives (in DEV Vite injects CSS only from JS; keep its colour in sync with dark slate `--gray-1`); `features/toggle-theme` toggles and persists it. Root `<Theme>` in both layouts has no `appearance` so Radix inherits the class — setting `appearance` there would make Radix overwrite the `<html>` class. `CameraPlayer` keeps its nested `appearance='dark'`. App surfaces use `$base-bg` / `$surface-bg` / `$base-shadow` (backed by `--app-*` custom properties in `src/app/global.scss`, declared on both `:root` and `.radix-themes` so `var(--gray-*)` resolves to the Theme's slate scale, and switched under `.dark`); prefer them over raw `--gray-1`/`--gray-3` for page backgrounds and cards.
 
 ### Auth and notifications
 Login with optional 2FA is in `pages/auth` and `src/api/auth`. Tokens are saved to `localStorage` but are not sent with requests. Check request failures using `isApiError` and `ApiErrorCode`. Main content uses `LoadError`; secondary blocks use `InlineError` (both from `@/shared/ui`). Toasts use `useCalloutMessage`, with a provider wrapping both layouts.
@@ -125,11 +125,11 @@ Login with optional 2FA is in `pages/auth` and `src/api/auth`. Tokens are saved 
 
 ## Map and audit context
 
-When you identify issues during your work, document them in the corresponding report under `/docs/`:
+When you identify issues during your work, document them in the corresponding report under `/ai-docs/`:
 
-- `/docs/arch-errors-report.md` — architecture issues (Architect).
-- `/docs/dev-errors-report.md` — implementation issues (Developer).
-- `/docs/test-errors-report.md` — testing issues (Tester).
+- `/ai-docs/arch-errors-report.md` — architecture issues (Architect).
+- `/ai-docs/dev-errors-report.md` — implementation issues (Developer).
+- `/ai-docs/test-errors-report.md` — testing issues (Tester).
 
 **Reporting rules:**
 - If the report file already exists, append new findings or update relevant entries without overwriting or deleting existing content.

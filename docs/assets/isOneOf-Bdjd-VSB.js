@@ -1,0 +1,1 @@
+function e(e,t){return typeof t==`string`&&e.includes(t)}export{e as t};
