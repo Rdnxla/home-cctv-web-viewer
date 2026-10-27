@@ -64,7 +64,7 @@ export function Component() {
               case ApiErrorCode.invalidCredentials: {
                 const remaining = err.data.attemptsRemaining as number | undefined;
 
-                setFormError(remaining === null ? err.message : `${err.message} Осталось попыток: ${remaining}.`);
+                setFormError(remaining ? `${err.message} Осталось попыток: ${remaining}.` : err.message);
                 break;
               }
 
