@@ -1,0 +1,56 @@
+<!doctype html>
+<html
+	lang="en"
+	class="text-gray-900 antialiased dark:bg-gray-800 dark:text-white"
+>
+	<head>
+		<link
+			rel="preload"
+			href="/Inter.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<link rel="manifest" href="/manifest.webmanifest" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="React app" />
+		<meta name="theme-color" content="#BD34FE" />
+		<title>React app</title>
+		<script>
+			'use strict';
+			{
+				const stored = localStorage.getItem('theme');
+				const isDark = stored === 'dark' || (stored !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+				document.documentElement.classList.add(isDark ? 'dark' : 'light');
+			}
+		</script>
+		<style>
+			@font-face {
+				font-family: Inter;
+				font-style: normal;
+				font-weight: 100 900;
+				font-display: swap;
+				src: url('/Inter.woff2') format('woff2');
+			}
+
+			/* В DEV Vite подключает стили только из JS-бандла, и до его загрузки тёмная тема мигает белым.
+			   Цвет — тёмный --gray-1 Radix (slate при accentColor='indigo'), фон $base-bg в .dark */
+			html.dark {
+				color-scheme: dark;
+				background-color: rgb(17 17 19);
+			}
+		</style>
+		<script type="module" crossorigin src="/assets/index-Bkg1-BoI.js"></script>
+		<link rel="modulepreload" crossorigin href="/assets/http-CtXBtUxM.js">
+		<link rel="modulepreload" crossorigin href="/assets/retry-CJti70bR.js">
+		<link rel="stylesheet" crossorigin href="/assets/retry-BiVRtKn9.css">
+		<link rel="stylesheet" crossorigin href="/assets/index-DA8iA3po.css">
+	</head>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div id="root"></div>
+	</body>
+</html>
