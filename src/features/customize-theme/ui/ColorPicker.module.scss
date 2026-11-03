@@ -1,0 +1,36 @@
+// Совпадает со значениями ACCENT_COLOR_OPTIONS из config/themeOptions.ts
+$colors:
+  "gray", "gold", "bronze", "brown", "yellow", "amber", "orange", "tomato", "red", "ruby", "crimson", "pink", "plum",
+  "purple", "violet", "iris", "indigo", "blue", "cyan", "teal", "jade", "green", "grass", "lime", "mint", "sky";
+
+.colorPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.colorPicker__swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px var(--gray-a5);
+  transition: box-shadow 0.15s;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-8);
+    outline-offset: 5px;
+  }
+
+  // Внутреннее кольцо цвета фона отделяет обводку от самого образца
+  &[data-state="checked"] {
+    box-shadow:
+      0 0 0 2px $surface-bg,
+      0 0 0 4px var(--gray-12);
+  }
+
+  @each $color in $colors {
+    &[data-color="#{$color}"] {
+      background-color: var(--#{$color}-9);
+    }
+  }
+}

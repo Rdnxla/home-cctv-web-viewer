@@ -5,6 +5,7 @@ import {ROUTES} from '@/shared/config/routes';
 import {InlineError} from '@/shared/ui';
 import {useCamerasQuery} from '@/api/cameras/cameraQueries';
 import type {Camera} from '@/api/cameras/types';
+import styles from './OtherCameras.module.scss';
 
 const SKELETON_KEYS = ['skeleton-1', 'skeleton-2', 'skeleton-3'];
 
@@ -20,12 +21,11 @@ function OtherCamerasContent(props: OtherCamerasContentProps) {
   if (cameras) {
     return (
       <ScrollArea
+        className={styles.otherCameras__scroll}
         scrollbars='horizontal'
         type='auto'
       >
-        <Flex
-          gap='3'
-        >
+        <Flex gap='3'>
           {cameras.map(camera => (
             <CameraTile
               camera={camera}

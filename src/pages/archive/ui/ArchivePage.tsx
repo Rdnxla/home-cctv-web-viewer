@@ -38,8 +38,6 @@ export function Component() {
     dayTitle,
     goToNextDay,
     goToPreviousDay,
-    goToToday,
-    isToday,
     maxDayKey,
     minDayKey,
     moment,
@@ -284,15 +282,6 @@ export function Component() {
                 </IconButton>
               </Tooltip>
             </Flex>
-
-            <Button
-              color='gray'
-              disabled={isToday}
-              onClick={goToToday}
-              variant='soft'
-            >
-              Сегодня
-            </Button>
           </Flex>
         </Flex>
         {renderContent()}

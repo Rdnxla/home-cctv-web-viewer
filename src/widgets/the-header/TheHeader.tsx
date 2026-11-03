@@ -1,9 +1,8 @@
-import {BellIcon, CounterClockwiseClockIcon, DashboardIcon, GearIcon} from '@radix-ui/react-icons';
-import {IconButton, Tooltip} from '@radix-ui/themes';
+import {BellIcon, CounterClockwiseClockIcon, DashboardIcon} from '@radix-ui/react-icons';
 import {Link, matchPath, useLocation} from 'react-router';
-import {ThemeToggle} from '@/features/toggle-theme';
 import {ROUTES} from '@/shared/config/routes';
 import {DeviceInfo} from './DeviceInfo';
+import {SettingsSheet} from './SettingsSheet';
 import styles from './TheHeader.module.scss';
 
 const NAV_ITEMS = [
@@ -44,21 +43,7 @@ export function TheHeader() {
         ))}
       </nav>
       <div className={styles.header__actions}>
-        <ThemeToggle />
-        <Tooltip content='Настройки'>
-          <IconButton
-            aria-label='Настройки'
-            color='gray'
-            radius='full'
-            variant='ghost'
-          >
-            <GearIcon
-              aria-hidden='true'
-              height={18}
-              width={18}
-            />
-          </IconButton>
-        </Tooltip>
+        <SettingsSheet />
       </div>
     </header>
   );

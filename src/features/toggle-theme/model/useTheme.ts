@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useSyncExternalStore} from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -6,8 +6,18 @@ type Theme = 'light' | 'dark';
 // а здесь её только читают и переключают. Radix Themes берёт оформление из этого класса.
 const STORAGE_KEY = 'theme';
 
+// Общее хранилище: ThemeToggle и ThemeModeControl, смонтированные одновременно, видят одно значение
+const listeners = new Set<() => void>();
+
 function readTheme(): Theme {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
+function subscribe(onChange: () => void) {
+  listeners.add(onChange);
+  return () => {
+    listeners.delete(onChange);
+  };
 }
 
 function applyTheme(theme: Theme) {
@@ -15,16 +25,15 @@ function applyTheme(theme: Theme) {
   root.classList.remove('light', 'dark');
   root.classList.add(theme);
   localStorage.setItem(STORAGE_KEY, theme);
+  for (const listener of listeners) listener();
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState(readTheme);
+  const theme = useSyncExternalStore(subscribe, readTheme);
 
   const toggleTheme = useCallback(() => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-    setTheme(next);
-  }, [theme]);
+    applyTheme(readTheme() === 'dark' ? 'light' : 'dark');
+  }, []);
 
-  return {theme, toggleTheme};
+  return {setTheme: applyTheme, theme, toggleTheme};
 }
