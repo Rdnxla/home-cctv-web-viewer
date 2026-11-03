@@ -25,6 +25,10 @@
   background: $surface-bg;
   outline: none;
 
+  @media (min-width: 769px) {
+    width: 50vw;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     animation: sideSheetSlideIn .2s ease-out;
 

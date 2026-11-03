@@ -44,10 +44,6 @@ export function useArchivePage() {
     selectDay(shiftDay(dayStart, 1));
   }, [dayStart, selectDay]);
 
-  const goToToday = useCallback(() => {
-    selectDay(today);
-  }, [selectDay, today]);
-
   const changeDay = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const next = parseDayKey(event.target.value);
@@ -67,8 +63,6 @@ export function useArchivePage() {
     dayTitle: dayTitleFormat.format(dayStart),
     goToNextDay,
     goToPreviousDay,
-    goToToday,
-    isToday: dayStart === today,
     maxDayKey: toDayKey(today),
     minDayKey: firstDay === null ? undefined : toDayKey(firstDay),
     moment,
