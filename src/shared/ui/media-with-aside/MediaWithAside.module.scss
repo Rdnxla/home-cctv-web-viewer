@@ -2,8 +2,10 @@ $aside-min-w: 400px;
 $columns: minmax(0, 1fr);
 $columns-md: minmax(0, auto) minmax($aside-min-w, 1fr);
 
-.mediaWithAside.rt-Grid {
+.mediaWithAside {
   display: grid;
+  flex-grow: 1;
+  gap: 16px;
   grid-template-columns: $columns;
 
   @media (min-width: 1024px) {

@@ -1,4 +1,4 @@
-import {Flex, Grid} from '@radix-ui/themes';
+import {Box, Flex} from '@radix-ui/themes';
 import type {ReactNode} from 'react';
 import {useEffect, useState} from 'react';
 import styles from './MediaWithAside.module.scss';
@@ -38,11 +38,7 @@ export function MediaWithAside(props: MediaWithAsideProps) {
   const {setMain, setMedia} = useRestHeight();
 
   return (
-    <Grid
-      className={styles.mediaWithAside}
-      flexGrow='1'
-      gap='4'
-    >
+    <Box className={styles.mediaWithAside}>
       <Flex
         className={styles.mediaWithAside__main}
         direction='column'
@@ -54,6 +50,6 @@ export function MediaWithAside(props: MediaWithAsideProps) {
         {children}
       </Flex>
       <div className={styles.mediaWithAside__aside}>{aside}</div>
-    </Grid>
+    </Box>
   );
 }
