@@ -13,6 +13,7 @@ concurrency:
 jobs:
   Test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v5
@@ -30,7 +31,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Biome
-        run: yarn biome ci
+        run: yarn biome ci src .claude .vscode .zed *.json *.ts index.html
 
       # vite.config.ts reads these at load time (Vitest and the Playwright dev server), but certs/ is git-ignored.
       - name: Generate dev TLS certificate
