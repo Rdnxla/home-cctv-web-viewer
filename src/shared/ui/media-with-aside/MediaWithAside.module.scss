@@ -2,7 +2,7 @@ $aside-min-w: 400px;
 $columns: minmax(0, 1fr);
 $columns-md: minmax(0, auto) minmax($aside-min-w, 1fr);
 
-.mediaWithAside {
+.mediaWithAside.rt-Grid {
   display: grid;
   grid-template-columns: $columns;
 
