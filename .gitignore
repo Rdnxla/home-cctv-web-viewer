@@ -11,3 +11,4 @@ mockServiceWorker.js
 /blob-report/
 /playwright/.cache/
 .yarn/
+ai-docs
