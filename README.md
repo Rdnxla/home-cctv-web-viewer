@@ -2,7 +2,10 @@
 
 Веб-интерфейс для домашнего видеорегистратора (NVR): живое видео с камер по WebRTC, журнал событий, архив с таймлайном и закладками, вход с двухфакторной аутентификацией.
 
-**Демо:** https://rdnxla.github.io/home-cctv-web-viewer/
+**Полно-функциональное демо:** https://rdnxla.github.io/home-cctv-web-viewer/
+
+**Превью**
+![Иллюстрация к проекту](https://github.com/Rdnxla/home-cctv-web-viewer/docs/preview.gif)
 
 Бэкенд демо-версии полностью имитируется в браузере через MSW. Войти можно под `ok@example.com` с паролем `Password123!`. Для входа с 2FA подойдёт `olga@example.com`, код — `123456`.
 
