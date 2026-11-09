@@ -4,8 +4,8 @@
 
 **Полно-функциональное демо:** https://rdnxla.github.io/home-cctv-web-viewer/
 
-**Превью**
-![Иллюстрация к проекту](https://github.com/Rdnxla/home-cctv-web-viewer/raw/main/docs/preview.gif)
+**Превью** (полноразмерные скриншоты лежат в `/docs/images/full-size`)
+![Иллюстрации к проекту](https://github.com/Rdnxla/home-cctv-web-viewer/raw/main/docs/images/preview.gif)
 
 Бэкенд демо-версии полностью имитируется в браузере через MSW. Войти можно под `ok@example.com` с паролем `Password123!`. Для входа с 2FA подойдёт `olga@example.com`, код — `123456`.
 
